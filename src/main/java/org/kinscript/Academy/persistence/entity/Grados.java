@@ -1,4 +1,4 @@
-package org.kinscript.Academy.entity;
+package org.kinscript.Academy.persistence.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
