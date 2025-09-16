@@ -1,6 +1,8 @@
 package org.kinscript.Academy.dominio.service;
 
 
+import org.kinscript.Academy.dominio.dto.ModTutoresDto;
+import org.kinscript.Academy.dominio.dto.TutoresDto;
 import org.kinscript.Academy.dominio.repository.TutoresRepository;
 import org.springframework.stereotype.Service;
 

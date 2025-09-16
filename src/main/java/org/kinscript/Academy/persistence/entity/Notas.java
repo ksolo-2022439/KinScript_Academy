@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "Notas")
 @Data
@@ -26,14 +28,14 @@ public class Notas {
     private Cursos curso;
 
     @Column(name = "bimestre1", precision = 5, scale = 2)
-    private Double bimestre1;
+    private BigDecimal bimestre1;
 
     @Column(name = "bimestre2", precision = 5, scale = 2)
-    private Double bimestre2;
+    private BigDecimal bimestre2;
 
     @Column(name = "bimestre3", precision = 5, scale = 2)
-    private Double bimestre3;
+    private BigDecimal bimestre3;
 
     @Column(name = "bimestre4", precision = 5, scale = 2)
-    private Double bimestre4;
+    private BigDecimal bimestre4;
 }

@@ -1,6 +1,7 @@
 package org.kinscript.Academy.dominio.service;
 
-
+import org.kinscript.Academy.dominio.dto.GradosDto;
+import org.kinscript.Academy.dominio.dto.ModGradosDto;
 import org.kinscript.Academy.dominio.repository.GradosRepository;
 import org.springframework.stereotype.Service;
 
@@ -23,15 +24,15 @@ public class GradosService {
         return this.GradosRepository.buscarGrados(codigo);
     }
 
-    public GradosDto guardarPelicula(GradosesDto GradosesDto){
+    public GradosDto guardarGrados(GradosDto GradosesDto){
         return this.GradosRepository.guardarGrados(GradosesDto);
     }
 
-    public GradosDto modificarPelicula(Long codigo, ModGradosesDto modGradosesDto){
+    public GradosDto modificarGrados(Long codigo, ModGradosDto modGradosesDto){
         return this.GradosRepository.modificarGrados(codigo, modGradosesDto);
     }
 
-    public void eliminarPelicula (Long codigo) {
+    public void eliminarGrados(Long codigo) {
         this.GradosRepository.eliminarGrados(codigo);
     }
 

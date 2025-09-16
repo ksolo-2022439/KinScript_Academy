@@ -1,6 +1,7 @@
 package org.kinscript.Academy.dominio.service;
 
-
+import org.kinscript.Academy.dominio.dto.SeccionesDto;
+import org.kinscript.Academy.dominio.dto.ModSeccionesDto;
 import org.kinscript.Academy.dominio.repository.SeccionesRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,23 +16,23 @@ public class SeccionesService {
         this.SeccionesRepository = seccionesRepository;
     }
 
-    public List<SeccionesDto> obtenerTodo(){
+    public List<SeccionesDto> obtenerSeccion(){
         return this.SeccionesRepository.obtenerSeccion();
     }
 
-    public SeccionesDto buscarPorCodigo(Long codigo){
+    public SeccionesDto buscarSeccion(Long codigo){
         return this.SeccionesRepository.buscarSeccion(codigo);
     }
 
-    public SeccionesDto guardarPelicula(SeccionesDto SeccionesDto){
+    public SeccionesDto guardarSeccion(SeccionesDto SeccionesDto){
         return this.SeccionesRepository.guardarSeccion(SeccionesDto);
     }
 
-    public SeccionesDto modificarPelicula(Long codigo, ModSeccionesDto modSeccionesDto){
+    public SeccionesDto modificarSeccion(Long codigo, ModSeccionesDto modSeccionesDto){
         return this.SeccionesRepository.modificarSeccion(codigo, modSeccionesDto);
     }
 
-    public void eliminarPelicula (Long codigo) {
+    public void eliminarSeccion (Long codigo) {
         this.SeccionesRepository.eliminarSeccion(codigo);
     }
 
