@@ -4,9 +4,9 @@ import jakarta.validation.constraints.NotNull;
 
 public record GradoCursoDto(
         @NotNull(message = "El ID del grado es obligatorio")
-        Integer idGrado,
+        Long idGrado,
 
         @NotNull(message = "El ID del curso es obligatorio")
-        Integer idCurso
+        Long idCurso
 ) {
 }

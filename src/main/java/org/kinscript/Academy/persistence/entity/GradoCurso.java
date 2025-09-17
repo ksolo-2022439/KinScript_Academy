@@ -11,11 +11,11 @@ public class GradoCurso {
 
     @Id
     @Column(name = "idGrado")
-    private Integer idGrado;
+    private Long idGrado;
 
     @Id
     @Column(name = "idCurso")
-    private Integer idCurso;
+    private Long idCurso;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "idGrado", insertable = false, updatable = false)

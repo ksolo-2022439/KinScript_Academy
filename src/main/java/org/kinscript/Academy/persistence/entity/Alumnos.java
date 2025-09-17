@@ -11,7 +11,7 @@ public class Alumnos {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idAlumno")
-    private Integer idAlumno;
+    private Long idAlumno;
 
     @Column(name = "carnetAlumno", nullable = false, unique = true, length = 20)
     private String carnetAlumno;
@@ -53,17 +53,17 @@ public class Alumnos {
 
     // llaves foraneas
     @Column(name = "idGrado", nullable = false)
-    private Integer idGrado;
+    private Long idGrado;
 
     @Column(name = "idSeccion", nullable = false)
-    private Integer idSeccion;
+    private Long idSeccion;
 
     @Column(name = "idJornada")
-    private Integer idJornada;
+    private Long idJornada;
 
     @Column(name = "idCarrera")
-    private Integer idCarrera;
+    private Long idCarrera;
 
     @Column(name = "idTutor", nullable = false)
-    private Integer idTutor;
+    private Long idTutor;
 }

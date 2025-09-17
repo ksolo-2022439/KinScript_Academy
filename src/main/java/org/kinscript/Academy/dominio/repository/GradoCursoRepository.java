@@ -5,7 +5,10 @@ import java.util.List;
 
 public interface GradoCursoRepository {
     List<GradoCursoDto> obtenerTodos();
-    List<GradoCursoDto> obtenerPorGrado(Integer idGrado);
+
+    List<GradoCursoDto> obtenerPorGrado(Long idGrado);
+
     GradoCursoDto guardar(GradoCursoDto gradoCursoDto);
-    void eliminar(Integer idGrado, Integer idCurso);
+
+    void eliminar(Long idGrado, Long idCurso);
 }

@@ -19,7 +19,7 @@ public class ProfesorAsignacionService {
         return profesorAsignacionRepository.obtenerTodas();
     }
 
-    public List<ProfesorAsignacionDto> obtenerAsignacionesPorProfesor(Integer idProfesor) {
+    public List<ProfesorAsignacionDto> obtenerAsignacionesPorProfesor(Long idProfesor) {
         return profesorAsignacionRepository.obtenerPorProfesor(idProfesor);
     }
 

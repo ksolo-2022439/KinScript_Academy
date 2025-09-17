@@ -5,7 +5,10 @@ import java.util.List;
 
 public interface ProfesorAsignacionRepository {
     List<ProfesorAsignacionDto> obtenerTodas();
-    List<ProfesorAsignacionDto> obtenerPorProfesor(Integer idProfesor);
+
+    List<ProfesorAsignacionDto> obtenerPorProfesor(Long idProfesor);
+
     ProfesorAsignacionDto guardar(ProfesorAsignacionDto asignacionDto);
+
     void eliminar(ProfesorAsignacionDto asignacionDto);
 }

@@ -29,8 +29,8 @@ public class AlumnosEntityRepository implements AlumnosRepository {
     }
 
     @Override
-    public AlumnosDto buscarPorId(Integer idAlumno) {
-        return crudAlumnosEntity.findById(idAlumno)
+    public AlumnosDto buscarPorId(Long idAlumno) {
+        return crudAlumnosEntity.findById(Math.toIntExact(idAlumno))
                 .map(alumnosMapper::toDto)
                 .orElseThrow(() -> new AlumnoNotExistsException(idAlumno));
     }
@@ -45,8 +45,8 @@ public class AlumnosEntityRepository implements AlumnosRepository {
     }
 
     @Override
-    public AlumnosDto modificar(Integer idAlumno, ModAlumnosDto modAlumnosDto) {
-        Alumnos alumno = crudAlumnosEntity.findById(idAlumno)
+    public AlumnosDto modificar(Long idAlumno, ModAlumnosDto modAlumnosDto) {
+        Alumnos alumno = crudAlumnosEntity.findById(Math.toIntExact(idAlumno))
                 .orElseThrow(() -> new AlumnoNotExistsException(idAlumno));
 
         alumno.setCarnetAlumno(modAlumnosDto.carnetAlumno());
@@ -65,10 +65,10 @@ public class AlumnosEntityRepository implements AlumnosRepository {
     }
 
     @Override
-    public void eliminar(Integer idAlumno) {
-        if (!crudAlumnosEntity.existsById(idAlumno)) {
+    public void eliminar(Long idAlumno) {
+        if (!crudAlumnosEntity.existsById(Math.toIntExact(idAlumno))) {
             throw new AlumnoNotExistsException(idAlumno);
         }
-        crudAlumnosEntity.deleteById(idAlumno);
+        crudAlumnosEntity.deleteById(Math.toIntExact(idAlumno));
     }
 }

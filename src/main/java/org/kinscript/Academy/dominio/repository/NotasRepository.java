@@ -7,9 +7,14 @@ import java.util.List;
 
 public interface NotasRepository {
     List<NotasDto> obtenerTodas();
-    NotasDto buscarPorId(Integer idNota);
-    List<NotasDto> buscarPorAlumno(Integer idAlumno);
+
+    NotasDto buscarPorId(Long idNota);
+
+    List<NotasDto> buscarPorAlumno(Long idAlumno);
+
     NotasDto guardar(NotasDto notasDto);
-    NotasDto modificar(Integer idNota, ModNotasDto modNotasDto);
-    void eliminar(Integer idNota);
+
+    NotasDto modificar(Long idNota, ModNotasDto modNotasDto);
+
+    void eliminar(Long idNota);
 }

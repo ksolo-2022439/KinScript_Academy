@@ -57,7 +57,6 @@ public class ProfesoresEntityRepository implements ProfesoresRepository {
         profesor.setApellidoCompleto(modProfesoresDto.apellidoCompleto());
         profesor.setDireccion(modProfesoresDto.direccion());
         profesor.setNumeroTelefono(modProfesoresDto.numeroTelefono());
-        // El email no se modifica directamente aquí según tu ejemplo, pero podrías añadirlo si fuera necesario
         return profesoresMapper.toDto(crudProfesoresEntity.save(profesor));
     }
 

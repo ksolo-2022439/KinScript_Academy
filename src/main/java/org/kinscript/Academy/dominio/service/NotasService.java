@@ -19,11 +19,11 @@ public class NotasService {
         return this.notasRepository.obtenerTodas();
     }
 
-    public NotasDto buscarPorCodigo(Integer idNota) {
+    public NotasDto buscarPorCodigo(Long idNota) {
         return this.notasRepository.buscarPorId(idNota);
     }
 
-    public List<NotasDto> buscarNotasPorAlumno(Integer idAlumno) {
+    public List<NotasDto> buscarNotasPorAlumno(Long idAlumno) {
         return this.notasRepository.buscarPorAlumno(idAlumno);
     }
 
@@ -31,11 +31,11 @@ public class NotasService {
         return this.notasRepository.guardar(notasDto);
     }
 
-    public NotasDto modificarNota(Integer idNota, ModNotasDto modNotasDto) {
+    public NotasDto modificarNota(Long idNota, ModNotasDto modNotasDto) {
         return this.notasRepository.modificar(idNota, modNotasDto);
     }
 
-    public void eliminarNota(Integer idNota) {
+    public void eliminarNota(Long idNota) {
         this.notasRepository.eliminar(idNota);
     }
 }

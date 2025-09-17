@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface CrudGradoCursoEntity extends CrudRepository<GradoCurso, GradoCursoId> {
 
-    List<GradoCurso> findByIdGrado(Integer idGrado);
+    List<GradoCurso> findByIdGrado(Long idGrado);
 }

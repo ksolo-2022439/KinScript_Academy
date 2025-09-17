@@ -25,7 +25,7 @@ public class GradoCursoController {
     }
 
     @GetMapping("/grado/{idGrado}")
-    public ResponseEntity<List<GradoCursoDto>> obtenerPorGrado(@PathVariable Integer idGrado) {
+    public ResponseEntity<List<GradoCursoDto>> obtenerPorGrado(@PathVariable Long idGrado) {
         return ResponseEntity.ok(gradoCursoService.obtenerCursosPorGrado(idGrado));
     }
 
@@ -35,7 +35,7 @@ public class GradoCursoController {
     }
 
     @DeleteMapping("/grado/{idGrado}/curso/{idCurso}")
-    public ResponseEntity<Void> eliminarAsociacion(@PathVariable Integer idGrado, @PathVariable Integer idCurso) {
+    public ResponseEntity<Void> eliminarAsociacion(@PathVariable Long idGrado, @PathVariable Long idCurso) {
         gradoCursoService.eliminarAsociacion(idGrado, idCurso);
         return ResponseEntity.noContent().build();
     }

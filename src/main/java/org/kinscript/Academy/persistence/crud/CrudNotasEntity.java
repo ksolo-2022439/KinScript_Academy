@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface CrudNotasEntity extends CrudRepository<Notas, Integer> {
 
-    Optional<Notas> findByIdAlumnoAndIdCurso(Integer idAlumno, Integer idCurso);
+    Optional<Notas> findByIdAlumnoAndIdCurso(Long idAlumno, Long idCurso);
 
-    List<Notas> findByIdAlumno(Integer idAlumno);
+    List<Notas> findByIdAlumno(Long idAlumno);
 }

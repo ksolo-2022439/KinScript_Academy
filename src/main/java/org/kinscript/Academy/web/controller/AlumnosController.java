@@ -26,7 +26,7 @@ public class AlumnosController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AlumnosDto> obtenerPorId(@PathVariable Integer id) {
+    public ResponseEntity<AlumnosDto> obtenerPorId(@PathVariable Long id) {
         AlumnosDto alumno = alumnosService.buscarPorCodigo(id);
         return (alumno != null) ? ResponseEntity.ok(alumno) : ResponseEntity.notFound().build();
     }
@@ -38,13 +38,13 @@ public class AlumnosController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AlumnosDto> modificar(@PathVariable Integer id, @Valid @RequestBody ModAlumnosDto modAlumnosDto) {
+    public ResponseEntity<AlumnosDto> modificar(@PathVariable Long id, @Valid @RequestBody ModAlumnosDto modAlumnosDto) {
         AlumnosDto actualizado = alumnosService.modificarAlumno(id, modAlumnosDto);
         return (actualizado != null) ? ResponseEntity.ok(actualizado) : ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminar(@PathVariable Integer id) {
+    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         alumnosService.eliminarAlumno(id);
         return ResponseEntity.noContent().build();
     }

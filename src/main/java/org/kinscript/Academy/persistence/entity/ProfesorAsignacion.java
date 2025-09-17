@@ -11,22 +11,22 @@ public class ProfesorAsignacion {
 
     @Id
     @Column(name = "idProfesor")
-    private Integer idProfesor;
+    private Long idProfesor;
 
     @Id
     @Column(name = "idCurso")
-    private Integer idCurso;
+    private Long idCurso;
 
     @Id
     @Column(name = "idGrado")
-    private Integer idGrado;
+    private Long idGrado;
 
     @Id
     @Column(name = "idSeccion")
-    private Integer idSeccion;
+    private Long idSeccion;
 
     @Column(name = "idJornada")
-    private Integer idJornada;
+    private Long idJornada;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "idProfesor", insertable = false, updatable = false)

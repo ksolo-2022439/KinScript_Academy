@@ -18,7 +18,7 @@ public class GradoCursoService {
         return gradoCursoRepository.obtenerTodos();
     }
 
-    public List<GradoCursoDto> obtenerCursosPorGrado(Integer idGrado) {
+    public List<GradoCursoDto> obtenerCursosPorGrado(Long idGrado) {
         return gradoCursoRepository.obtenerPorGrado(idGrado);
     }
 
@@ -26,7 +26,7 @@ public class GradoCursoService {
         return gradoCursoRepository.guardar(gradoCursoDto);
     }
 
-    public void eliminarAsociacion(Integer idGrado, Integer idCurso) {
+    public void eliminarAsociacion(Long idGrado, Long idCurso) {
         gradoCursoRepository.eliminar(idGrado, idCurso);
     }
 }

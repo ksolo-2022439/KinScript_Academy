@@ -4,17 +4,17 @@ import jakarta.validation.constraints.NotNull;
 
 public record ProfesorAsignacionDto(
         @NotNull(message = "El ID del profesor es obligatorio")
-        Integer idProfesor,
+        Long idProfesor,
 
         @NotNull(message = "El ID del curso es obligatorio")
-        Integer idCurso,
+        Long idCurso,
 
         @NotNull(message = "El ID del grado es obligatorio")
-        Integer idGrado,
+        Long idGrado,
 
         @NotNull(message = "El ID de la sección es obligatorio")
-        Integer idSeccion,
+        Long idSeccion,
 
-        Integer idJornada // puede ser nulo
+        Long idJornada // puede ser nulo
 ) {
 }

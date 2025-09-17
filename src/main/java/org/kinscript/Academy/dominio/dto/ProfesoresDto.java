@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Email;
 
 public record ProfesoresDto(
 
-        Integer idProfesor,
+        Long idProfesor,
         @NotBlank(message = "El nombre del profesor es obligatorio")
         String nombreCompleto,
         @NotBlank(message = "El apellido del profesor es obligatorio")

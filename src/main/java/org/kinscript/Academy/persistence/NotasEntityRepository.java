@@ -29,14 +29,14 @@ public class NotasEntityRepository implements NotasRepository {
     }
 
     @Override
-    public NotasDto buscarPorId(Integer idNota) {
-        return crudNotasEntity.findById(idNota)
+    public NotasDto buscarPorId(Long idNota) {
+        return crudNotasEntity.findById(Math.toIntExact(idNota))
                 .map(notasMapper::toDto)
-                .orElseThrow(() -> new NotaNotExistsException(idNota));
+                .orElseThrow(() -> new NotaNotExistsException(Math.toIntExact(idNota)));
     }
 
     @Override
-    public List<NotasDto> buscarPorAlumno(Integer idAlumno) {
+    public List<NotasDto> buscarPorAlumno(Long idAlumno) {
         List<Notas> notas = crudNotasEntity.findByIdAlumno(idAlumno);
         return notasMapper.toDto(notas);
     }
@@ -53,9 +53,9 @@ public class NotasEntityRepository implements NotasRepository {
     }
 
     @Override
-    public NotasDto modificar(Integer idNota, ModNotasDto modNotasDto) {
-        Notas nota = crudNotasEntity.findById(idNota)
-                .orElseThrow(() -> new NotaNotExistsException(idNota));
+    public NotasDto modificar(Long idNota, ModNotasDto modNotasDto) {
+        Notas nota = crudNotasEntity.findById(Math.toIntExact(idNota))
+                .orElseThrow(() -> new NotaNotExistsException(Math.toIntExact(idNota)));
 
         nota.setIdAlumno(modNotasDto.idAlumno());
         nota.setIdCurso(modNotasDto.idCurso());
@@ -68,10 +68,10 @@ public class NotasEntityRepository implements NotasRepository {
     }
 
     @Override
-    public void eliminar(Integer idNota) {
-        if (!crudNotasEntity.existsById(idNota)) {
-            throw new NotaNotExistsException(idNota);
+    public void eliminar(Long idNota) {
+        if (!crudNotasEntity.existsById(Math.toIntExact(idNota))) {
+            throw new NotaNotExistsException(Math.toIntExact(idNota));
         }
-        crudNotasEntity.deleteById(idNota);
+        crudNotasEntity.deleteById(Math.toIntExact(idNota));
     }
 }

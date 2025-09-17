@@ -19,7 +19,7 @@ public class AlumnosService {
         return this.alumnosRepository.obtenerTodos();
     }
 
-    public AlumnosDto buscarPorCodigo(Integer idAlumno) {
+    public AlumnosDto buscarPorCodigo(Long idAlumno) {
         return this.alumnosRepository.buscarPorId(idAlumno);
     }
 
@@ -27,11 +27,11 @@ public class AlumnosService {
         return this.alumnosRepository.guardar(alumnosDto);
     }
 
-    public AlumnosDto modificarAlumno(Integer idAlumno, ModAlumnosDto modAlumnosDto) {
+    public AlumnosDto modificarAlumno(Long idAlumno, ModAlumnosDto modAlumnosDto) {
         return this.alumnosRepository.modificar(idAlumno, modAlumnosDto);
     }
 
-    public void eliminarAlumno(Integer idAlumno) {
+    public void eliminarAlumno(Long idAlumno) {
         this.alumnosRepository.eliminar(idAlumno);
     }
 }

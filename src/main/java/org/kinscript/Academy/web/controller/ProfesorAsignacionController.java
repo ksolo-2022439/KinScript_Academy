@@ -25,7 +25,7 @@ public class ProfesorAsignacionController {
     }
 
     @GetMapping("/profesor/{idProfesor}")
-    public ResponseEntity<List<ProfesorAsignacionDto>> obtenerPorProfesor(@PathVariable Integer idProfesor) {
+    public ResponseEntity<List<ProfesorAsignacionDto>> obtenerPorProfesor(@PathVariable Long idProfesor) {
         return ResponseEntity.ok(asignacionService.obtenerAsignacionesPorProfesor(idProfesor));
     }
 

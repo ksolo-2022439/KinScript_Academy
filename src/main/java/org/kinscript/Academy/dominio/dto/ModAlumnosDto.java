@@ -26,15 +26,15 @@ public record ModAlumnosDto(
         String direccion,
 
         @NotNull(message = "El ID del grado es obligatorio")
-        Integer idGrado,
+        Long idGrado,
 
         @NotNull(message = "El ID de la sección es obligatorio")
-        Integer idSeccion,
+        Long idSeccion,
 
-        Integer idJornada,
+        Long idJornada,
 
-        Integer idCarrera,
+        Long idCarrera,
 
         @NotNull(message = "El ID del tutor es obligatorio")
-        Integer idTutor) {
+        Long idTutor) {
 }

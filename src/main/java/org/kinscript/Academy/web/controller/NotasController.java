@@ -26,12 +26,12 @@ public class NotasController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<NotasDto> obtenerPorId(@PathVariable Integer id) {
+    public ResponseEntity<NotasDto> obtenerPorId(@PathVariable Long id) {
         return ResponseEntity.ok(notasService.buscarPorCodigo(id));
     }
 
     @GetMapping("/alumno/{idAlumno}")
-    public ResponseEntity<List<NotasDto>> obtenerPorAlumno(@PathVariable Integer idAlumno) {
+    public ResponseEntity<List<NotasDto>> obtenerPorAlumno(@PathVariable Long idAlumno) {
         List<NotasDto> notas = notasService.buscarNotasPorAlumno(idAlumno);
         if (notas.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -45,12 +45,12 @@ public class NotasController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<NotasDto> modificar(@PathVariable Integer id, @Valid @RequestBody ModNotasDto modNotasDto) {
+    public ResponseEntity<NotasDto> modificar(@PathVariable Long id, @Valid @RequestBody ModNotasDto modNotasDto) {
         return ResponseEntity.ok(notasService.modificarNota(id, modNotasDto));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminar(@PathVariable Integer id) {
+    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         notasService.eliminarNota(id);
         return ResponseEntity.noContent().build();
     }

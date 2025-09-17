@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public record AlumnosDto(
-        Integer idAlumno,
+        Long idAlumno,
 
         @NotBlank(message = "El carnet del alumno es obligatorio")
         @Size(max = 20, message = "El carnet no puede exceder los 20 caracteres")
@@ -29,16 +29,16 @@ public record AlumnosDto(
         String direccion,
 
         @NotNull(message = "El ID del grado es obligatorio")
-        Integer idGrado,
+        Long idGrado,
 
         @NotNull(message = "El ID de la sección es obligatorio")
-        Integer idSeccion,
+        Long idSeccion,
 
-        Integer idJornada, // Puede ser nulo
+        Long idJornada, // Puede ser nulo
 
-        Integer idCarrera, // Puede ser nulo
+        Long idCarrera, // Puede ser nulo
 
         @NotNull(message = "El ID del tutor es obligatorio")
-        Integer idTutor
+        Long idTutor
 ) {
 }

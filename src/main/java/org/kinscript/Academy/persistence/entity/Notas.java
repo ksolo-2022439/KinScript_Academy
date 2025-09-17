@@ -12,13 +12,13 @@ public class Notas {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idNota")
-    private Integer idNota;
+    private Long idNota;
 
     @Column(name = "idAlumno", nullable = false)
-    private Integer idAlumno;
+    private Long idAlumno;
 
     @Column(name = "idCurso", nullable = false)
-    private Integer idCurso;
+    private Long idCurso;
 
     @Column(precision = 5, scale = 2)
     private BigDecimal bimestre1;

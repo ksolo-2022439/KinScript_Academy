@@ -10,8 +10,8 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProfesorAsignacionId implements Serializable {
-    private Integer idProfesor;
-    private Integer idCurso;
-    private Integer idGrado;
-    private Integer idSeccion;
+    private Long idProfesor;
+    private Long idCurso;
+    private Long idGrado;
+    private Long idSeccion;
 }

@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Size;
 
 public record TutoresDto(
 
-        Integer idTutor,
+        Long idTutor,
         @NotBlank(message = "El nombre del tutor es obligatorio")
         String nombreCompleto,
         @NotBlank(message = "El apellido del tutor es obligatorio")

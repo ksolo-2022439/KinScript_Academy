@@ -7,8 +7,12 @@ import java.util.List;
 
 public interface AlumnosRepository {
     List<AlumnosDto> obtenerTodos();
-    AlumnosDto buscarPorId(Integer idAlumno);
+
+    AlumnosDto buscarPorId(Long idAlumno);
+
     AlumnosDto guardar(AlumnosDto alumnosDto);
-    AlumnosDto modificar(Integer idAlumno, ModAlumnosDto modAlumnosDto);
-    void eliminar(Integer idAlumno);
+
+    AlumnosDto modificar(Long idAlumno, ModAlumnosDto modAlumnosDto);
+
+    void eliminar(Long idAlumno);
 }

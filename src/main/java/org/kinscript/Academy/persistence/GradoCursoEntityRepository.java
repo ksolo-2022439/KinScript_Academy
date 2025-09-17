@@ -29,7 +29,7 @@ public class GradoCursoEntityRepository implements GradoCursoRepository {
     }
 
     @Override
-    public List<GradoCursoDto> obtenerPorGrado(Integer idGrado) {
+    public List<GradoCursoDto> obtenerPorGrado(Long idGrado) {
         return gradoCursoMapper.toDto(crudGradoCursoEntity.findByIdGrado(idGrado));
     }
 
@@ -44,7 +44,7 @@ public class GradoCursoEntityRepository implements GradoCursoRepository {
     }
 
     @Override
-    public void eliminar(Integer idGrado, Integer idCurso) {
+    public void eliminar(Long idGrado, Long idCurso) {
         GradoCursoId id = new GradoCursoId(idGrado, idCurso);
         if (!crudGradoCursoEntity.existsById(id)) {
             throw new GradoCursoNotExistsException(id.getIdGrado(), id.getIdCurso());

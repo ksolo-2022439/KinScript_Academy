@@ -8,10 +8,10 @@ import java.math.BigDecimal;
 
 public record ModNotasDto(
         @NotNull(message = "El ID del alumno es obligatorio")
-        Integer idAlumno,
+        Long idAlumno,
 
         @NotNull(message = "El ID del curso es obligatorio")
-        Integer idCurso,
+        Long idCurso,
 
         @DecimalMin(value = "0.00", message = "La nota no puede ser menor a 0")
         @DecimalMax(value = "100.00", message = "La nota no puede ser mayor a 100")

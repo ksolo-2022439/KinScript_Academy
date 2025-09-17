@@ -29,7 +29,7 @@ public class ProfesorAsignacionEntityRepository implements ProfesorAsignacionRep
     }
 
     @Override
-    public List<ProfesorAsignacionDto> obtenerPorProfesor(Integer idProfesor) {
+    public List<ProfesorAsignacionDto> obtenerPorProfesor(Long idProfesor) {
         return asignacionMapper.toDto(crudAsignacionEntity.findByIdProfesor(idProfesor));
     }
 
