@@ -1,6 +1,11 @@
 package org.kinscript.Academy.persistence.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
@@ -11,21 +16,20 @@ import lombok.AllArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Tutores {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idTutor")
+    @Column(name = "id_tutor")
     private Integer idTutor;
 
-    @Column(name = "nombreCompleto", nullable = false)
+    @Column(name = "nombreCompleto")
     private String nombreCompleto;
 
-    @Column(name = "apellidoCompleto", nullable = false)
+    @Column(name = "apellidoCompleto")
     private String apellidoCompleto;
 
-    @Column(name = "numeroTelefono", nullable = false)
+    @Column(name = "numeroTelefono")
     private String numeroTelefono;
 
-    @Column(name = "direccion", nullable = false)
+    @Column(name = "direccion")
     private String direccion;
 }
