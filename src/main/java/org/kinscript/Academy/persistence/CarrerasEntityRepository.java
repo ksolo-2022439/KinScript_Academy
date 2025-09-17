@@ -2,6 +2,8 @@ package org.kinscript.Academy.persistence;
 
 import org.kinscript.Academy.dominio.dto.CarrerasDto;
 import org.kinscript.Academy.dominio.dto.ModCarrerasDto;
+import org.kinscript.Academy.dominio.exception.CarreraExistsException;
+import org.kinscript.Academy.dominio.exception.CarreraNotExistsException;
 import org.kinscript.Academy.dominio.repository.CarrerasRepository;
 import org.kinscript.Academy.persistence.crud.CrudCarrerasEntity;
 import org.kinscript.Academy.persistence.entity.Carreras;
@@ -9,7 +11,6 @@ import org.kinscript.Academy.persistence.mapper.CarrerasMapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public class CarrerasEntityRepository implements CarrerasRepository {
@@ -31,12 +32,13 @@ public class CarrerasEntityRepository implements CarrerasRepository {
     public CarrerasDto buscarCarrera(Long codigo) {
         return crudCarrerasEntity.findById(codigo.intValue())
                 .map(carrerasMapper::toDto)
-                .orElse(null);
+                .orElseThrow(() -> new CarreraNotExistsException(codigo));
     }
 
     @Override
     public CarrerasDto guardarCarrera(CarrerasDto carrerasDto) {
         if (crudCarrerasEntity.findByNombreCarrera(carrerasDto.nombreCarrera()) != null) {
+            throw new CarreraExistsException(carrerasDto.nombreCarrera());
         }
         Carreras carrera = carrerasMapper.toEntity(carrerasDto);
         return carrerasMapper.toDto(crudCarrerasEntity.save(carrera));
@@ -44,20 +46,18 @@ public class CarrerasEntityRepository implements CarrerasRepository {
 
     @Override
     public CarrerasDto modificarCarrera(Long codigo, ModCarrerasDto modcarrerasDto) {
-        Optional<Carreras> carreraOptional = crudCarrerasEntity.findById(codigo.intValue());
-        if (carreraOptional.isPresent()) {
-            Carreras carrera = carreraOptional.get();
-            carrera.setNombreCarrera(modcarrerasDto.nombreCarrera());
-            return carrerasMapper.toDto(crudCarrerasEntity.save(carrera));
-        }
-        return null;
+        Carreras carrera = crudCarrerasEntity.findById(codigo.intValue())
+                .orElseThrow(() -> new CarreraNotExistsException(codigo));
+
+        carrera.setNombreCarrera(modcarrerasDto.nombreCarrera());
+        return carrerasMapper.toDto(crudCarrerasEntity.save(carrera));
     }
 
     @Override
     public void eliminarCarrera(Long codigo) {
-        if (crudCarrerasEntity.existsById(codigo.intValue())) {
-            crudCarrerasEntity.deleteById(codigo.intValue());
-        } else {
+        if (!crudCarrerasEntity.existsById(codigo.intValue())) {
+            throw new CarreraNotExistsException(codigo);
         }
+        crudCarrerasEntity.deleteById(codigo.intValue());
     }
 }
