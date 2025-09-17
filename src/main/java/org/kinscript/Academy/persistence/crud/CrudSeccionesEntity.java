@@ -5,5 +5,5 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface CrudSeccionesEntity extends CrudRepository<Secciones, Long> {
 
-    Secciones findFirstByNombre (String nombreSeccion);
+    Secciones findFirstByNombreSeccion (String nombreSeccion);
 }

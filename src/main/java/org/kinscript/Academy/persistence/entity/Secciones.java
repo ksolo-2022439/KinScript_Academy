@@ -15,7 +15,7 @@ public class Secciones {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idSeccion")
-    private Integer idSeccion;
+    private Long idSeccion;
 
     @Column(name = "nombreSeccion", nullable = false, unique = true)
     private String nombreSeccion;

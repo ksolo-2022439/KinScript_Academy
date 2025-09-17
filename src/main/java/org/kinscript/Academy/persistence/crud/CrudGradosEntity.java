@@ -5,5 +5,5 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface CrudGradosEntity extends CrudRepository<Grados, Long> {
 
-    Grados findFirstByNombre (String nombreGrado);
+    Grados findFirstByNombreGrado (String nombreGrado);
 }
