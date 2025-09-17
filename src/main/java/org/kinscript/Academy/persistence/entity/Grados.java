@@ -16,7 +16,7 @@ public class Grados {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idGrado")
-    private Integer idGrado;
+    private Long idGrado;
 
     @Column(name = "nombreGrado", nullable = false, unique = true)
     private String nombreGrado;
