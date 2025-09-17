@@ -1,17 +1,26 @@
 package org.kinscript.Academy.dominio.dto;
+
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Data;
+import jakarta.validation.constraints.NotNull;
 
-@Data
-public class CoordinadoresDto {
-    private Long id;
-    @NotBlank(message = "El nombre es obligatorio")
-    private String nombreCompleto;
-    @NotBlank(message = "El apellido es obligatorio")
-    private String apellidoCompleto;
-    @NotBlank(message = "El email es obligatorio")
-    private String email;
-    @NotBlank(message = "La contrasena es obligatoria")
-    private String contrasena;
+public record CoordinadoresDto(
+        Integer idCoordinador,
 
+        @NotBlank(message = "El nombre es obligatorio")
+        String nombreCompleto,
+
+        @NotBlank(message = "El apellido es obligatorio")
+        String apellidoCompleto,
+
+        @NotBlank(message = "El email es obligatorio")
+        @Email(message = "Debe ser un formato de email válido")
+        String email,
+
+        @NotBlank(message = "La contraseña es obligatoria")
+        String contrasena,
+
+        @NotNull(message = "El ID del grado es obligatorio")
+        Long idGrado
+) {
 }

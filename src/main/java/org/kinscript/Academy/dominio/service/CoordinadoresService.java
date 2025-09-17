@@ -1,38 +1,41 @@
 package org.kinscript.Academy.dominio.service;
 
-import org.kinscript.Academy.repository.CoordinadoresRepository;
-import org.kinscript.Academy.dominio.dto.ModCoordinadoresDto;
 import org.kinscript.Academy.dominio.dto.CoordinadoresDto;
+import org.kinscript.Academy.dominio.dto.ModCoordinadoresDto;
+import org.kinscript.Academy.dominio.exception.CoordinadorNotExistsException;
+import org.kinscript.Academy.dominio.repository.CoordinadoresRepository;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
 public class CoordinadoresService {
 
-    private final CoordinadoresRepository CoordinadoresRepository;
+    private final CoordinadoresRepository coordinadoresRepository;
 
-    public CoordinadoresService (CoordinadoresRepository coordinadoresRepository){
-        this.CoordinadoresRepository = coordinadoresRepository;
+    public CoordinadoresService(CoordinadoresRepository coordinadoresRepository) {
+        this.coordinadoresRepository = coordinadoresRepository;
     }
 
-    public List<CoordinadoresDto> obtenerCoordinador(){
-        return this.CoordinadoresRepository.obtenerCoordinador();
+    public List<CoordinadoresDto> obtenerTodo() {
+        return coordinadoresRepository.obtenerTodos();
     }
 
-    public CoordinadoresDto buscarCoordinador (Long codigo) {
-        return this.CoordinadoresRepository.buscarCoordinador(codigo);
+    public CoordinadoresDto buscarPorCodigo(Integer idCoordinador) {
+        return coordinadoresRepository.buscarPorId(idCoordinador)
+                .orElseThrow(() -> new CoordinadorNotExistsException(idCoordinador));
     }
 
-    public CoordinadoresDto guardarCoordinador (CoordinadoresDto coordinadoresDto) {
-        return this.CoordinadoresRepository.guardarCoordinador(coordinadoresDto);
+    public CoordinadoresDto guardarCoordinador(CoordinadoresDto coordinadoresDto) {
+        return coordinadoresRepository.guardar(coordinadoresDto);
     }
 
-    public CoordinadoresDto modificarCoordinador(Long codigo, ModCoordinadoresDto modCoordinador) {
-        return this.CoordinadoresRepository.modificarCoordinador(codigo, modCoordinador);
+    public CoordinadoresDto modificarCoordinador(Integer idCoordinador, ModCoordinadoresDto modCoordinadoresDto) {
+        return coordinadoresRepository.modificar(idCoordinador, modCoordinadoresDto)
+                .orElseThrow(() -> new CoordinadorNotExistsException(idCoordinador));
     }
 
-    public void eliminarCoordinador (Long codigo) {
-        this.CoordinadoresRepository.eliminarCoordinador(codigo);
+    public void eliminarCoordinador(Integer idCoordinador) {
+        coordinadoresRepository.eliminar(idCoordinador);
     }
-
 }

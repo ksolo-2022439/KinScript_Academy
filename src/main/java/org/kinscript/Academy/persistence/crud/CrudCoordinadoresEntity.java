@@ -1,8 +1,10 @@
 package org.kinscript.Academy.persistence.crud;
 
-import org.kinscript.Academy.persistence.entity.CoordinadoresEntity;
+import org.kinscript.Academy.persistence.entity.Coordinadores;
 import org.springframework.data.repository.CrudRepository;
 
-public interface CrudCoordinadoresEntity extends CrudRepository<CoordinadoresEntity, Long> {
-    CoordinadoresEntity findByNombre(String nombreCompleto);
+import java.util.Optional;
+
+public interface CrudCoordinadoresEntity extends CrudRepository<Coordinadores, Integer> {
+    Optional<Coordinadores> findByEmail(String email);
 }

@@ -1,15 +1,9 @@
 package org.kinscript.Academy.web.controller;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.kinscript.Academy.dominio.dto.CoordinadoresDto;
 import org.kinscript.Academy.dominio.dto.ModCoordinadoresDto;
 import org.kinscript.Academy.dominio.service.CoordinadoresService;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,51 +11,38 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/v1/coordinadores")
-@Tag(name = "Coordinadores",
-        description= "gestion de coordinadorees")
+@RequestMapping("/coordinadores")
 public class CoordinadoresController {
-    private final CoordinadoresService coordinadoresService;
 
+    private final CoordinadoresService coordinadoresService;
 
     public CoordinadoresController(CoordinadoresService coordinadoresService) {
         this.coordinadoresService = coordinadoresService;
     }
 
     @GetMapping
-    public ResponseEntity<List<CoordinadoresDto>> obtenerCoordinador() {
-        return ResponseEntity.ok(coordinadoresService.obtenerCoordinador());
+    public ResponseEntity<List<CoordinadoresDto>> obtenerTodos() {
+        return ResponseEntity.ok(coordinadoresService.obtenerTodo());
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<CoordinadoresDto> obtenerPorId(@PathVariable Integer id) {
+        return ResponseEntity.ok(coordinadoresService.buscarPorCodigo(id));
+    }
 
     @PostMapping
-    public ResponseEntity<CoordinadoresDto> guadarCoordinador(@RequestBody @Valid CoordinadoresDto coordinadoresDto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(this.coordinadoresService.guardarCoordinador(coordinadoresDto));
+    public ResponseEntity<CoordinadoresDto> crear(@Valid @RequestBody CoordinadoresDto coordinadoresDto) {
+        return new ResponseEntity<>(coordinadoresService.guardarCoordinador(coordinadoresDto), HttpStatus.CREATED);
     }
 
-    @PutMapping("/{codigo}")
-    public ResponseEntity<CoordinadoresDto> modificarCoordinador(@PathVariable Long codigo, @RequestBody ModCoordinadoresDto modCoordinadores) {
-        return ResponseEntity.ok(this.coordinadoresService.modificarCoordinador(codigo, modCoordinadores));
+    @PutMapping("/{id}")
+    public ResponseEntity<CoordinadoresDto> modificar(@PathVariable Integer id, @Valid @RequestBody ModCoordinadoresDto modCoordinadoresDto) {
+        return ResponseEntity.ok(coordinadoresService.modificarCoordinador(id, modCoordinadoresDto));
     }
 
-    @DeleteMapping("/{codigo}")
-    public ResponseEntity<Void> eliminarCoordinador(@PathVariable Long codigo) {
-        this.coordinadoresService.eliminarCoordinador(codigo);
-        return ResponseEntity.ok().build();
-
-    }
-
-    @GetMapping("{codigo}")
-    @Operation(summary = "Obtener un coordinador por su identificador",
-            description = "Retorna el coordinador que coincida con el identificador enviado",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "Coordinador encontrado"),
-                    @ApiResponse(responseCode = "404", description = "Coordinador no encontrado", content = @Content)
-            })
-
-    public ResponseEntity<CoordinadoresDto> buscarPorCodigo
-            (@Parameter(description = "Identificador del Coordinador a buscar", example = "7")
-             @PathVariable Long codigo){
-        return ResponseEntity.ok(this.coordinadoresService.buscarCoordinador(codigo));
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminar(@PathVariable Integer id) {
+        coordinadoresService.eliminarCoordinador(id);
+        return ResponseEntity.noContent().build();
     }
 }

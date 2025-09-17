@@ -1,16 +1,15 @@
-package org.kinscript.Academy.repository;
+package org.kinscript.Academy.dominio.repository;
 
 import org.kinscript.Academy.dominio.dto.CoordinadoresDto;
 import org.kinscript.Academy.dominio.dto.ModCoordinadoresDto;
-import org.kinscript.Academy.web.controller.CoordinadoresController;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CoordinadoresRepository {
-    //firmas de nuestros metodos a trabajar
-    List<CoordinadoresDto> obtenerCoordinador();
-    public CoordinadoresDto buscarCoordinador(Long codigo);
-    CoordinadoresDto guardarCoordinador(CoordinadoresDto coordinadoresDto);
-    CoordinadoresDto modificarCoordinador(Long codigo, ModCoordinadoresDto coordinadoresDto);
-    void eliminarCoordinador(Long codigo);
+    List<CoordinadoresDto> obtenerTodos();
+    Optional<CoordinadoresDto> buscarPorId(Integer idCoordinador);
+    CoordinadoresDto guardar(CoordinadoresDto coordinadoresDto);
+    Optional<CoordinadoresDto> modificar(Integer idCoordinador, ModCoordinadoresDto modCoordinadoresDto);
+    void eliminar(Integer idCoordinador);
 }

@@ -2,15 +2,16 @@ package org.kinscript.Academy.persistence;
 
 import org.kinscript.Academy.dominio.dto.CoordinadoresDto;
 import org.kinscript.Academy.dominio.dto.ModCoordinadoresDto;
-import org.kinscript.Academy.dominio.exception.CoordinadorNoExisteException;
-import org.kinscript.Academy.dominio.exception.CoordinadorYaExisteException;
+import org.kinscript.Academy.dominio.exception.CoordinadorExistsException;
+import org.kinscript.Academy.dominio.exception.CoordinadorNotExistsException;
+import org.kinscript.Academy.dominio.repository.CoordinadoresRepository;
 import org.kinscript.Academy.persistence.crud.CrudCoordinadoresEntity;
-import org.kinscript.Academy.persistence.entity.CoordinadoresEntity;
+import org.kinscript.Academy.persistence.entity.Coordinadores;
 import org.kinscript.Academy.persistence.mapper.CoordinadoresMapper;
-import org.kinscript.Academy.repository.CoordinadoresRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class CoordinadoresEntityRepository implements CoordinadoresRepository {
@@ -24,45 +25,44 @@ public class CoordinadoresEntityRepository implements CoordinadoresRepository {
     }
 
     @Override
-    public List<CoordinadoresDto> obtenerCoordinador() {
-        return this.coordinadoresMapper.toDto(this.crudCoordinadoresEntity.findAll());
+    public List<CoordinadoresDto> obtenerTodos() {
+        return coordinadoresMapper.toDto((List<Coordinadores>) crudCoordinadoresEntity.findAll());
     }
 
     @Override
-    public CoordinadoresDto buscarCoordinador(Long codigo) {
-        return this.coordinadoresMapper.toDto(this.crudCoordinadoresEntity.findById(codigo).orElse(null));
+    public Optional<CoordinadoresDto> buscarPorId(Integer idCoordinador) {
+        return crudCoordinadoresEntity.findById(idCoordinador)
+                .map(coordinadoresMapper::toDto);
     }
 
     @Override
-    public CoordinadoresDto guardarCoordinador(CoordinadoresDto coordinadoresDto) {
-        if (this.crudCoordinadoresEntity.findByNombre(coordinadoresDto.getNombreCompleto()) != null) {
-            throw new CoordinadorYaExisteException(coordinadoresDto.getNombreCompleto());
-        } else {
-            CoordinadoresEntity = this.coordinadoresMapper.toEntity(CoordinadoresDto);
-            CoordinadoresEntity = this.coordinadoresMapper.save(CrudCoordinadoresEntity);
-            return this.coordinadoresMapper.toDto(CoordinadoresEntity);
+    public CoordinadoresDto guardar(CoordinadoresDto coordinadoresDto) {
+        crudCoordinadoresEntity.findByEmail(coordinadoresDto.email())
+                .ifPresent(coordinador -> {
+                    throw new CoordinadorExistsException(coordinadoresDto.email());
+                });
+        Coordinadores coordinador = coordinadoresMapper.toEntity(coordinadoresDto);
+        return coordinadoresMapper.toDto(crudCoordinadoresEntity.save(coordinador));
+    }
+
+    @Override
+    public Optional<CoordinadoresDto> modificar(Integer idCoordinador, ModCoordinadoresDto modDto) {
+        return crudCoordinadoresEntity.findById(idCoordinador)
+                .map(coordinador -> {
+                    coordinador.setNombreCompleto(modDto.nombreCompleto());
+                    coordinador.setApellidoCompleto(modDto.apellidoCompleto());
+                    coordinador.setEmail(modDto.email());
+                    coordinador.setContrasena(modDto.contrasena());
+                    coordinador.setIdGrado(modDto.idGrado());
+                    return coordinadoresMapper.toDto(crudCoordinadoresEntity.save(coordinador));
+                });
+    }
+
+    @Override
+    public void eliminar(Integer idCoordinador) {
+        if (!crudCoordinadoresEntity.existsById(idCoordinador)) {
+            throw new CoordinadorNotExistsException(idCoordinador);
         }
-    }
-
-    @Override
-    public CoordinadoresDto modificarCoordinador(Long codigo, ModCoordinadoresDto modCoordinadoresDto) {
-        CoordinadoresEntity coordinadores = this.crudCoordinadoresEntity.findById(codigo).orElse(null);
-        if (coordinadores != null) {
-            this.coordinadoresMapper.modificarCoordinador(modPelicula, coordinadores);
-            return coordinadoresMapper.toDto(this.crudCoordinadoresEntity.save(coordinadores));
-        } else {
-            throw new CoordinadorNoExisteException(codigo);
-        }
-    }
-
-    @Override
-    public void eliminarCoordinador(Long codigo) {
-        CoordinadoresEntity coordinadore = this.crudCoordinadoresEntity.findById(codigo).orElse(null);
-        //Exceptions
-        if (coordinadore != null) {
-            this.crudCoordinadoresEntity.delete(coordinadore);
-        } else {
-            throw new CoordinadorNoExisteException(codigo);
-        }
+        crudCoordinadoresEntity.deleteById(idCoordinador);
     }
 }
