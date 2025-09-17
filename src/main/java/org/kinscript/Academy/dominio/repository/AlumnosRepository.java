@@ -1,10 +1,14 @@
-/*package org.kinscript.Academy.dominio.repository;
+package org.kinscript.Academy.dominio.repository;
 
-public class AlumnosRepository {
-    List<AlumnosDto> obtenerAlumno();
-    public AlumnosDto buscarAlumno(Long codigo);
-    AlumnosDto guardarAlumno(AlumnosDto peliculalumnoDto);
-    AlumnosDto modificarAlumno(Long codigo, ModAlumnosDto  modAlumnos);
-    void eliminarAlumno(Long codigo);
+import org.kinscript.Academy.dominio.dto.AlumnosDto;
+import org.kinscript.Academy.dominio.dto.ModAlumnosDto;
 
-}*/
+import java.util.List;
+
+public interface AlumnosRepository {
+    List<AlumnosDto> obtenerTodos();
+    AlumnosDto buscarPorId(Integer idAlumno);
+    AlumnosDto guardar(AlumnosDto alumnosDto);
+    AlumnosDto modificar(Integer idAlumno, ModAlumnosDto modAlumnosDto);
+    void eliminar(Integer idAlumno);
+}

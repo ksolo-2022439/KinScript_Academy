@@ -1,37 +1,37 @@
-// package org.kinscript.Academy.dominio.service;
+package org.kinscript.Academy.dominio.service;
 
-/*
+import org.kinscript.Academy.dominio.dto.AlumnosDto;
+import org.kinscript.Academy.dominio.dto.ModAlumnosDto;
+import org.kinscript.Academy.dominio.repository.AlumnosRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class AlumnosService {
+    private final AlumnosRepository alumnosRepository;
 
-    private final PeliculaRepository peliculaRepository;
-
-    public PeliculaService(PeliculaRepository peliculaRepository){
-        this.peliculaRepository = peliculaRepository;
+    public AlumnosService(AlumnosRepository alumnosRepository) {
+        this.alumnosRepository = alumnosRepository;
     }
 
-    public List<PeliculaDto> obtenerTodo(){
-        return this.peliculaRepository.obtenerTodo();
+    public List<AlumnosDto> obtenerTodo() {
+        return this.alumnosRepository.obtenerTodos();
     }
 
-    public PeliculaDto buscarPorCodigo(Long codigo){
-        return this.peliculaRepository.buscarPorCodigo(codigo);
+    public AlumnosDto buscarPorCodigo(Integer idAlumno) {
+        return this.alumnosRepository.buscarPorId(idAlumno);
     }
 
-    public PeliculaDto guardarPelicula(PeliculaDto peliculaDto){
-        return this.peliculaRepository.guardarPelicula(peliculaDto);
+    public AlumnosDto guardarAlumno(AlumnosDto alumnosDto) {
+        return this.alumnosRepository.guardar(alumnosDto);
     }
 
-    public PeliculaDto modificarPelicula(Long codigo, ModPeliculaDto modPeliculaDto){
-        return this.peliculaRepository.modificarPelicula(codigo, modPeliculaDto);
+    public AlumnosDto modificarAlumno(Integer idAlumno, ModAlumnosDto modAlumnosDto) {
+        return this.alumnosRepository.modificar(idAlumno, modAlumnosDto);
     }
 
-    public void eliminarPelicula (Long codigo) {
-        this.peliculaRepository.eliminarPelicula(codigo);
+    public void eliminarAlumno(Integer idAlumno) {
+        this.alumnosRepository.eliminar(idAlumno);
     }
-
-}*/
+}
