@@ -130,7 +130,7 @@ INSERT IGNORE INTO grado_curso (id_grado, id_curso) VALUES
 -- =============================================================
 -- INSERCIÓN DE TUTORES
 -- =============================================================
-INSERT IGNORE INTO Tutores (nombreCompleto, apellidoCompleto, numeroTelefono, direccion) VALUES
+INSERT IGNORE INTO Tutores (nombre_completo, apellido_completo, numero_telefono, direccion) VALUES
 ('Carlos', 'González', '55123456', '4a Calle 12-34 Zona 5, Guatemala'),
 ('Ana', 'Martínez', '42987654', 'Avenida Las Américas 20-21 Zona 13, Guatemala'),
 ('Luis', 'Hernández', '31225588', 'Calzada Roosevelt 5-55 Zona 11, Mixco'),
@@ -145,7 +145,7 @@ INSERT IGNORE INTO Tutores (nombreCompleto, apellidoCompleto, numeroTelefono, di
 -- =============================================================
 -- INSERCIÓN DE PROFESORES
 -- =============================================================
-INSERT IGNORE INTO Profesores (nombreCompleto, apellidoCompleto, direccion, numeroTelefono, email, contrasena) VALUES
+INSERT IGNORE INTO Profesores (nombre_completo, apellido_completo, direccion, numero_telefono, email, contrasena) VALUES
 ('Roberto', 'Mendoza', '10a Av. 5-30 Zona 9, Guatemala', '58765432', 'roberto.mendoza@kinscript.org', 'profe123'),
 ('Patricia', 'Reyes', '8a Calle 14-56 Zona 1, Guatemala', '41239876', 'patricia.reyes@kinscript.org', 'profe123'),
 ('Fernando', 'Castillo', 'Calle Mariscal Cruz 9-87 Zona 5, Guatemala', '32104567', 'fernando.castillo@kinscript.org', 'profe123'),
@@ -156,40 +156,40 @@ INSERT IGNORE INTO Profesores (nombreCompleto, apellidoCompleto, direccion, nume
 -- =============================================================
 -- INSERCIÓN DE COORDINADORES
 -- =============================================================
-INSERT IGNORE INTO Coordinadores (nombreCompleto, apellidoCompleto, email, contrasena, idGrado) VALUES
-('Mónica', 'Salazar', 'monica.salazar@kinscript.org', 'coordinador123', (SELECT idGrado FROM Grados WHERE nombreGrado = '1ro Básico')),
-('Ricardo', 'Valdez', 'ricardo.valdez@kinscript.org', 'coordinador123', (SELECT idGrado FROM Grados WHERE nombreGrado = '4to Perito'));
+INSERT IGNORE INTO Coordinadores (nombre_completo, apellido_completo, email, contrasena, id_grado) VALUES
+('Mónica', 'Salazar', 'monica.salazar@kinscript.org', 'coordinador123', (SELECT id_grado FROM Grados WHERE nombre_grado = '1ro Básico')),
+('Ricardo', 'Valdez', 'ricardo.valdez@kinscript.org', 'coordinador123', (SELECT id_grado FROM Grados WHERE nombre_grado = '4to Perito'));
 
 -- =============================================================
 -- INSERCIÓN DE ALUMNOS
 -- =============================================================
 -- 1ro Básico
-INSERT IGNORE INTO Alumnos (carnetAlumno, nombreCompleto, apellidoCompleto, emailAcademico, contrasena, direccion, idGrado, idSeccion, idJornada, idCarrera, idTutor) VALUES
+INSERT IGNORE INTO Alumnos (carnet_alumno, nombre_completo, apellido_completo, email_academico, contrasena, direccion, id_grado, id_seccion, id_jornada, id_carrera, id_tutor) VALUES
 ('2025001', 'Juan', 'Pérez López', 'juan.perez@kinscript.edu.gt', 'alumno123', 'Colonia El Milagro, Zona 6, Mixco', 1, 1, 1, NULL, 1),
 ('2025002', 'Maria', 'Gomez Hernandez', 'maria.gomez@kinscript.edu.gt', 'alumno123', 'Residenciales San José, Zona 1, San José Pinula', 1, 2, 1, NULL, 2),
 ('2025003', 'Pedro', 'Chavez Garcia', 'pedro.chavez@kinscript.edu.gt', 'alumno123', 'Condominio Las Victorias, Zona 10, Guatemala', 1, 1, 2, NULL, 3);
 
 -- 2do Básico
-INSERT IGNORE INTO Alumnos (carnetAlumno, nombreCompleto, apellidoCompleto, emailAcademico, contrasena, direccion, idGrado, idSeccion, idJornada, idCarrera, idTutor) VALUES
+INSERT IGNORE INTO Alumnos (carnet_alumno, nombre_completo, apellido_completo, email_academico, contrasena, direccion, id_grado, id_seccion, id_jornada, id_carrera, id_tutor) VALUES
 ('2025004', 'Lucia', 'Morales Ramirez', 'lucia.morales@kinscript.edu.gt', 'alumno123', '4a Calle Poniente, Antigua Guatemala', 2, 1, 1, NULL, 4),
 ('2025005', 'Jose', 'Santos Diaz', 'jose.santos@kinscript.edu.gt', 'alumno123', 'Avenida Petapa 34-01, Zona 12, Guatemala', 2, 2, 2, NULL, 5);
 
 -- 3ro Básico
-INSERT IGNORE INTO Alumnos (carnetAlumno, nombreCompleto, apellidoCompleto, emailAcademico, contrasena, direccion, idGrado, idSeccion, idJornada, idCarrera, idTutor) VALUES
+INSERT IGNORE INTO Alumnos (carnet_alumno, nombre_completo, apellido_completo, email_academico, contrasena, direccion, id_grado, id_seccion, id_jornada, id_carrera, id_tutor) VALUES
 ('2025006', 'Ana', 'Castillo Torres', 'ana.castillo@kinscript.edu.gt', 'alumno123', 'Km 15 Carretera a El Salvador, Fraijanes', 3, 1, 1, NULL, 6),
 ('2025007', 'Miguel', 'Reyes Mendoza', 'miguel.reyes@kinscript.edu.gt', 'alumno123', 'Santa Catarina Pinula, Guatemala', 3, 1, 2, NULL, 7);
 
 -- 4to Perito en Informática
-INSERT IGNORE INTO Alumnos (carnetAlumno, nombreCompleto, apellidoCompleto, emailAcademico, contrasena, direccion, idGrado, idSeccion, idJornada, idCarrera, idTutor) VALUES
+INSERT IGNORE INTO Alumnos (carnet_alumno, nombre_completo, apellido_completo, email_academico, contrasena, direccion, id_grado, id_seccion, id_jornada, id_carrera, id_tutor) VALUES
 ('2025008', 'Sofia', 'Guzman Ortiz', 'sofia.guzman@kinscript.edu.gt', 'alumno123', 'Zona 4, Quetzaltenango', 4, 1, 1, 1, 8),
 ('2025009', 'Daniel', 'Salazar Valdez', 'daniel.salazar@kinscript.edu.gt', 'alumno123', '1ra Calle 1-23 Zona 1, Cobán', 4, 2, 1, 1, 9);
 
 -- 5to Perito en Mecánica
-INSERT IGNORE INTO Alumnos (carnetAlumno, nombreCompleto, apellidoCompleto, emailAcademico, contrasena, direccion, idGrado, idSeccion, idJornada, idCarrera, idTutor) VALUES
+INSERT IGNORE INTO Alumnos (carnet_alumno, nombre_completo, apellido_completo, email_academico, contrasena, direccion, id_grado, id_seccion, id_jornada, id_carrera, id_tutor) VALUES
 ('2025010', 'Camila', 'Gomez Hernandez', 'camila.gomez@kinscript.edu.gt', 'alumno123', 'Residenciales San José, Zona 1, San José Pinula', 5, 1, 2, 2, 2);
 
 -- 6to Perito en Electrónica
-INSERT IGNORE INTO Alumnos (carnetAlumno, nombreCompleto, apellidoCompleto, emailAcademico, contrasena, direccion, idGrado, idSeccion, idJornada, idCarrera, idTutor) VALUES
+INSERT IGNORE INTO Alumnos (carnet_alumno, nombre_completo, apellido_completo, email_academico, contrasena, direccion, id_grado, id_seccion, id_jornada, id_carrera, id_tutor) VALUES
 ('2025011', 'Mateo', 'Pérez López', 'mateo.perez@kinscript.edu.gt', 'alumno123', '4a Calle 12-34 Zona 5, Guatemala', 6, 1, 1, 5, 1);
 
 
@@ -197,25 +197,25 @@ INSERT IGNORE INTO Alumnos (carnetAlumno, nombreCompleto, apellidoCompleto, emai
 -- INSERCIÓN DE NOTAS
 -- =============================================================
 
--- Notas para Juan Pérez (idAlumno=1, idGrado=1)
-INSERT IGNORE INTO Notas (idAlumno, idCurso, bimestre1, bimestre2, bimestre3, bimestre4) VALUES
+-- Notas para Juan Pérez (id_alumno=1, id_grado=1)
+INSERT IGNORE INTO Notas (id_alumno, id_curso, bimestre1, bimestre2, bimestre3, bimestre4) VALUES
 (1, 2, 85.50, 90.00, 88.75, 92.50), -- Sociales
 (1, 3, 78.00, 82.50, 80.00, 79.50), -- Artes Plásticas
 (1, 10, 92.00, 88.50, 95.00, 93.00); -- Matemáticas
 
--- Notas para Maria Gomez (idAlumno=2, idGrado=1)
-INSERT IGNORE INTO Notas (idAlumno, idCurso, bimestre1, bimestre2, bimestre3, bimestre4) VALUES
+-- Notas para Maria Gomez (id_alumno=2, id_grado=1)
+INSERT IGNORE INTO Notas (id_alumno, id_curso, bimestre1, bimestre2, bimestre3, bimestre4) VALUES
 (2, 2, 90.00, 91.50, 89.00, 94.00), -- Sociales
 (2, 3, 88.00, 85.00, 86.50, 90.00), -- Artes Plásticas
 (2, 10, 95.00, 96.50, 94.00, 97.00); -- Matemáticas
 
--- Notas para Lucia Morales (idAlumno=4, idGrado=2)
-INSERT IGNORE INTO Notas (idAlumno, idCurso, bimestre1, bimestre2, bimestre3, bimestre4) VALUES
+-- Notas para Lucia Morales (id_alumno=4, id_grado=2)
+INSERT IGNORE INTO Notas (id_alumno, id_curso, bimestre1, bimestre2, bimestre3, bimestre4) VALUES
 (4, 2, 76.00, 80.50, 79.00, 81.00), -- Sociales
 (4, 10, 82.50, 85.00, 88.00, 86.50); -- Matemáticas
 
--- Notas para Sofia Guzman (idAlumno=8, idGrado=4)
-INSERT IGNORE INTO Notas (idAlumno, idCurso, bimestre1, bimestre2, bimestre3, bimestre4) VALUES
+-- Notas para Sofia Guzman (id_alumno=8, id_grado=4)
+INSERT IGNORE INTO Notas (id_alumno, id_curso, bimestre1, bimestre2, bimestre3, bimestre4) VALUES
 (8, 15, 88.00, 92.50, 90.00, 94.00), -- Tecnología I
 (8, 21, 91.50, 89.00, 93.00, 95.50), -- Matemáticas I
 (8, 23, 85.00, 88.00, 86.50, 90.00); -- Taller I

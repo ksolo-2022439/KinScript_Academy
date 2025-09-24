@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>Gestión de Grados</title>
+    <link rel="stylesheet" href="https://unpkg.com/primeflex@latest/primeflex.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/primeflex/themes/primeone-dark.css"/>
+</h:head>
+<h:body>
+    <div class="card">
+        <h:form id="formulario-grados">
+                <p:growl id="mensaje-emergente" showDetail="true" showSummary="true"/>
+                <div class="card">
+                    <p:menubar>
+                        <p:menuitem value="Nuevo Grado" icon="pi pi-fw pi-plus"
+                                    actionListener="#{gradosVistaController.prepararNuevoGrado}"
+                                    update=":formulario-modal:dialogo-grado"
+                                    oncomplete="PF('dialogoGrado').show();"/>
+                    </p:menubar>
+
+                    <div class="card">
+                        <p:dataTable value="#{gradosVistaController.grados}" var="grado" id="tabla-grados" widgetVar="gradosTabla">
+                            <f:facet name="header">
+                                <h3 class="flex align-items-center justify-content-center w-20rem h4rem bg-blue-500 font-bold m-2 text-gray-900 border-round">
+                                    Gestión de Grados
+                                </h3>
+                            </f:facet>
+
+                            <p:column headerText="ID">
+                                <h:outputText value="#{grado.idGrado}"/>
+                            </p:column>
+
+                            <p:column headerText="Nombre del Grado">
+                                <h:outputText value="#{grado.nombreGrado}"/>
+                            </p:column>
+
+                            <p:column>
+                                <p:commandButton value="Editar" icon="pi pi-pencil"
+                                                 update=":formulario-modal:dialogo-grado"
+                                                 process="@this"
+                                                 oncomplete="PF('dialogoGrado').show();"
+                                                 class="ui-button-primary"
+                                                 style="margin-right:.5rem">
+                                    <f:setPropertyActionListener value="#{grado}" target="#{gradosVistaController.gradoSeleccionado}"/>
+                                    <p:resetInput target="formulario-modal:dialogo-grado"/>
+                                </p:commandButton>
+
+                                <p:commandButton value="Eliminar" icon="pi pi-trash" class="ui-button-danger"
+                                                 process="@this"
+                                                 oncomplete="PF('confirmarEliminarGrado').show()">
+                                    <f:setPropertyActionListener value="#{grado}" target="#{gradosVistaController.gradoSeleccionado}"/>
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+                    </div>
+                </div>
+            </h:form>
+
+            <h:form id="formulario-modal">
+                <p:dialog header="Detalles del Grado" showEffect="fade" modal="true" widgetVar="dialogoGrado" responsive="true">
+                    <p:outputPanel id="dialogo-grado" class="ui-fluid">
+                        <div class="field">
+                            <p:outputPanel for="nombreGrado">Nombre del Grado</p:outputPanel>
+                            <p:inputText id="nombreGrado" value="#{gradosVistaController.gradoSeleccionado.nombreGrado}" required="true"/>
+                        </div>
+                    </p:outputPanel>
+                    <f:facet name="footer">
+                        <p:commandButton value="Guardar"
+                                         icon="pi pi-check"
+                                         process="dialogo-grado @this"
+                                         actionListener="#{gradosVistaController.guardarGrado}"
+                                         update="formulario-grados:mensaje-emergente formulario-grados:tabla-grados"
+                                         oncomplete="PF('dialogoGrado').hide();"/>
+                    </f:facet>
+                </p:dialog>
+
+                <p:confirmDialog widgetVar="confirmarEliminarGrado"
+                                 showEffect="fade" width="300"
+                                 message="¿Desea eliminar este grado?"
+                                 header="Confirmar" severity="warn">
+                    <p:commandButton value="Si" icon="pi pi-check"
+                                     actionListener="#{gradosVistaController.eliminarGrado}"
+                                     update="formulario-grados:mensaje-emergente formulario-grados:tabla-grados"
+                                     oncomplete="PF('confirmarEliminarGrado').hide()"/>
+                    <p:commandButton value="No" icon="pi pi-times"
+                                     onclick="PF('confirmarEliminarGrado').hide()"
+                                     styleClass="ui-button-secondary" type="button"/>
+                </p:confirmDialog>
+            </h:form>
+        </div>
+    </h:body>
+</html>
