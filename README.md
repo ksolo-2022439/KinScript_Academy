@@ -1,8 +1,32 @@
 # 🎓 KinScript Academy
 
+![Java](https://img.shields.io/badge/Java-21-orange?style=flat-square&logo=openjdk)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.5-brightgreen?style=flat-square&logo=springboot)
+![MySQL](https://img.shields.io/badge/MySQL-8.0-blue?style=flat-square&logo=mysql)
+![Maven](https://img.shields.io/badge/Maven-3.6+-red?style=flat-square&logo=apachemaven)
+![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)
+![Status](https://img.shields.io/badge/Status-In%20Development-blue?style=flat-square)
+
 ## Descripción del Proyecto
 
 KinScript Academy es un sistema integral de gestión académica desarrollado con Spring Boot, diseñado para facilitar la administración completa de instituciones educativas. El sistema permite gestionar alumnos, profesores, cursos, notas, tutores y toda la estructura organizacional de un centro académico.
+
+## 📋 Tabla de Contenidos
+
+- [✨ Características Principales](#-características-principales)
+- [🛠️ Tecnologías Utilizadas](#️-tecnologías-utilizadas)
+- [📁 Estructura del Proyecto](#-estructura-del-proyecto)
+- [🗃️ Modelo de Datos](#️-modelo-de-datos)
+- [🚀 Instalación y Configuración](#-instalación-y-configuración)
+- [📡 API Endpoints](#-api-endpoints)
+- [🏗️ Arquitectura del Sistema](#️-arquitectura-del-sistema)
+- [⚙️ Configuración Avanzada](#️-configuración-avanzada)
+- [🧪 Testing](#-testing)
+- [🚀 Despliegue en Producción](#-despliegue-en-producción)
+- [🔧 Solución de Problemas](#-solución-de-problemas)
+- [📈 Roadmap del Proyecto](#-roadmap-del-proyecto)
+- [🤝 Contribución](#-contribución)
+- [📞 Soporte](#-soporte)
 
 ## ✨ Características Principales
 
@@ -306,10 +330,136 @@ Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más det
 **KinScript Academy Team**
 - GitHub: [@ksolo-2022439](https://github.com/ksolo-2022439)
 
+## 🚀 Despliegue en Producción
+
+### Docker
+```dockerfile
+# Dockerfile ejemplo
+FROM openjdk:21-jre-slim
+COPY target/Academy-0.0.1-SNAPSHOT.jar app.jar
+EXPOSE 8090
+ENTRYPOINT ["java", "-jar", "/app.jar"]
+```
+
+### Variables de Entorno para Producción
+```bash
+SPRING_PROFILES_ACTIVE=production
+SPRING_DATASOURCE_URL=jdbc:mysql://db-host:3306/KinScript_Academy
+SPRING_DATASOURCE_USERNAME=${DB_USER}
+SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
+SERVER_PORT=8090
+```
+
+## 🔧 Solución de Problemas
+
+### Problemas Comunes
+
+#### Error de Conexión a Base de Datos
+```bash
+# Verificar que MySQL esté ejecutándose
+sudo systemctl status mysql
+
+# Verificar conectividad
+mysql -u tu_usuario -p -h localhost
+```
+
+#### Puerto en Uso
+```bash
+# Encontrar proceso usando el puerto 8090
+lsof -i :8090
+
+# Cambiar puerto en application.properties
+server.port=8091
+```
+
+#### Problemas de Compilación con Java 21
+```bash
+# Verificar versión de Java
+java -version
+
+# Configurar JAVA_HOME
+export JAVA_HOME=/usr/lib/jvm/temurin-21-jdk-amd64
+```
+
+### Logs de la Aplicación
+```bash
+# Ver logs en tiempo real
+tail -f logs/academy.log
+
+# Configurar nivel de logs en application.properties
+logging.level.org.kinscript.Academy=DEBUG
+```
+
+## 📈 Roadmap del Proyecto
+
+### Versión 1.1 (Próximamente)
+- [ ] Autenticación y autorización con JWT
+- [ ] Reportes en PDF y Excel
+- [ ] Sistema de notificaciones por email
+- [ ] Dashboard con métricas en tiempo real
+
+### Versión 1.2 (Futuro)
+- [ ] Aplicación móvil con React Native
+- [ ] Integración con sistemas de pago
+- [ ] Chat en tiempo real con WebSockets
+- [ ] Integración con calendarios externos
+
+### Versión 2.0 (Visión a Largo Plazo)
+- [ ] Microservicios con Spring Cloud
+- [ ] Implementación de blockchain para certificados
+- [ ] IA avanzada para recomendaciones académicas
+- [ ] Realidad aumentada para laboratorios virtuales
+
+## 🔐 Seguridad
+
+### Mejores Prácticas Implementadas
+- Validación de entrada en todos los endpoints
+- Uso de DTOs para evitar exposición de entidades
+- Encriptación de contraseñas (cuando se implemente autenticación)
+- Configuración de CORS apropiada
+- Sanitización de datos SQL con JPA
+
+### Recomendaciones Adicionales
+- Implementar HTTPS en producción
+- Configurar firewall para la base de datos
+- Usar secretos seguros para API keys
+- Implementar rate limiting
+- Auditoría de accesos
+
+## 📊 Métricas y Monitoreo
+
+### Métricas Disponibles
+- Número de requests por endpoint
+- Tiempo de respuesta promedio
+- Uso de memoria y CPU
+- Número de conexiones a base de datos
+- Errores por tipo y frecuencia
+
+### Herramientas Recomendadas
+- **Micrometer**: Métricas de aplicación
+- **Prometheus**: Recolección de métricas
+- **Grafana**: Visualización de métricas
+- **ELK Stack**: Análisis de logs
+
+## 🌐 Internacionalización
+
+El sistema está preparado para soportar múltiples idiomas:
+- Español (idioma por defecto)
+- Inglés (próximamente)
+- Mensajes de error localizados
+- Formatos de fecha y número por región
+
 ## 📞 Soporte
 
 Para reportar bugs o solicitar nuevas características, por favor crea un [issue](https://github.com/ksolo-2022439/KinScript_Academy/issues) en GitHub.
 
+### Canales de Comunicación
+- **Issues**: Para bugs y solicitudes de características
+- **Discussions**: Para preguntas generales y discusiones
+- **Wiki**: Documentación adicional y guías avanzadas
+
 ---
 
 ⭐ **¡No olvides dar una estrella al proyecto si te fue útil!** ⭐
+
+**KinScript Academy** - Revolucionando la gestión académica con tecnología moderna
