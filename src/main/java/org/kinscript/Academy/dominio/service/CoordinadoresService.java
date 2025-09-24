@@ -7,6 +7,7 @@ import org.kinscript.Academy.dominio.repository.CoordinadoresRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CoordinadoresService {
@@ -37,5 +38,9 @@ public class CoordinadoresService {
 
     public void eliminarCoordinador(Long idCoordinador) {
         coordinadoresRepository.eliminar(idCoordinador);
+    }
+
+    public Optional<CoordinadoresDto> findByEmail(String email) {
+        return this.coordinadoresRepository.findByEmail(email);
     }
 }

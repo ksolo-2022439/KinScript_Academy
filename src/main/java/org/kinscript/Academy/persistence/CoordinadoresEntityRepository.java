@@ -65,4 +65,10 @@ public class CoordinadoresEntityRepository implements CoordinadoresRepository {
         }
         crudCoordinadoresEntity.deleteById(idCoordinador);
     }
+
+    @Override
+    public Optional<CoordinadoresDto> findByEmail(String email) {
+        return crudCoordinadoresEntity.findFirstByEmail(email)
+                .map(coordinadoresMapper::toDto);
+    }
 }

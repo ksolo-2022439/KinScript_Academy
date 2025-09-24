@@ -12,4 +12,5 @@ public interface CoordinadoresRepository {
     CoordinadoresDto guardar(CoordinadoresDto coordinadoresDto);
     Optional<CoordinadoresDto> modificar(Long idCoordinador, ModCoordinadoresDto modCoordinadoresDto);
     void eliminar(Long idCoordinador);
+    Optional<CoordinadoresDto> findByEmail(String email);
 }

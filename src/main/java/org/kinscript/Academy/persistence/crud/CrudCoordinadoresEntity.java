@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface CrudCoordinadoresEntity extends CrudRepository<Coordinadores, Long> {
     Optional<Coordinadores> findByEmail(String email);
+    Optional<Coordinadores> findFirstByEmail(String email);
 }
