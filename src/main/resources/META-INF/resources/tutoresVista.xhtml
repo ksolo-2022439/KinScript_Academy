@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>Gestión de Tutores</title>
+    <link rel="stylesheet" href="https://unpkg.com/primeflex@latest/primeflex.css"/>
+</h:head>
+<h:body>
+    <div class="card">
+        <h:form id="formulario-tutores">
+            <p:growl id="mensaje-emergente" showDetail="true" showSummary="true" life="4000"/>
+            <p:menubar>
+                <p:menuitem value="Nuevo Tutor" icon="pi pi-fw pi-plus"
+                            actionListener="#{tutoresVistaController.prepararNuevoTutor}"
+                            update=":formulario-modal:dialogo-tutor"
+                            oncomplete="PF('dialogoTutor').show();"/>
+            </p:menubar>
+
+            <div class="card">
+                <p:dataTable value="#{tutoresVistaController.tutores}" var="tutor" id="tabla-tutores" widgetVar="tutoresTabla"
+                             paginator="true" rows="10" paginatorPosition="bottom">
+                    <f:facet name="header">
+                        <h3>Gestión de Tutores</h3>
+                    </f:facet>
+                    <p:column headerText="Nombre Completo" sortBy="#{tutor.nombreCompleto}" filterBy="#{tutor.nombreCompleto}" filterMatchMode="contains">
+                        <h:outputText value="#{tutor.nombreCompleto} #{tutor.apellidoCompleto}"/>
+                    </p:column>
+                    <p:column headerText="Teléfono">
+                        <h:outputText value="#{tutor.numeroTelefono}"/>
+                    </p:column>
+                    <p:column headerText="Dirección">
+                        <h:outputText value="#{tutor.direccion}"/>
+                    </p:column>
+                    <p:column headerText="Acciones" style="width:10rem; text-align:center;">
+                        <p:commandButton value="Editar" icon="pi pi-pencil"
+                                         update=":formulario-modal:dialogo-tutor"
+                                         process="@this"
+                                         oncomplete="PF('dialogoTutor').show();"
+                                         class="ui-button-primary"
+                                         style="margin-right:.5rem">
+                            <f:setPropertyActionListener value="#{tutor}" target="#{tutoresVistaController.tutorSeleccionado}"/>
+                            <p:resetInput target=":formulario-modal:dialogo-tutor"/>
+                        </p:commandButton>
+                        <p:commandButton value="Eliminar" icon="pi pi-trash" class="ui-button-danger"
+                                         process="@this"
+                                         oncomplete="PF('confirmarEliminarTutor').show()">
+                            <f:setPropertyActionListener value="#{tutor}" target="#{tutoresVistaController.tutorSeleccionado}"/>
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </div>
+        </h:form>
+
+        <h:form id="formulario-modal">
+            <p:dialog header="Detalles del Tutor" showEffect="fade" modal="true" widgetVar="dialogoTutor" responsive="true">
+                <p:outputPanel id="dialogo-tutor" class="ui-fluid">
+                    <div class="p-field">
+                        <p:outputLabel for="nombre">Nombres</p:outputLabel>
+                        <p:inputText id="nombre" value="#{tutoresVistaController.tutorSeleccionado.nombreCompleto}" required="true"/>
+                    </div>
+                    <div class="p-field">
+                        <p:outputLabel for="apellido">Apellidos</p:outputLabel>
+                        <p:inputText id="apellido" value="#{tutoresVistaController.tutorSeleccionado.apellidoCompleto}" required="true"/>
+                    </div>
+                    <div class="p-field">
+                        <p:outputLabel for="telefono">Teléfono</p:outputLabel>
+                        <p:inputText id="telefono" value="#{tutoresVistaController.tutorSeleccionado.numeroTelefono}" required="true"/>
+                    </div>
+                    <div class="p-field">
+                        <p:outputLabel for="direccion">Dirección</p:outputLabel>
+                        <p:inputTextarea id="direccion" value="#{tutoresVistaController.tutorSeleccionado.direccion}" required="true" rows="3"/>
+                    </div>
+                </p:outputPanel>
+
+                <f:facet name="footer">
+                    <p:commandButton value="Guardar" icon="pi pi-check"
+                                     actionListener="#{tutoresVistaController.guardarTutor}"
+                                     process="dialogo-tutor @this"
+                                     update=":formulario-tutores:tabla-tutores :formulario-tutores:mensaje-emergente"
+                                     oncomplete="PF('dialogoTutor').hide();"/>
+                </f:facet>
+            </p:dialog>
+
+            <p:confirmDialog widgetVar="confirmarEliminarTutor" message="¿Desea eliminar a este tutor?" header="Confirmar" severity="warn">
+                <p:commandButton value="Si" icon="pi pi-check" process="@this"
+                                 actionListener="#{tutoresVistaController.eliminarTutor}"
+                                 update=":formulario-tutores:tabla-tutores :formulario-tutores:mensaje-emergente"
+                                 oncomplete="PF('confirmarEliminarTutor').hide()"/>
+                <p:commandButton value="No" icon="pi pi-times" styleClass="ui-button-secondary" type="button"
+                                 onclick="PF('confirmarEliminarTutor').hide()"/>
+            </p:confirmDialog>
+        </h:form>
+    </div>
+</h:body>
+</html>
