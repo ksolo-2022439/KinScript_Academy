@@ -55,7 +55,7 @@ public class CursosVistaController implements Serializable {
             if (this.cursoSeleccionado.getIdCurso() == null) {
                 // Crear nuevo curso
                 CursosDto nuevoDto = cursosMapper.toDto(this.cursoSeleccionado);
-                cursosService.guardarCurso(nuevoDto);
+                cursosService.guardarCursos(nuevoDto);
                 FacesContext.getCurrentInstance().addMessage(null,
                         new FacesMessage(FacesMessage.SEVERITY_INFO, "Curso Creado", "Se ha registrado el nuevo curso."));
             } else {
@@ -63,7 +63,7 @@ public class CursosVistaController implements Serializable {
                 ModCursosDto modDto = new ModCursosDto(
                         cursoSeleccionado.getNombreCurso()
                 );
-                cursosService.modificarCurso(this.cursoSeleccionado.getIdCurso(), modDto);
+                cursosService.modificarCursos(this.cursoSeleccionado.getIdCurso(), modDto);
                 FacesContext.getCurrentInstance().addMessage(null,
                         new FacesMessage(FacesMessage.SEVERITY_INFO, "Curso Actualizado", "Los datos han sido actualizados."));
             }
@@ -78,7 +78,7 @@ public class CursosVistaController implements Serializable {
     public void eliminarCurso() {
         if (this.cursoSeleccionado != null && this.cursoSeleccionado.getIdCurso() != null) {
             try {
-                cursosService.eliminarCurso(this.cursoSeleccionado.getIdCurso());
+                cursosService.eliminarCursos(this.cursoSeleccionado.getIdCurso());
                 FacesContext.getCurrentInstance().addMessage(null,
                         new FacesMessage(FacesMessage.SEVERITY_INFO, "Curso Eliminado", "El registro ha sido eliminado."));
                 cargarCursos();
