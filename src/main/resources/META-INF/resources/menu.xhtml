@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>KinScript Academy - Panel de Gestión</title>
+    <link rel="stylesheet" href="https://unpkg.com/primeflex@latest/primeflex.css"/>
+    <style>
+        @import url('https://www.google.com/search?q=https://fonts.googleapis.com/css2%3Ffamily%3DInter:wght%40400%3B500%3B600%3B700%26amp%3Bdisplay%3Dswap');
+
+            body {
+                font-family: 'Inter', sans-serif;
+                margin: 0;
+                padding: 0;
+                background: linear-gradient(135deg, #e0f2f1 0%, #b2ebf2 100%);
+                color: #333;
+            }
+
+            .admin-container {
+                display: flex;
+                min-height: 100vh;
+            }
+
+            .sidebar {
+                width: 280px;
+                background: linear-gradient(135deg, #00796b 0%, #00acc1 100%);
+                color: white;
+                position: fixed;
+                height: 100vh;
+                left: 0;
+                top: 0;
+                z-index: 1000;
+                overflow-y: auto;
+                box-shadow: 2px 0 20px rgba(0, 0, 0, 0.1);
+                transition: transform 0.3s ease;
+            }
+
+            .sidebar-header {
+                padding: 2rem 1.5rem;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                text-align: center;
+            }
+
+            .admin-logo {
+                font-size: 2rem;
+                font-weight: bold;
+                color: white;
+                text-decoration: none;
+                display: block;
+                margin-bottom: 0.5rem;
+            }
+
+            .admin-subtitle {
+                font-size: 0.9rem;
+                opacity: 0.8;
+            }
+
+            .sidebar-nav {
+                padding: 1rem 0;
+            }
+
+            .nav-section {
+                margin-bottom: 2rem;
+            }
+
+            .nav-section-title {
+                padding: 0.5rem 1.5rem;
+                font-size: 0.8rem;
+                font-weight: 600;
+                opacity: 0.8;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                margin-bottom: 0.5rem;
+            }
+
+            .nav-item {
+                display: flex;
+                align-items: center;
+                padding: 1rem 1.5rem;
+                color: white;
+                text-decoration: none;
+                transition: background 0.3s ease, transform 0.3s ease;
+                border-radius: 12px;
+                margin: 0 1rem 0.5rem 1rem;
+            }
+
+            .nav-item:hover {
+                background: rgba(255, 255, 255, 0.1);
+                transform: translateX(5px);
+            }
+
+            .nav-icon {
+                font-size: 1.2rem;
+                margin-right: 1rem;
+            }
+
+            .main-content {
+                flex: 1;
+                margin-left: 280px;
+                padding: 2rem;
+                min-height: 100vh;
+                transition: margin-left 0.3s ease;
+            }
+
+            .topbar {
+                background: white;
+                padding: 1.5rem 2rem;
+                box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+                border-radius: 15px;
+                margin-bottom: 2rem;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .topbar-title {
+                font-size: 1.8rem;
+                font-weight: bold;
+                color: #333;
+            }
+
+            .content-area {
+                background: white;
+                padding: 2rem;
+                border-radius: 15px;
+                box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            }
+
+            .entity-section-title {
+                font-size: 1.5rem;
+                font-weight: 600;
+                color: #00796b;
+                margin-bottom: 1.5rem;
+                border-bottom: 2px solid #e0f2f1;
+                padding-bottom: 0.5rem;
+            }
+
+            .entity-placeholder {
+                padding: 2rem;
+                text-align: center;
+                color: #666;
+                font-style: italic;
+            }
+
+            @media (max-width: 768px) {
+                .sidebar {
+                    transform: translateX(-100%);
+                    width: 100%;
+                    max-width: 280px;
+                }
+                .sidebar.active {
+                    transform: translateX(0);
+                }
+                .main-content {
+                    margin-left: 0;
+                }
+            }
+    </style>
+
+</h:head>
+
+<h:body>
+    <div class="admin-container">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="#" class="admin-logo">🎓 KinScript</a>
+                <div class="admin-subtitle">Panel de Gestión</div>
+            </div>
+            <h:form>
+                <nav class="sidebar-nav">
+                    <div class="nav-section">
+                        <div class="nav-section-title">Gestión de la Academia</div>
+                        <a href="#" class="nav-item">
+                            <span class="nav-icon">👨‍🏫</span>
+                            <span>Profesores</span>
+                        </a>
+                        <a href="#" class="nav-item">
+                            <span class="nav-icon">👨‍🎓</span>
+                            <span>Alumnos</span>
+                        </a>
+                        <a href="#" class="nav-item">
+                            <span class="nav-icon">📚</span>
+                            <span>Cursos</span>
+                        </a>
+                        <a href="#" class="nav-item">
+                            <span class="nav-icon">👩‍💼</span>
+                            <span>Coordinadores</span>
+                        </a>
+                        <a href="#" class="nav-item">
+                            <span class="nav-icon">📝</span>
+                            <span>Notas</span>
+                        </a>
+                    </div>
+                    <div class="nav-section">
+                        <div class="nav-section-title">Datos Generales</div>
+                        <a href="#" class="nav-item">
+                            <span class="nav-icon">🏠</span>
+                            <span>Tutores</span>
+                        </a>
+                        <a href="#" class="nav-item">
+                            <span class="nav-icon">🏆</span>
+                            <span>Grados</span>
+                        </a>
+                        <a href="#" class="nav-item">
+                            <span class="nav-icon">📊</span>
+                            <span>Secciones</span>
+                        </a>
+                        <a href="#" class="nav-item">
+                            <span class="nav-icon">☀️</span>
+                            <span>Jornadas</span>
+                        </a>
+                        <a href="#" class="nav-item">
+                            <span class="nav-icon">💼</span>
+                            <span>Carreras</span>
+                        </a>
+                    </div>
+                </nav>
+            </h:form>
+        </aside>
+
+        <main class="main-content">
+            <div class="topbar">
+                <h1 class="topbar-title">Panel de Gestión de Entidades</h1>
+            </div>
+
+            <div class="content-area">
+                <h2 class="entity-section-title">Bienvenido</h2>
+                <div class="entity-placeholder">
+                    <p>Selecciona una entidad del menú lateral para comenzar a gestionar los datos.</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+</h:body>
+
+</html>
