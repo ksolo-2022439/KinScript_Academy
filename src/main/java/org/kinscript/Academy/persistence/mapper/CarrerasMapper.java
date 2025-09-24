@@ -20,6 +20,6 @@ public interface CarrerasMapper {
     List<CarrerasDto> toDto(List<Carreras> carreras);
 
     @InheritInverseConfiguration
-    @Mapping(target = "idCarrera", ignore = true)
+    //@Mapping(target = "idCarrera", ignore = true)
     Carreras toEntity(CarrerasDto carrerasDto);
 }

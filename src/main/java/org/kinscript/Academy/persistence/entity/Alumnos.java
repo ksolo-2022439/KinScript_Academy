@@ -31,31 +31,31 @@ public class Alumnos {
     @Column(nullable = false)
     private String direccion;
 
-    @ManyToOne
+    // llaves foraneas
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "idGrado", insertable = false, updatable = false)
     private Grados grado;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "idSeccion", insertable = false, updatable = false)
     private Secciones seccion;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "idJornada", insertable = false, updatable = false)
     private Jornadas jornada;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "idCarrera", insertable = false, updatable = false)
     private Carreras carrera;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "idTutor", insertable = false, updatable = false)
     private Tutores tutor;
 
-    // llaves foraneas
-    @Column(name = "idGrado", nullable = false)
+    @Column(name = "idGrado")
     private Long idGrado;
 
-    @Column(name = "idSeccion", nullable = false)
+    @Column(name = "idSeccion")
     private Long idSeccion;
 
     @Column(name = "idJornada")
@@ -64,6 +64,6 @@ public class Alumnos {
     @Column(name = "idCarrera")
     private Long idCarrera;
 
-    @Column(name = "idTutor", nullable = false)
+    @Column(name = "idTutor")
     private Long idTutor;
 }
