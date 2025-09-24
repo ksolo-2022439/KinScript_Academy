@@ -20,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 
 import java.io.Serializable;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -43,17 +42,16 @@ public class GradoCursoVistaController implements Serializable {
     @Autowired
     private CursosMapper cursosMapper;
 
-    private Long idGradoSeleccionado;
-    private Long idCursoParaAsociar;
+    private List<GradoCurso> todasLasAsociaciones;
+    private GradoCurso nuevaAsociacion;
     private GradoCurso asociacionSeleccionada;
-
     private List<Grados> listaGrados;
     private List<Cursos> listaCursos;
-    private List<GradoCurso> cursosDelGrado;
 
     @PostConstruct
     public void init() {
         cargarListasSoporte();
+        cargarTodasLasAsociaciones();
     }
 
     private void cargarListasSoporte() {
@@ -65,20 +63,15 @@ public class GradoCursoVistaController implements Serializable {
                 .collect(Collectors.toList());
     }
 
-    public void cargarCursosPorGrado() {
-        if (idGradoSeleccionado == null) {
-            this.cursosDelGrado = Collections.emptyList();
-            return;
-        }
-
-        List<GradoCursoDto> dtos = gradoCursoService.obtenerCursosPorGrado(idGradoSeleccionado);
+    public void cargarTodasLasAsociaciones() {
+        List<GradoCursoDto> dtos = gradoCursoService.obtenerTodo();
 
         Map<Long, Cursos> cursosMap = listaCursos.stream()
                 .collect(Collectors.toMap(Cursos::getIdCurso, Function.identity()));
         Map<Long, Grados> gradosMap = listaGrados.stream()
                 .collect(Collectors.toMap(Grados::getIdGrado, Function.identity()));
 
-        this.cursosDelGrado = dtos.stream().map(dto -> {
+        this.todasLasAsociaciones = dtos.stream().map(dto -> {
             GradoCurso gc = new GradoCurso();
             gc.setIdGrado(dto.idGrado());
             gc.setIdCurso(dto.idCurso());
@@ -88,14 +81,20 @@ public class GradoCursoVistaController implements Serializable {
         }).collect(Collectors.toList());
     }
 
-    public void asociarCurso() {
-        if (idGradoSeleccionado != null && idCursoParaAsociar != null) {
+    public void prepararNuevaAsociacion() {
+        this.nuevaAsociacion = new GradoCurso();
+        this.nuevaAsociacion.setGrado(new Grados());
+        this.nuevaAsociacion.setCurso(new Cursos());
+    }
+
+    public void guardarAsociacion() {
+        if (nuevaAsociacion != null && nuevaAsociacion.getGrado() != null && nuevaAsociacion.getGrado().getIdGrado() != null
+                && nuevaAsociacion.getCurso() != null && nuevaAsociacion.getCurso().getIdCurso() != null) {
             try {
-                GradoCursoDto dto = new GradoCursoDto(idGradoSeleccionado, idCursoParaAsociar);
+                GradoCursoDto dto = new GradoCursoDto(nuevaAsociacion.getGrado().getIdGrado(), nuevaAsociacion.getCurso().getIdCurso());
                 gradoCursoService.guardarAsociacion(dto);
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Asociación Creada", "El curso fue asociado al grado."));
-                cargarCursosPorGrado();
-                idCursoParaAsociar = null;
+                cargarTodasLasAsociaciones();
             } catch (Exception e) {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "El curso ya está asociado a este grado."));
             }
@@ -109,7 +108,7 @@ public class GradoCursoVistaController implements Serializable {
             try {
                 gradoCursoService.eliminarAsociacion(asociacionSeleccionada.getIdGrado(), asociacionSeleccionada.getIdCurso());
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Asociación Eliminada", "Se ha eliminado el curso del grado."));
-                cargarCursosPorGrado();
+                cargarTodasLasAsociaciones();
                 asociacionSeleccionada = null;
             } catch (DataIntegrityViolationException e) {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Acción Denegada", "La asociación está en uso."));

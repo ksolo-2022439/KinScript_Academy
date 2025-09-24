@@ -11,58 +11,81 @@
     <div class="card">
         <h:form id="formulario-gradocurso">
             <p:growl id="mensaje-emergente" showDetail="true" showSummary="true" life="4000"/>
+            <p:menubar>
+                <p:menuitem value="Volver al Menú"
+                            icon="pi pi-fw pi-home"
+                            action="menu.xhtml?faces-redirect=true"
+                            update="@form" />
+                <p:menuitem value="Asociar Nuevo Curso" icon="pi pi-fw pi-plus"
+                            actionListener="#{gradoCursoVistaController.prepararNuevaAsociacion}"
+                            update=":formulario-modal:dialogo-asociacion"
+                            oncomplete="PF('dialogoAsociacion').show();"/>
+            </p:menubar>
 
             <div class="card">
-                <h3>Gestión de Cursos por Grado</h3>
+                <p:dataTable id="tabla-cursos-grado" var="asociacion" value="#{gradoCursoVistaController.todasLasAsociaciones}"
+                             paginator="true" rows="10" paginatorPosition="bottom"
+                             emptyMessage="No hay cursos asociados a ningún grado.">
+                    <f:facet name="header">
+                        <h3>Cursos Asociados por Grado</h3>
+                    </f:facet>
 
-                <p:panelGrid columns="2" layout="grid" styleClass="ui-noborder">
-                    <p:outputLabel for="grado" value="Seleccione un Grado:" />
-                    <p:selectOneMenu id="grado" value="#{gradoCursoVistaController.idGradoSeleccionado}" required="true">
-                        <f:selectItem itemLabel="Seleccione..." itemValue="#{null}" noSelectionOption="true"/>
-                        <f:selectItems value="#{gradoCursoVistaController.listaGrados}" var="g" itemLabel="#{g.nombreGrado}" itemValue="#{g.idGrado}"/>
-                        <p:ajax listener="#{gradoCursoVistaController.cargarCursosPorGrado}" update="panel-cursos-asociados"/>
-                    </p:selectOneMenu>
-                </p:panelGrid>
+                    <p:column headerText="Grado" sortBy="#{asociacion.grado.nombreGrado}" filterBy="#{asociacion.grado.nombreGrado}" filterMatchMode="contains">
+                        <h:outputText value="#{asociacion.grado.nombreGrado}" />
+                    </p:column>
 
-                <p:outputPanel id="panel-cursos-asociados" style="margin-top: 20px;">
-                    <p:panelGrid columns="3" layout="grid" styleClass="ui-noborder" rendered="#{not empty gradoCursoVistaController.idGradoSeleccionado}">
-                        <p:outputLabel for="curso" value="Asociar Nuevo Curso:" />
-                        <p:selectOneMenu id="curso" value="#{gradoCursoVistaController.idCursoParaAsociar}">
-                            <f:selectItem itemLabel="Seleccione un curso" itemValue="#{null}" noSelectionOption="true"/>
-                            <f:selectItems value="#{gradoCursoVistaController.listaCursos}" var="c" itemLabel="#{c.nombreCurso}" itemValue="#{c.idCurso}"/>
-                        </p:selectOneMenu>
-                        <p:commandButton value="Asociar Curso" icon="pi pi-plus"
-                                         actionListener="#{gradoCursoVistaController.asociarCurso}"
-                                         process="@this curso"
-                                         update="tabla-cursos-grado mensaje-emergente"/>
-                    </p:panelGrid>
+                    <p:column headerText="Nombre del Curso" sortBy="#{asociacion.curso.nombreCurso}" filterBy="#{asociacion.curso.nombreCurso}" filterMatchMode="contains">
+                        <h:outputText value="#{asociacion.curso.nombreCurso}" />
+                    </p:column>
 
-                    <p:dataTable id="tabla-cursos-grado" var="asociacion" value="#{gradoCursoVistaController.cursosDelGrado}"
-                                 paginator="true" rows="10" paginatorPosition="bottom" style="margin-top: 10px;"
-                                 emptyMessage="No hay cursos asociados a este grado.">
-                        <f:facet name="header">
-                            Cursos Asociados al Grado
-                        </f:facet>
-                        <p:column headerText="Nombre del Curso">
-                            <h:outputText value="#{asociacion.curso.nombreCurso}" />
-                        </p:column>
-                        <p:column headerText="Acciones" style="width:10rem; text-align:center;">
-                            <p:commandButton value="Eliminar" icon="pi pi-trash" class="ui-button-danger"
-                                             process="@this"
-                                             oncomplete="PF('confirmarEliminarAsociacion').show()">
-                                <f:setPropertyActionListener value="#{asociacion}" target="#{gradoCursoVistaController.asociacionSeleccionada}"/>
-                            </p:commandButton>
-                        </p:column>
-                    </p:dataTable>
-                </p:outputPanel>
+                    <p:column headerText="Acciones" style="width:6rem; text-align:center;">
+                        <p:commandButton value="Eliminar" icon="pi pi-trash" class="ui-button-danger"
+                                         process="@this"
+                                         oncomplete="PF('confirmarEliminarAsociacion').show()">
+                            <f:setPropertyActionListener value="#{asociacion}" target="#{gradoCursoVistaController.asociacionSeleccionada}"/>
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
             </div>
         </h:form>
 
-        <h:form id="formulario-confirmacion">
+        <h:form id="formulario-modal">
+            <p:dialog header="Asociar Curso a Grado" showEffect="fade" modal="true" widgetVar="dialogoAsociacion" responsive="true">
+                <p:outputPanel id="dialogo-asociacion" class="ui-fluid">
+
+                    <div class="p-field" style="margin-bottom: 1rem;">
+                        <p:outputLabel for="grado" value="Grado" />
+                        <p:selectOneMenu id="grado" value="#{gradoCursoVistaController.nuevaAsociacion.grado}" required="true" converter="omnifaces.SelectItemsConverter">
+                            <f:selectItem itemLabel="Seleccione un grado" itemValue="#{null}" noSelectionOption="true"/>
+                            <f:selectItems value="#{gradoCursoVistaController.listaGrados}" var="g" itemLabel="#{g.nombreGrado}" itemValue="#{g}"/>
+                        </p:selectOneMenu>
+                    </div>
+
+                    <div class="p-field">
+                        <p:outputLabel for="curso" value="Curso" />
+                        <p:selectOneMenu id="curso" value="#{gradoCursoVistaController.nuevaAsociacion.curso}" required="true" converter="omnifaces.SelectItemsConverter">
+                            <f:selectItem itemLabel="Seleccione un curso" itemValue="#{null}" noSelectionOption="true"/>
+                            <f:selectItems value="#{gradoCursoVistaController.listaCursos}" var="c" itemLabel="#{c.nombreCurso}" itemValue="#{c}"/>
+                        </p:selectOneMenu>
+                    </div>
+
+                </p:outputPanel>
+
+                <f:facet name="footer">
+                    <p:commandButton value="Guardar" icon="pi pi-check"
+                                     actionListener="#{gradoCursoVistaController.guardarAsociacion}"
+                                     process="dialogo-asociacion @this"
+                                     update=":formulario-gradocurso:tabla-cursos-grado :formulario-gradocurso:mensaje-emergente"
+                                     oncomplete="if (!args.validationFailed) PF('dialogoAsociacion').hide();"/>
+                    <p:commandButton value="Cancelar" icon="pi pi-times" styleClass="ui-button-secondary"
+                                     onclick="PF('dialogoAsociacion').hide()" type="button"/>
+                </f:facet>
+            </p:dialog>
+
             <p:confirmDialog widgetVar="confirmarEliminarAsociacion" message="¿Desea desvincular este curso del grado?" header="Confirmar" severity="warn">
                 <p:commandButton value="Si" icon="pi pi-check" process="@this"
                                  actionListener="#{gradoCursoVistaController.eliminarAsociacion}"
-                                 update=":formulario-gradocurso:panel-cursos-asociados :formulario-gradocurso:mensaje-emergente"
+                                 update=":formulario-gradocurso:tabla-cursos-grado :formulario-gradocurso:mensaje-emergente"
                                  oncomplete="PF('confirmarEliminarAsociacion').hide()"/>
                 <p:commandButton value="No" icon="pi pi-times" styleClass="ui-button-secondary" type="button"
                                  onclick="PF('confirmarEliminarAsociacion').hide()"/>

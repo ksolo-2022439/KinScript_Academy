@@ -6,7 +6,6 @@
 <h:head>
     <title>Gestión de Secciones</title>
     <link rel="stylesheet" href="https://unpkg.com/primeflex@latest/primeflex.css"/>
-    <link rel="stylesheet" href="https://unpkg.com/primeflex/themes/primeone-dark.css"/>
 </h:head>
 <h:body>
     <div class="card">
@@ -14,25 +13,32 @@
             <p:growl id="mensaje-emergente" showDetail="true" showSummary="true"/>
             <div class="card">
                 <p:menubar>
+                    <p:menuitem value="Volver al Menú"
+                                icon="pi pi-fw pi-home"
+                                action="menu.xhtml?faces-redirect=true"
+                                update="@form" />
                     <p:menuitem value="Nueva Sección" icon="pi pi-fw pi-plus"
                                 actionListener="#{seccionesVistaController.prepararNuevaSeccion}"
                                 update=":formulario-modal:dialogo-seccion"
                                 oncomplete="PF('dialogoSeccion').show();"/>
                 </p:menubar>
                 <div class="card">
-                    <p:dataTable value="#{seccionesVistaController.secciones}" var="seccion" id="tabla-secciones" widgetVar="seccionesTabla">
+                    <p:dataTable value="#{seccionesVistaController.secciones}" var="seccion" id="tabla-secciones"
+                                 widgetVar="seccionesTabla"
+                                 paginator="true" rows="10" rowsPerPageTemplate="5,10,20" paginatorPosition="bottom">
                         <f:facet name="header">
-                            <h3 class="flex align-items-center justify-content-center w-20rem h4rem bg-blue-500 font-bold m-2 text-gray-900 border-round">
-                                Gestión de Secciones
-                            </h3>
+                            <h3 class="m-0">Gestión de Secciones</h3>
                         </f:facet>
-                        <p:column headerText="ID">
+
+                        <p:column headerText="ID" sortBy="#{seccion.idSeccion}" filterBy="#{seccion.idSeccion}" filterMatchMode="contains">
                             <h:outputText value="#{seccion.idSeccion}"/>
                         </p:column>
-                        <p:column headerText="Nombre de la Sección">
+
+                        <p:column headerText="Nombre de la Sección" sortBy="#{seccion.nombreSeccion}" filterBy="#{seccion.nombreSeccion}" filterMatchMode="contains">
                             <h:outputText value="#{seccion.nombreSeccion}"/>
                         </p:column>
-                        <p:column>
+
+                        <p:column headerText="Acciones" exportable="false" style="text-align:center;">
                             <p:commandButton value="Editar" icon="pi pi-pencil"
                                              update=":formulario-modal:dialogo-seccion"
                                              process="@this"
@@ -40,7 +46,7 @@
                                              class="ui-button-primary"
                                              style="margin-right:.5rem">
                                 <f:setPropertyActionListener value="#{seccion}" target="#{seccionesVistaController.seccionSeleccionada}"/>
-                                <p:resetInput target="formulario-modal:dialogo-seccion"/>
+                                <p:resetInput target=":formulario-modal:dialogo-seccion"/>
                             </p:commandButton>
                             <p:commandButton value="Eliminar" icon="pi pi-trash" class="ui-button-danger"
                                              process="@this"
@@ -56,8 +62,8 @@
         <h:form id="formulario-modal">
             <p:dialog header="Detalles de la Sección" showEffect="fade" modal="true" widgetVar="dialogoSeccion" responsive="true">
                 <p:outputPanel id="dialogo-seccion" class="ui-fluid">
-                    <div class="field">
-                        <p:outputPanel for="nombreSeccion">Nombre de la Sección</p:outputPanel>
+                    <div class="p-field">
+                        <p:outputLabel for="nombreSeccion">Nombre de la Sección</p:outputLabel>
                         <p:inputText id="nombreSeccion" value="#{seccionesVistaController.seccionSeleccionada.nombreSeccion}" required="true"/>
                     </div>
                 </p:outputPanel>
@@ -66,18 +72,18 @@
                                      icon="pi pi-check"
                                      process="dialogo-seccion @this"
                                      actionListener="#{seccionesVistaController.guardarSeccion}"
-                                     update="formulario-secciones:mensaje-emergente formulario-secciones:tabla-secciones"
-                                     oncomplete="PF('dialogoSeccion').hide();"/>
+                                     update=":formulario-secciones:tabla-secciones :formulario-secciones:mensaje-emergente"
+                                     oncomplete="if (!args.validationFailed) PF('dialogoSeccion').hide();"/>
                 </f:facet>
             </p:dialog>
 
             <p:confirmDialog widgetVar="confirmarEliminarSeccion"
-                             showEffect="fade" width="300"
                              message="¿Desea eliminar esta sección?"
                              header="Confirmar" severity="warn">
                 <p:commandButton value="Si" icon="pi pi-check"
+                                 process="@this"
                                  actionListener="#{seccionesVistaController.eliminarSeccion}"
-                                 update="formulario-secciones:mensaje-emergente formulario-secciones:tabla-secciones"
+                                 update=":formulario-secciones:tabla-secciones :formulario-secciones:mensaje-emergente"
                                  oncomplete="PF('confirmarEliminarSeccion').hide()"/>
                 <p:commandButton value="No" icon="pi pi-times"
                                  onclick="PF('confirmarEliminarSeccion').hide()"

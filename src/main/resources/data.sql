@@ -1,4 +1,5 @@
 -- USE KinScript_Academy;
+-- CREATE DATABASE IF NOT EXISTS kinscript_academy;
 
 INSERT IGNORE INTO Grados (nombre_grado) VALUES
 ('1ro Básico'), ('2do Básico'), ('3ro Básico'),

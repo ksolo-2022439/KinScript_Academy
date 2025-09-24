@@ -12,6 +12,10 @@
         <h:form id="formulario-alumnos">
             <p:growl id="mensaje-emergente" showDetail="true" showSummary="true"/>
             <p:menubar>
+                <p:menuitem value="Volver al Menú"
+                            icon="pi pi-fw pi-home"
+                            action="menu.xhtml?faces-redirect=true"
+                            update="@form" />
                 <p:menuitem value="Nuevo Alumno" icon="pi pi-fw pi-plus"
                             actionListener="#{alumnosVistaController.prepararNuevoAlumno}"
                             update=":formulario-modal:dialogo-alumno"

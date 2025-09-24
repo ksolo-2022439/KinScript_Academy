@@ -12,6 +12,10 @@
         <h:form id="formulario-asignaciones">
             <p:growl id="mensaje-emergente" showDetail="true" showSummary="true" life="4000"/>
             <p:menubar>
+                <p:menuitem value="Volver al Menú"
+                            icon="pi pi-fw pi-home"
+                            action="menu.xhtml?faces-redirect=true"
+                            update="@form" />
                 <p:menuitem value="Nueva Asignación" icon="pi pi-fw pi-plus"
                             actionListener="#{profesorAsignacionVistaController.prepararNuevaAsignacion}"
                             update=":formulario-modal:dialogo-asignacion"

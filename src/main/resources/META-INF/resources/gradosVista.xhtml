@@ -6,7 +6,6 @@
 <h:head>
     <title>Gestión de Grados</title>
     <link rel="stylesheet" href="https://unpkg.com/primeflex@latest/primeflex.css"/>
-    <link rel="stylesheet" href="https://unpkg.com/primeflex/themes/primeone-dark.css"/>
 </h:head>
 <h:body>
     <div class="card">
@@ -14,6 +13,10 @@
             <p:growl id="mensaje-emergente" showDetail="true" showSummary="true"/>
             <div class="card">
                 <p:menubar>
+                    <p:menuitem value="Volver al Menú"
+                                icon="pi pi-fw pi-home"
+                                action="menu.xhtml?faces-redirect=true"
+                                update="@form" />
                     <p:menuitem value="Nuevo Grado" icon="pi pi-fw pi-plus"
                                 actionListener="#{gradosVistaController.prepararNuevoGrado}"
                                 update=":formulario-modal:dialogo-grado"
@@ -22,38 +25,35 @@
 
                 <div class="card">
                     <p:dataTable value="#{gradosVistaController.grados}" var="grado" id="tabla-grados"
-                                 widgetVar="gradosTabla">
+                                 widgetVar="gradosTabla"
+                                 paginator="true" rows="10" rowsPerPageTemplate="5,10,20" paginatorPosition="bottom">
                         <f:facet name="header">
-                            <h3 class="flex align-items-center justify-content-center w-20rem h4rem bg-blue-500 font-bold m-2 text-gray-900 border-round">
-                                Gestión de Grados
-                            </h3>
+                            <h3 class="m-0">Gestión de Grados</h3>
                         </f:facet>
 
-                        <p:column headerText="ID">
+                        <p:column headerText="ID" sortBy="#{grado.idGrado}" filterBy="#{grado.idGrado}" filterMatchMode="contains">
                             <h:outputText value="#{grado.idGrado}"/>
                         </p:column>
 
-                        <p:column headerText="Nombre del Grado">
+                        <p:column headerText="Nombre del Grado" sortBy="#{grado.nombreGrado}" filterBy="#{grado.nombreGrado}" filterMatchMode="contains">
                             <h:outputText value="#{grado.nombreGrado}"/>
                         </p:column>
 
-                        <p:column>
+                        <p:column headerText="Acciones" exportable="false" style="text-align:center;">
                             <p:commandButton value="Editar" icon="pi pi-pencil"
                                              update=":formulario-modal:dialogo-grado"
                                              process="@this"
                                              oncomplete="PF('dialogoGrado').show();"
                                              class="ui-button-primary"
                                              style="margin-right:.5rem">
-                                <f:setPropertyActionListener value="#{grado}"
-                                                             target="#{gradosVistaController.gradoSeleccionado}"/>
-                                <p:resetInput target="formulario-modal:dialogo-grado"/>
+                                <f:setPropertyActionListener value="#{grado}" target="#{gradosVistaController.gradoSeleccionado}"/>
+                                <p:resetInput target=":formulario-modal:dialogo-grado"/>
                             </p:commandButton>
 
                             <p:commandButton value="Eliminar" icon="pi pi-trash" class="ui-button-danger"
                                              process="@this"
                                              oncomplete="PF('confirmarEliminarGrado').show()">
-                                <f:setPropertyActionListener value="#{grado}"
-                                                             target="#{gradosVistaController.gradoSeleccionado}"/>
+                                <f:setPropertyActionListener value="#{grado}" target="#{gradosVistaController.gradoSeleccionado}"/>
                             </p:commandButton>
                         </p:column>
                     </p:dataTable>
@@ -65,8 +65,8 @@
             <p:dialog header="Detalles del Grado" showEffect="fade" modal="true" widgetVar="dialogoGrado"
                       responsive="true">
                 <p:outputPanel id="dialogo-grado" class="ui-fluid">
-                    <div class="field">
-                        <p:outputPanel for="nombreGrado">Nombre del Grado</p:outputPanel>
+                    <div class="p-field">
+                        <p:outputLabel for="nombreGrado">Nombre del Grado</p:outputLabel>
                         <p:inputText id="nombreGrado" value="#{gradosVistaController.gradoSeleccionado.nombreGrado}"
                                      required="true"/>
                     </div>
@@ -76,19 +76,18 @@
                                      icon="pi pi-check"
                                      process="dialogo-grado @this"
                                      actionListener="#{gradosVistaController.guardarGrado}"
-                                     update="formulario-grados:mensaje-emergente formulario-grados:tabla-grados"
-                                     oncomplete="PF('dialogoGrado').hide();"/>
+                                     update=":formulario-grados:tabla-grados :formulario-grados:mensaje-emergente"
+                                     oncomplete="if (!args.validationFailed) PF('dialogoGrado').hide();"/>
                 </f:facet>
             </p:dialog>
 
             <p:confirmDialog widgetVar="confirmarEliminarGrado"
-                             showEffect="fade" width="300"
                              message="¿Desea eliminar este grado?"
                              header="Confirmar" severity="warn">
                 <p:commandButton value="Si" icon="pi pi-check"
                                  process="@this"
                                  actionListener="#{gradosVistaController.eliminarGrado}"
-                                 update="formulario-grados:mensaje-emergente formulario-grados:tabla-grados"
+                                 update=":formulario-grados:tabla-grados :formulario-grados:mensaje-emergente"
                                  oncomplete="PF('confirmarEliminarGrado').hide()"/>
 
                 <p:commandButton value="No" icon="pi pi-times"
