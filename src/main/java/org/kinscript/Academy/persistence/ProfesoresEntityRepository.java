@@ -11,6 +11,7 @@ import org.kinscript.Academy.persistence.mapper.ProfesoresMapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class ProfesoresEntityRepository implements ProfesoresRepository {
@@ -67,5 +68,11 @@ public class ProfesoresEntityRepository implements ProfesoresRepository {
             throw new ProfesorNotExistsException(idProfesor);
         }
         crudProfesoresEntity.deleteById(idProfesor);
+    }
+
+    @Override
+    public Optional<ProfesoresDto> findByEmail(String email) {
+        return crudProfesoresEntity.findFirstByEmail(email)
+                .map(profesoresMapper::toDto);
     }
 }

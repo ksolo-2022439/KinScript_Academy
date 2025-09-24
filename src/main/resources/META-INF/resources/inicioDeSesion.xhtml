@@ -136,17 +136,19 @@
             </div>
 
             <h:form>
+                <p:growl id="messages" showDetail="true"/>
+
                 <div class="form-group">
                     <label class="form-label">Email</label>
-                    <h:inputText styleClass="form-input" required="true" requiredMessage="El email es obligatorio."/>
+                    <h:inputText id="email" value="#{loginController.email}" styleClass="form-input" required="true" requiredMessage="El email es obligatorio."/>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label">Contraseña</label>
-                    <h:inputSecret styleClass="form-input" required="true" requiredMessage="La contraseña es obligatoria."/>
+                    <h:inputSecret id="password" value="#{loginController.password}" styleClass="form-input" required="true" requiredMessage="La contraseña es obligatoria."/>
                 </div>
 
-                <h:commandButton value="Iniciar Sesión" styleClass="btn-primary mt-3"/>
+                <h:commandButton action="#{loginController.login}" value="Iniciar Sesión" styleClass="btn-primary mt-3"/>
             </h:form>
         </div>
     </div>

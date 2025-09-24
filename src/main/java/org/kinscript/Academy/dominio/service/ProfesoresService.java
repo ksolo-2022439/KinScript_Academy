@@ -6,6 +6,7 @@ import org.kinscript.Academy.dominio.repository.ProfesoresRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProfesoresService {
@@ -34,5 +35,9 @@ public class ProfesoresService {
 
     public void eliminarProfesor(Long idProfesor) {
         this.profesoresRepository.eliminarProfesor(idProfesor);
+    }
+
+    public Optional<ProfesoresDto> findByEmail(String email) {
+        return this.profesoresRepository.findByEmail(email);
     }
 }
