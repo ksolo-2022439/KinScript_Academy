@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>Gestión de Coordinadores</title>
+    <link rel="stylesheet" href="https://unpkg.com/primeflex@latest/primeflex.css"/>
+</h:head>
+<h:body>
+    <div class="card">
+        <h:form id="formulario-coordinadores">
+            <p:growl id="mensaje-emergente" showDetail="true" showSummary="true" life="4000"/>
+            <p:menubar>
+                <p:menuitem value="Nuevo Coordinador" icon="pi pi-fw pi-plus"
+                            actionListener="#{coordinadoresVistaController.prepararNuevoCoordinador}"
+                            update=":formulario-modal:dialogo-coordinador"
+                            oncomplete="PF('dialogoCoordinador').show();"/>
+            </p:menubar>
+
+            <div class="card">
+                <p:dataTable value="#{coordinadoresVistaController.coordinadores}" var="coordinador" id="tabla-coordinadores"
+                             paginator="true" rows="10" paginatorPosition="bottom">
+                    <f:facet name="header">
+                        <h3>Gestión de Coordinadores Académicos</h3>
+                    </f:facet>
+                    <p:column headerText="Nombre Completo" sortBy="#{coordinador.nombreCompleto}" filterBy="#{coordinador.nombreCompleto}" filterMatchMode="contains">
+                        <h:outputText value="#{coordinador.nombreCompleto} #{coordinador.apellidoCompleto}"/>
+                    </p:column>
+                    <p:column headerText="Email" sortBy="#{coordinador.email}" filterBy="#{coordinador.email}" filterMatchMode="contains">
+                        <h:outputText value="#{coordinador.email}"/>
+                    </p:column>
+                    <p:column headerText="Grado Asignado" sortBy="#{coordinador.grado.nombreGrado}" filterBy="#{coordinador.grado.nombreGrado}" filterMatchMode="contains">
+                        <h:outputText value="#{coordinador.grado.nombreGrado}"/>
+                    </p:column>
+                    <p:column headerText="Acciones" style="width:10rem; text-align:center;">
+                        <p:commandButton value="Editar" icon="pi pi-pencil"
+                                         update=":formulario-modal:dialogo-coordinador"
+                                         process="@this"
+                                         oncomplete="PF('dialogoCoordinador').show();"
+                                         class="ui-button-primary" style="margin-right:.5rem">
+                            <f:setPropertyActionListener value="#{coordinador}" target="#{coordinadoresVistaController.coordinadorSeleccionado}"/>
+                            <p:resetInput target=":formulario-modal:dialogo-coordinador"/>
+                        </p:commandButton>
+                        <p:commandButton value="Eliminar" icon="pi pi-trash" class="ui-button-danger"
+                                         process="@this"
+                                         oncomplete="PF('confirmarEliminarCoordinador').show()">
+                            <f:setPropertyActionListener value="#{coordinador}" target="#{coordinadoresVistaController.coordinadorSeleccionado}"/>
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </div>
+        </h:form>
+
+        <h:form id="formulario-modal">
+            <p:dialog header="Detalles del Coordinador" showEffect="fade" modal="true" widgetVar="dialogoCoordinador" responsive="true">
+                <p:outputPanel id="dialogo-coordinador" class="ui-fluid">
+                    <div class="p-field">
+                        <p:outputLabel for="nombre">Nombres</p:outputLabel>
+                        <p:inputText id="nombre" value="#{coordinadoresVistaController.coordinadorSeleccionado.nombreCompleto}" required="true"/>
+                    </div>
+                    <div class="p-field">
+                        <p:outputLabel for="apellido">Apellidos</p:outputLabel>
+                        <p:inputText id="apellido" value="#{coordinadoresVistaController.coordinadorSeleccionado.apellidoCompleto}" required="true"/>
+                    </div>
+                    <div class="p-field">
+                        <p:outputLabel for="email">Email</p:outputLabel>
+                        <p:inputText id="email" value="#{coordinadoresVistaController.coordinadorSeleccionado.email}" required="true"/>
+                    </div>
+                    <div class="p-field">
+                        <p:outputLabel for="grado">Grado Asignado</p:outputLabel>
+                        <p:selectOneMenu id="grado" value="#{coordinadoresVistaController.coordinadorSeleccionado.grado}" required="true" converter="omnifaces.SelectItemsConverter">
+                            <f:selectItem itemLabel="Seleccione un grado" itemValue="#{null}" noSelectionOption="true"/>
+                            <f:selectItems value="#{coordinadoresVistaController.listaGrados}" var="g" itemLabel="#{g.nombreGrado}" itemValue="#{g}"/>
+                        </p:selectOneMenu>
+                    </div>
+                    <div class="p-field">
+                        <p:outputLabel for="contrasena">Contraseña</p:outputLabel>
+                        <p:password id="contrasena" value="#{coordinadoresVistaController.coordinadorSeleccionado.contrasena}" required="true"/>
+                    </div>
+                </p:outputPanel>
+
+                <f:facet name="footer">
+                    <p:commandButton value="Guardar" icon="pi pi-check"
+                                     actionListener="#{coordinadoresVistaController.guardarCoordinador}"
+                                     process="dialogo-coordinador @this"
+                                     update=":formulario-coordinadores:tabla-coordinadores :formulario-coordinadores:mensaje-emergente"
+                                     oncomplete="PF('dialogoCoordinador').hide();"/>
+                </f:facet>
+            </p:dialog>
+
+            <p:confirmDialog widgetVar="confirmarEliminarCoordinador" message="¿Desea eliminar este registro?" header="Confirmar" severity="warn">
+                <p:commandButton value="Si" icon="pi pi-check" process="@this"
+                                 actionListener="#{coordinadoresVistaController.eliminarCoordinador}"
+                                 update=":formulario-coordinadores:tabla-coordinadores :formulario-coordinadores:mensaje-emergente"
+                                 oncomplete="PF('confirmarEliminarCoordinador').hide()"/>
+                <p:commandButton value="No" icon="pi pi-times" styleClass="ui-button-secondary" type="button"
+                                 onclick="PF('confirmarEliminarCoordinador').hide()"/>
+            </p:confirmDialog>
+        </h:form>
+    </div>
+</h:body>
+</html>
