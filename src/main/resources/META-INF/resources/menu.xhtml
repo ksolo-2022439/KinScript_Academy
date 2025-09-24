@@ -8,7 +8,7 @@
 <h:head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>KinScript Academy - Panel de Gestión</title>
+    <title>KinScript Academy - Generador de Actividades</title>
     <link rel="stylesheet" href="https://unpkg.com/primeflex@latest/primeflex.css"/>
     <style>
         @import url('https://www.google.com/search?q=https://fonts.googleapis.com/css2%3Ffamily%3DInter:wght%40400%3B500%3B600%3B700%26amp%3Bdisplay%3Dswap');
@@ -233,18 +233,42 @@
 
         <main class="main-content">
             <div class="topbar">
-                <h1 class="topbar-title">Panel de Gestión de Entidades</h1>
+                <h1 class="topbar-title">Generador de Actividades</h1>
             </div>
 
             <div class="content-area">
-                <h2 class="entity-section-title">Bienvenido</h2>
-                <div class="entity-placeholder">
-                    <p>Selecciona una entidad del menú lateral para comenzar a gestionar los datos.</p>
-                </div>
+                <h2 class="entity-section-title">Generador de Actividades con IA</h2>
+
+                <h:form>
+                    <p:growl id="growl" showDetail="true" />
+
+                    <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank p-grid">
+
+                        <p:outputLabel for="materia" value="Materia o Tema:" style="font-weight: bold;"/>
+                        <p:inputText id="materia" value="#{aIActividadVistaController.materia}" required="true"
+                                     label="Materia o Tema" styleClass="p-inputtext p-col-12"/>
+
+                        <p:outputLabel for="nivel" value="Nivel Educativo:" style="font-weight: bold;"/>
+                        <p:inputText id="nivel" value="#{aIActividadVistaController.nivelEducativo}" required="true"
+                                     label="Nivel Educativo" styleClass="p-inputtext p-col-12"/>
+
+                        <p:outputLabel for="tema" value="Tema Específico:" style="font-weight: bold;"/>
+                        <p:inputText id="tema" value="#{aIActividadVistaController.temaEspecifico}" required="true"
+                                     label="Tema Específico" styleClass="p-inputtext p-col-12"/>
+                    </p:panelGrid>
+
+                    <p:commandButton value="Generar Actividad"
+                                     action="#{aIActividadVistaController.generarActividad}"
+                                     update="actividadPanel growl"
+                                     styleClass="p-mt-3 p-button-success" />
+
+                    <p:panel id="actividadPanel" header="Sugerencia de Actividad" styleClass="p-mt-4">
+                        <h:outputText value="#{aIActividadVistaController.resultadoActividad}" escape="false" />
+                    </p:panel>
+                </h:form>
             </div>
         </main>
     </div>
-
 </h:body>
 
 </html>
