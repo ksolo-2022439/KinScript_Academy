@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>Gestión de Jornadas</title>
+    <link rel="stylesheet" href="https://unpkg.com/primeflex@latest/primeflex.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/primeflex/themes/primeone-dark.css"/>
+</h:head>
+<h:body>
+    <div class="card">
+        <h:form id="formulario-jornadas">
+            <p:growl id="mensaje-emergente" showDetail="true" showSummary="true"/>
+            <div class="card">
+                <p:menubar>
+                    <p:menuitem value="Nueva Jornada" icon="pi pi-fw pi-plus"
+                                actionListener="#{jornadasVistaController.prepararNuevaJornada}"
+                                update=":formulario-modal:dialogo-jornada"
+                                oncomplete="PF('dialogoJornada').show();"/>
+                </p:menubar>
+                <div class="card">
+                    <p:dataTable value="#{jornadasVistaController.jornadas}" var="jornada" id="tabla-jornadas" widgetVar="jornadasTabla">
+                        <f:facet name="header">
+                            <h3 class="flex align-items-center justify-content-center w-20rem h4rem bg-blue-500 font-bold m-2 text-gray-900 border-round">
+                                Gestión de Jornadas
+                            </h3>
+                        </f:facet>
+                        <p:column headerText="ID">
+                            <h:outputText value="#{jornada.idJornada}"/>
+                        </p:column>
+                        <p:column headerText="Nombre de la Jornada">
+                            <h:outputText value="#{jornada.nombreJornada}"/>
+                        </p:column>
+                        <p:column>
+                            <p:commandButton value="Editar" icon="pi pi-pencil"
+                                             update=":formulario-modal:dialogo-jornada"
+                                             process="@this"
+                                             oncomplete="PF('dialogoJornada').show();"
+                                             class="ui-button-primary"
+                                             style="margin-right:.5rem">
+                                <f:setPropertyActionListener value="#{jornada}" target="#{jornadasVistaController.jornadaSeleccionada}"/>
+                                <p:resetInput target="formulario-modal:dialogo-jornada"/>
+                            </p:commandButton>
+                            <p:commandButton value="Eliminar" icon="pi pi-trash" class="ui-button-danger"
+                                             process="@this"
+                                             oncomplete="PF('confirmarEliminarJornada').show()">
+                                <f:setPropertyActionListener value="#{jornada}" target="#{jornadasVistaController.jornadaSeleccionada}"/>
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                </div>
+            </div>
+        </h:form>
+
+        <h:form id="formulario-modal">
+            <p:dialog header="Detalles de la Jornada" showEffect="fade" modal="true" widgetVar="dialogoJornada" responsive="true">
+                <p:outputPanel id="dialogo-jornada" class="ui-fluid">
+                    <div class="field">
+                        <p:outputPanel for="nombreJornada">Nombre de la Jornada</p:outputPanel>
+                        <p:inputText id="nombreJornada" value="#{jornadasVistaController.jornadaSeleccionada.nombreJornada}" required="true"/>
+                    </div>
+                </p:outputPanel>
+                <f:facet name="footer">
+                    <p:commandButton value="Guardar"
+                                     icon="pi pi-check"
+                                     process="dialogo-jornada @this"
+                                     actionListener="#{jornadasVistaController.guardarJornada}"
+                                     update="formulario-jornadas:mensaje-emergente formulario-jornadas:tabla-jornadas"
+                                     oncomplete="PF('dialogoJornada').hide();"/>
+                </f:facet>
+            </p:dialog>
+
+            <p:confirmDialog widgetVar="confirmarEliminarJornada"
+                             showEffect="fade" width="300"
+                             message="¿Desea eliminar esta jornada?"
+                             header="Confirmar" severity="warn">
+                <p:commandButton value="Si" icon="pi pi-check"
+                                 actionListener="#{jornadasVistaController.eliminarJornada}"
+                                 update="formulario-jornadas:mensaje-emergente formulario-jornadas:tabla-jornadas"
+                                 oncomplete="PF('confirmarEliminarJornada').hide()"/>
+                <p:commandButton value="No" icon="pi pi-times"
+                                 onclick="PF('confirmarEliminarJornada').hide()"
+                                 styleClass="ui-button-secondary" type="button"/>
+            </p:confirmDialog>
+        </h:form>
+    </div>
+</h:body>
+</html>
