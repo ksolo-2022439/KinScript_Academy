@@ -87,6 +87,16 @@
             <artifactId>omnifaces</artifactId>
             <version>4.5</version>
         </dependency>
+        <dependency>
+            <groupId>dev.langchain4j</groupId>
+            <artifactId>langchain4j-open-ai-spring-boot-starter</artifactId>
+            <version>1.0.0-beta1</version>
+        </dependency>
+        <dependency>
+            <groupId>dev.langchain4j</groupId>
+            <artifactId>langchain4j-spring-boot-starter</artifactId>
+            <version>1.0.0-beta1</version>
+        </dependency>
 	</dependencies>
 
     <repositories>
