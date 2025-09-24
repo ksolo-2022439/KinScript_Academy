@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>Gestión de Notas</title>
+    <link rel="stylesheet" href="https://unpkg.com/primeflex@latest/primeflex.css"/>
+</h:head>
+<h:body>
+    <div class="card">
+        <h:form id="formulario-notas">
+            <p:growl id="mensaje-emergente" showDetail="true" showSummary="true" life="4000"/>
+            <p:menubar>
+                <p:menuitem value="Nueva Nota" icon="pi pi-fw pi-plus"
+                            actionListener="#{notasVistaController.prepararNuevaNota}"
+                            update=":formulario-modal:dialogo-nota"
+                            oncomplete="PF('dialogoNota').show();"/>
+            </p:menubar>
+
+            <div class="card">
+                <p:dataTable value="#{notasVistaController.notas}" var="nota" id="tabla-notas"
+                             paginator="true" rows="10" paginatorPosition="bottom">
+                    <f:facet name="header">
+                        <h3>Gestión de Notas Académicas</h3>
+                    </f:facet>
+                    <p:column headerText="Alumno" sortBy="#{nota.alumno.nombreCompleto}" filterBy="#{nota.alumno.nombreCompleto}" filterMatchMode="contains">
+                        <h:outputText value="#{nota.alumno.nombreCompleto} #{nota.alumno.apellidoCompleto}"/>
+                    </p:column>
+                    <p:column headerText="Curso" sortBy="#{nota.curso.nombreCurso}" filterBy="#{nota.curso.nombreCurso}" filterMatchMode="contains">
+                        <h:outputText value="#{nota.curso.nombreCurso}"/>
+                    </p:column>
+                    <p:column headerText="Bimestre 1" style="text-align:center;">
+                        <h:outputText value="#{nota.bimestre1}"/>
+                    </p:column>
+                    <p:column headerText="Bimestre 2" style="text-align:center;">
+                        <h:outputText value="#{nota.bimestre2}"/>
+                    </p:column>
+                    <p:column headerText="Bimestre 3" style="text-align:center;">
+                        <h:outputText value="#{nota.bimestre3}"/>
+                    </p:column>
+                    <p:column headerText="Bimestre 4" style="text-align:center;">
+                        <h:outputText value="#{nota.bimestre4}"/>
+                    </p:column>
+                    <p:column headerText="Acciones" style="width:10rem; text-align:center;">
+                        <p:commandButton value="Editar" icon="pi pi-pencil"
+                                         update=":formulario-modal:dialogo-nota"
+                                         process="@this"
+                                         oncomplete="PF('dialogoNota').show();"
+                                         class="ui-button-primary" style="margin-right:.5rem">
+                            <f:setPropertyActionListener value="#{nota}" target="#{notasVistaController.notaSeleccionada}"/>
+                            <p:resetInput target=":formulario-modal:dialogo-nota"/>
+                        </p:commandButton>
+                        <p:commandButton value="Eliminar" icon="pi pi-trash" class="ui-button-danger"
+                                         process="@this"
+                                         oncomplete="PF('confirmarEliminarNota').show()">
+                            <f:setPropertyActionListener value="#{nota}" target="#{notasVistaController.notaSeleccionada}"/>
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </div>
+        </h:form>
+
+        <h:form id="formulario-modal">
+            <p:dialog header="Detalles de la Nota" showEffect="fade" modal="true" widgetVar="dialogoNota" responsive="true">
+                <p:outputPanel id="dialogo-nota" class="ui-fluid">
+                    <div class="p-field">
+                        <p:outputLabel for="alumno">Alumno</p:outputLabel>
+                        <p:selectOneMenu id="alumno" value="#{notasVistaController.notaSeleccionada.alumno}" required="true" converter="omnifaces.SelectItemsConverter">
+                            <f:selectItem itemLabel="Seleccione un alumno" itemValue="#{null}" noSelectionOption="true"/>
+                            <f:selectItems value="#{notasVistaController.listaAlumnos}" var="a" itemLabel="#{a.nombreCompleto} #{a.apellidoCompleto}" itemValue="#{a}"/>
+                        </p:selectOneMenu>
+                    </div>
+                    <div class="p-field">
+                        <p:outputLabel for="curso">Curso</p:outputLabel>
+                        <p:selectOneMenu id="curso" value="#{notasVistaController.notaSeleccionada.curso}" required="true" converter="omnifaces.SelectItemsConverter">
+                            <f:selectItem itemLabel="Seleccione un curso" itemValue="#{null}" noSelectionOption="true"/>
+                            <f:selectItems value="#{notasVistaController.listaCursos}" var="c" itemLabel="#{c.nombreCurso}" itemValue="#{c}"/>
+                        </p:selectOneMenu>
+                    </div>
+                    <div class="p-field">
+                        <p:outputLabel for="bim1">Nota Bimestre 1</p:outputLabel>
+                        <p:inputText id="bim1" value="#{notasVistaController.notaSeleccionada.bimestre1}"/>
+                    </div>
+                    <div class="p-field">
+                        <p:outputLabel for="bim2">Nota Bimestre 2</p:outputLabel>
+                        <p:inputText id="bim2" value="#{notasVistaController.notaSeleccionada.bimestre2}"/>
+                    </div>
+                    <div class="p-field">
+                        <p:outputLabel for="bim3">Nota Bimestre 3</p:outputLabel>
+                        <p:inputText id="bim3" value="#{notasVistaController.notaSeleccionada.bimestre3}"/>
+                    </div>
+                    <div class="p-field">
+                        <p:outputLabel for="bim4">Nota Bimestre 4</p:outputLabel>
+                        <p:inputText id="bim4" value="#{notasVistaController.notaSeleccionada.bimestre4}"/>
+                    </div>
+                </p:outputPanel>
+
+                <f:facet name="footer">
+                    <p:commandButton value="Guardar" icon="pi pi-check"
+                                     actionListener="#{notasVistaController.guardarNota}"
+                                     process="dialogo-nota @this"
+                                     update=":formulario-notas:tabla-notas :formulario-notas:mensaje-emergente"
+                                     oncomplete="PF('dialogoNota').hide();"/>
+                </f:facet>
+            </p:dialog>
+
+            <p:confirmDialog widgetVar="confirmarEliminarNota" message="¿Desea eliminar este registro de nota?" header="Confirmar" severity="warn">
+                <p:commandButton value="Si" icon="pi pi-check" process="@this"
+                                 actionListener="#{notasVistaController.eliminarNota}"
+                                 update=":formulario-notas:tabla-notas :formulario-notas:mensaje-emergente"
+                                 oncomplete="PF('confirmarEliminarNota').hide()"/>
+                <p:commandButton value="No" icon="pi pi-times" styleClass="ui-button-secondary" type="button"
+                                 onclick="PF('confirmarEliminarNota').hide()"/>
+            </p:confirmDialog>
+        </h:form>
+    </div>
+</h:body>
+</html>
