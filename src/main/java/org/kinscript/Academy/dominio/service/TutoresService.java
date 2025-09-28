@@ -39,4 +39,12 @@ public class TutoresService {
         }
         return false;
     }
+
+    public List<TutoresDto> buscarPorFiltros(String nombre, String telefono) {
+        return tutoresRepository.buscarPorFiltros(nombre, telefono);
+    }
+
+    public long contarTotal() {
+        return tutoresRepository.contarTotal();
+    }
 }

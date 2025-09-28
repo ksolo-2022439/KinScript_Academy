@@ -15,4 +15,8 @@ public interface AlumnosRepository {
     AlumnosDto modificar(Long idAlumno, ModAlumnosDto modAlumnosDto);
 
     void eliminar(Long idAlumno);
+
+    List<AlumnosDto> buscarPorFiltros(String carnet, String nombre, String email);
+
+    long contarTotal();
 }

@@ -19,30 +19,44 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Controller
-    @RequestMapping("/alumnos")
+@RequestMapping("/alumnos")
 public class AlumnosVistaController {
 
-    @Autowired private AlumnosService alumnosService;
-    @Autowired private GradosService gradosService;
-    @Autowired private SeccionesService seccionesService;
-    @Autowired private JornadasService jornadasService;
-    @Autowired private CarrerasService carrerasService;
-    @Autowired private TutoresService tutoresService;
-    @Autowired private AlumnosMapper alumnosMapper;
+    @Autowired
+    private AlumnosService alumnosService;
+    @Autowired
+    private GradosService gradosService;
+    @Autowired
+    private SeccionesService seccionesService;
+    @Autowired
+    private JornadasService jornadasService;
+    @Autowired
+    private CarrerasService carrerasService;
+    @Autowired
+    private TutoresService tutoresService;
+    @Autowired
+    private AlumnosMapper alumnosMapper;
 
     @GetMapping
-    public String mostrarPaginaAlumnos(Model model) {
-        List<AlumnosDto> alumnos = alumnosService.obtenerTodo();
-        model.addAttribute("alumnos", alumnos);
-        model.addAttribute("totalAlumnos", alumnos.size());
-        model.addAttribute("alumnosActivos", alumnos.size());
-        model.addAttribute("nuevosAlumnosMes", 15);
+    public String mostrarPaginaAlumnos(Model model,
+                                       @RequestParam(required = false) String carnetFilter,
+                                       @RequestParam(required = false) String nombreFilter,
+                                       @RequestParam(required = false) String emailFilter) {
+
+        List<AlumnosDto> alumnosFiltrados = alumnosService.buscarPorFiltros(carnetFilter, nombreFilter, emailFilter);
+        long totalActivos = alumnosService.contarTotal();
+
+        model.addAttribute("alumnos", alumnosFiltrados);
+        model.addAttribute("carnetFilter", carnetFilter);
+        model.addAttribute("nombreFilter", nombreFilter);
+        model.addAttribute("emailFilter", emailFilter);
+
+        model.addAttribute("totalAlumnos", alumnosFiltrados.size());
+        model.addAttribute("alumnosActivos", totalActivos);
 
         List<GradosDto> todosLosGrados = gradosService.obtenerTodo();
-
         Map<Long, String> gradosMap = todosLosGrados.stream()
                 .collect(Collectors.toMap(GradosDto::idGrado, GradosDto::nombreGrado));
-
         model.addAttribute("gradosMap", gradosMap);
 
         if (!model.containsAttribute("alumnoParaFormulario")) {
@@ -55,7 +69,12 @@ public class AlumnosVistaController {
     }
 
     @GetMapping("/editar/{id}")
-    public String mostrarFormularioEdicion(@PathVariable("id") Long idAlumno, Model model, RedirectAttributes redirectAttributes) {
+    public String mostrarFormularioEdicion(@PathVariable("id") Long idAlumno,
+                                           Model model,
+                                           RedirectAttributes redirectAttributes,
+                                           @RequestParam(required = false) String carnetFilter,
+                                           @RequestParam(required = false) String nombreFilter,
+                                           @RequestParam(required = false) String emailFilter) {
         try {
             AlumnosDto alumnoDto = alumnosService.buscarPorCodigo(idAlumno);
             Alumnos alumnoEntity = alumnosMapper.toEntity(alumnoDto);
@@ -63,9 +82,10 @@ public class AlumnosVistaController {
             model.addAttribute("editar", true);
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Error: No se pudo encontrar el alumno para editar.");
-            return "redirect:/vista/alumnos";
+            return "redirect:/alumnos";
         }
-        return mostrarPaginaAlumnos(model);
+
+        return mostrarPaginaAlumnos(model, carnetFilter, nombreFilter, emailFilter);
     }
 
     @PostMapping("/guardar")
@@ -104,7 +124,7 @@ public class AlumnosVistaController {
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Ocurrió un error inesperado al guardar el alumno.");
         }
-        return "redirect:/vista/alumnos";
+        return "redirect:/alumnos";
     }
 
     @PostMapping("/eliminar/{id}")
@@ -115,7 +135,7 @@ public class AlumnosVistaController {
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Error al eliminar el alumno.");
         }
-        return "redirect:/vista/alumnos";
+        return "redirect:/alumnos";
     }
 
     private void cargarListasDesplegables(Model model) {

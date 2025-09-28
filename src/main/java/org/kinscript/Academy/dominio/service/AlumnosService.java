@@ -34,4 +34,12 @@ public class AlumnosService {
     public void eliminarAlumno(Long idAlumno) {
         this.alumnosRepository.eliminar(idAlumno);
     }
+
+    public List<AlumnosDto> buscarPorFiltros(String carnet, String nombre, String email) {
+        return alumnosRepository.buscarPorFiltros(carnet, nombre, email);
+    }
+
+    public long contarTotal() {
+        return alumnosRepository.contarTotal();
+    }
 }

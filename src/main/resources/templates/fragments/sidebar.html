@@ -13,7 +13,7 @@
                 <span class="nav-icon">👨‍🏫</span>
                 <span>Profesores</span>
             </a>
-            <a th:href="@{/vista/alumnos}" class="nav-item" th:classappend="${paginaActiva == 'alumnos' ? 'active' : ''}">
+            <a th:href="@{/alumnos}" class="nav-item" th:classappend="${paginaActiva == 'alumnos' ? 'active' : ''}">
                 <span class="nav-icon">👨‍🎓</span>
                 <span>Alumnos</span>
             </a>
@@ -32,11 +32,11 @@
         </div>
         <div class="nav-section">
             <div class="nav-section-title">Datos Generales</div>
-            <a href="#" class="nav-item">
+            <a th:href="@{/tutores}" class="nav-item" th:classappend="${paginaActiva == 'tutores' ? 'active' : ''}">
                 <span class="nav-icon">🏠</span>
                 <span>Tutores</span>
             </a>
-            <a href="#" class="nav-item">
+            <a th:href="@{/grados}" class="nav-item" th:classappend="${paginaActiva == 'grados' ? 'active' : ''}">
                 <span class="nav-icon">🏆</span>
                 <span>Grados</span>
             </a>

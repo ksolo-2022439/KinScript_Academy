@@ -57,43 +57,54 @@
                 <h3 class="card-title">Alumnos Activos</h3>
                 <p class="card-value" th:text="${alumnosActivos}">0</p>
             </div>
-            <div class="card">
-                <h3 class="card-title">Nuevos (Mes)</h3>
-                <p class="card-value" th:text="'+' + ${nuevosAlumnosMes}">+0</p>
-            </div>
         </div>
 
         <div class="data-table-container">
-            <table class="data-table">
-                <thead>
-                <tr>
-                    <th>Carnet</th>
-                    <th>Nombre Completo</th>
-                    <th>Email Académico</th>
-                    <th>Grado</th>
-                    <th>Acciones</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="alumno : ${alumnos}">
-                    <td th:text="${alumno.carnetAlumno}"></td>
-                    <td th:text="${alumno.nombreCompleto + ' ' + alumno.apellidoCompleto}"></td>
-                    <td th:text="${alumno.emailAcademico}"></td>
-                    <td th:text="${gradosMap[alumno.idGrado]}"></td>
-                    <td class="action-buttons">
-                        <a th:href="@{/vista/alumnos/editar/{id}(id=${alumno.idAlumno})}" class="action-buttons">
-                            <button class="edit" title="Editar">✏️</button>
-                        </a>
-                        <form th:action="@{/vista/alumnos/eliminar/{id}(id=${alumno.idAlumno})}" method="post"
-                              style="display:inline;">
-                            <button type="submit" class="delete" title="Eliminar"
-                                    onclick="return confirm('¿Estás seguro de que quieres eliminar a este alumno?')">🗑️
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+
+            <form th:action="@{/alumnos}" method="get" id="filter-form">
+                <table class="data-table">
+                    <thead>
+                    <tr class="filter-header">
+                        <th>
+                            <input type="text" name="carnetFilter" placeholder="Buscar por Carnet..."
+                                   th:value="${carnetFilter}" onchange="this.form.submit()">
+                        </th>
+                        <th>
+                            <input type="text" name="nombreFilter" placeholder="Buscar por Nombre..."
+                                   th:value="${nombreFilter}" onchange="this.form.submit()">
+                        </th>
+                        <th>
+                            <input type="text" name="emailFilter" placeholder="Buscar por Email..."
+                                   th:value="${emailFilter}" onchange="this.form.submit()">
+                        </th>
+                        <th>Grado</th>
+                        <th>Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="alumno : ${alumnos}">
+                        <td th:text="${alumno.carnetAlumno}"></td>
+                        <td th:text="${alumno.nombreCompleto + ' ' + alumno.apellidoCompleto}"></td>
+                        <td th:text="${alumno.emailAcademico}"></td>
+                        <td th:text="${gradosMap[alumno.idGrado]}"></td>
+                        <td class="action-buttons">
+                            <a th:href="@{/alumnos/editar/{id}(id=${alumno.idAlumno},
+                                    carnetFilter=${carnetFilter},
+                                    nombreFilter=${nombreFilter},
+                                    emailFilter=${emailFilter})}"
+                               class="action-buttons">
+                                <button class="edit" title="Editar">✏️</button>
+                            </a>
+                            <form th:action="@{/alumnos/eliminar/{id}(id=${alumno.idAlumno})}" method="post"
+                                  style="display:inline;">
+                                <button type="submit" class="delete" title="Eliminar"
+                                        onclick="return confirm('¿Estás seguro?')">🗑️</button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
         </div>
     </main>
 </div>
@@ -101,7 +112,7 @@
 <div class="modal fade" id="alumnoModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <form th:action="@{/vista/alumnos/guardar}" th:object="${alumnoParaFormulario}" method="post">
+            <form th:action="@{/alumnos/guardar}" th:object="${alumnoParaFormulario}" method="post">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modalLabel"
                         th:text="${editar == true ? 'Editar Alumno' : 'Nuevo Alumno'}">Formulario de Alumno</h5>

@@ -63,4 +63,18 @@ public class TutoresEntityRepository implements TutoresRepository {
             this.crudTutoresEntity.deleteById(codigo);
         }
     }
+
+    @Override
+    public List<TutoresDto> buscarPorFiltros(String nombre, String telefono) {
+        List<Tutores> tutores = crudTutoresEntity.findByNombreCompletoContainingIgnoreCaseAndNumeroTelefonoContainingIgnoreCase(
+                nombre != null ? nombre : "",
+                telefono != null ? telefono : ""
+        );
+        return mapper.toDto(tutores);
+    }
+
+    @Override
+    public long contarTotal() {
+        return crudTutoresEntity.count();
+    }
 }

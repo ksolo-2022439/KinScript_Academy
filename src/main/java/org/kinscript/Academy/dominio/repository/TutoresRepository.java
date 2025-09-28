@@ -12,4 +12,6 @@ public interface TutoresRepository {
     TutoresDto guardarTutor(TutoresDto tutorDto);
     TutoresDto modificarTutor(Integer codigo, ModTutoresDto modTutor);
     void eliminarTutor(Integer codigo);
+    List<TutoresDto> buscarPorFiltros(String nombre, String telefono);
+    long contarTotal();
 }

@@ -71,4 +71,19 @@ public class AlumnosEntityRepository implements AlumnosRepository {
         }
         crudAlumnosEntity.deleteById(Math.toIntExact(idAlumno));
     }
+
+    @Override
+    public List<AlumnosDto> buscarPorFiltros(String carnet, String nombre, String email) {
+        List<Alumnos> alumnos = crudAlumnosEntity.findByCarnetAlumnoContainingIgnoreCaseAndNombreCompletoContainingIgnoreCaseAndEmailAcademicoContainingIgnoreCase(
+                carnet != null ? carnet : "",
+                nombre != null ? nombre : "",
+                email != null ? email : ""
+        );
+        return alumnosMapper.toDto(alumnos);
+    }
+
+    @Override
+    public long contarTotal() {
+        return crudAlumnosEntity.count();
+    }
 }
