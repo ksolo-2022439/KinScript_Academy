@@ -61,6 +61,7 @@
 
         <div class="data-table-container">
             <form th:action="@{/tutores}" method="get" id="filter-form">
+                <button type="submit" style="display: none;" aria-hidden="true"></button>
                 <table class="data-table">
                     <thead>
                     <tr class="filter-header">
@@ -82,16 +83,15 @@
                         <td th:text="${tutor.numeroTelefono}"></td>
                         <td th:text="${tutor.direccion}"></td>
                         <td class="action-buttons">
-                            <a th:href="@{/tutores/editar/{id}(id=${tutor.idTutor}, nombreFilter=${nombreFilter}, telefonoFilter=${telefonoFilter})}"
-                               class="action-buttons">
-                                <button class="edit" title="Editar">✏️</button>
+                            <a th:href="@{/tutores/editar/{id}(id=${tutor.idTutor}, nombreFilter=${nombreFilter}, telefonoFilter=${telefonoFilter})}" class="action-buttons">
+                                <button type="button" class="edit" title="Editar">✏️</button>
                             </a>
-                            <form th:action="@{/tutores/eliminar/{id}(id=${tutor.idTutor})}" method="post"
-                                  style="display:inline;">
-                                <button type="submit" class="delete" title="Eliminar"
-                                        onclick="return confirm('¿Estás seguro?')">🗑️
-                                </button>
-                            </form>
+
+                            <button type="submit" class="delete" title="Eliminar"
+                                    th:formaction="@{/tutores/eliminar/{id}(id=${tutor.idTutor})}"
+                                    formmethod="post"
+                                    onclick="return confirm('¿Estás seguro de que quieres eliminar a este tutor?')">🗑️
+                            </button>
                         </td>
                     </tr>
                     </tbody>

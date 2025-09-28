@@ -62,6 +62,7 @@
         <div class="data-table-container">
 
             <form th:action="@{/alumnos}" method="get" id="filter-form">
+                <button type="submit" style="display: none;" aria-hidden="true"></button>
                 <table class="data-table">
                     <thead>
                     <tr class="filter-header">
@@ -88,18 +89,15 @@
                         <td th:text="${alumno.emailAcademico}"></td>
                         <td th:text="${gradosMap[alumno.idGrado]}"></td>
                         <td class="action-buttons">
-                            <a th:href="@{/alumnos/editar/{id}(id=${alumno.idAlumno},
-                                    carnetFilter=${carnetFilter},
-                                    nombreFilter=${nombreFilter},
-                                    emailFilter=${emailFilter})}"
-                               class="action-buttons">
-                                <button class="edit" title="Editar">✏️</button>
+                            <a th:href="@{/alumnos/editar/{id}(id=${alumno.idAlumno}, carnetFilter=${carnetFilter}, nombreFilter=${nombreFilter}, emailFilter=${emailFilter})}" class="action-buttons">
+                                <button type="button" class="edit" title="Editar">✏️</button>
                             </a>
-                            <form th:action="@{/alumnos/eliminar/{id}(id=${alumno.idAlumno})}" method="post"
-                                  style="display:inline;">
-                                <button type="submit" class="delete" title="Eliminar"
-                                        onclick="return confirm('¿Estás seguro?')">🗑️</button>
-                            </form>
+
+                            <button type="submit" class="delete" title="Eliminar"
+                                    th:formaction="@{/alumnos/eliminar/{id}(id=${alumno.idAlumno})}"
+                                    formmethod="post"
+                                    onclick="return confirm('¿Estás seguro de que quieres eliminar a este alumno?')">🗑️
+                            </button>
                         </td>
                     </tr>
                     </tbody>
