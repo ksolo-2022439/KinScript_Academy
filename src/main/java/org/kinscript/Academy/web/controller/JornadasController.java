@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/jornadas")
+@RequestMapping("/api/jornadas")
 @Tag(name = "Jornadas", description = "Operaciones CRUD sobre las jornadas de trabajo.")
 public class JornadasController {
 

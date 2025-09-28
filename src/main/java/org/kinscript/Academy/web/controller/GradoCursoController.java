@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/gradocursos")
+@RequestMapping("/api/gradocursos")
 @Tag(name = "Grado-Cursos", description = "Operaciones para asociar y gestionar la relación entre grados y cursos.")
 public class GradoCursoController {
 

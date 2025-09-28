@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/cursos")
+@RequestMapping("/api/cursos")
 @Tag(name = "Cursos", description = "Operaciones CRUD sobre los cursos de la academia.")
 public class CursosController {
 

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/profesor-asignaciones")
+@RequestMapping("/api/profesor-asignaciones")
 @Tag(name = "Asignaciones de Profesores", description = "Operaciones para gestionar la asignación de cursos a profesores.")
 public class ProfesorAsignacionController {
 

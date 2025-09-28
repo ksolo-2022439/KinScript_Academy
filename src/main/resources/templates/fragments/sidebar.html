@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<aside class="sidebar" th:fragment="sidebar">
+    <div class="sidebar-header">
+        <a href="#" class="logo">KinScript Academy</a>
+    </div>
+    <nav class="sidebar-nav">
+        <div class="nav-section">
+            <div class="nav-section-title">Gestión de KinScript</div>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">👨‍🏫</span>
+                <span>Profesores</span>
+            </a>
+            <a th:href="@{/vista/alumnos}" class="nav-item" th:classappend="${paginaActiva == 'alumnos' ? 'active' : ''}">
+                <span class="nav-icon">👨‍🎓</span>
+                <span>Alumnos</span>
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">📚</span>
+                <span>Cursos</span>
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">👩‍💼</span>
+                <span>Coordinadores</span>
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">📝</span>
+                <span>Notas</span>
+            </a>
+        </div>
+        <div class="nav-section">
+            <div class="nav-section-title">Datos Generales</div>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">🏠</span>
+                <span>Tutores</span>
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">🏆</span>
+                <span>Grados</span>
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">📊</span>
+                <span>Secciones</span>
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">☀️</span>
+                <span>Jornadas</span>
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">💼</span>
+                <span>Carreras</span>
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">🤵</span>
+                <span>Grados por Curso</span>
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">🔨</span>
+                <span>Asignar Profesores</span>
+            </a>
+        </div>
+    </nav>
+</aside>
+
+</body>
+</html>
