@@ -23,15 +23,15 @@ public class CarrerasService {
         return this.CarrerasRepository.buscarCarrera(codigo);
     }
 
-    public CarrerasDto guardarGrados(CarrerasDto carrerasDto) {
+    public CarrerasDto guardarCarrera(CarrerasDto carrerasDto) {
         return this.CarrerasRepository.guardarCarrera(carrerasDto);
     }
 
-    public CarrerasDto modificarGrados(Long codigo, ModCarrerasDto modcarrerasDto) {
+    public CarrerasDto modificarCarrera(Long codigo, ModCarrerasDto modcarrerasDto) {
         return this.CarrerasRepository.modificarCarrera(codigo, modcarrerasDto);
     }
 
-    public void eliminarGrados(Long codigo) {
+    public void eliminarCarrera(Long codigo) {
         this.CarrerasRepository.eliminarCarrera(codigo);
     }
 

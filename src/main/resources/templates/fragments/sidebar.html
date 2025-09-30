@@ -44,11 +44,11 @@
                 <span class="nav-icon">📊</span>
                 <span>Secciones</span>
             </a>
-            <a href="#" class="nav-item">
+            <a th:href="@{/jornadas}" class="nav-item" th:classappend="${paginaActiva == 'jornadas' ? 'active' : ''}">
                 <span class="nav-icon">☀️</span>
                 <span>Jornadas</span>
             </a>
-            <a href="#" class="nav-item">
+            <a th:href="@{/carreras}" class="nav-item" th:classappend="${paginaActiva == 'carreras' ? 'active' : ''}">
                 <span class="nav-icon">💼</span>
                 <span>Carreras</span>
             </a>

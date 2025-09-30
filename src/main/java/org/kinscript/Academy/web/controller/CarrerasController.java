@@ -51,7 +51,7 @@ public class CarrerasController {
     @ApiResponse(responseCode = "200", description = "Carrera creada con éxito.")
     @ApiResponse(responseCode = "400", description = "Datos de entrada inválidos.", content = @Content(schema = @Schema(implementation = String.class)))
     public ResponseEntity<CarrerasDto> crear(@Valid @RequestBody CarrerasDto carrerasDto) {
-        CarrerasDto creada = carrerasService.guardarGrados(carrerasDto);
+        CarrerasDto creada = carrerasService.guardarCarrera(carrerasDto);
         return ResponseEntity.ok(creada);
     }
 
@@ -61,7 +61,7 @@ public class CarrerasController {
     @ApiResponse(responseCode = "404", description = "Carrera no encontrada.", content = @Content)
     @ApiResponse(responseCode = "400", description = "Datos de entrada inválidos.", content = @Content(schema = @Schema(implementation = String.class)))
     public ResponseEntity<CarrerasDto> modificar(@Parameter(description = "ID de la carrera a modificar.", example = "1") @PathVariable Long id, @Valid @RequestBody ModCarrerasDto modCarrerasDto) {
-        CarrerasDto actualizada = carrerasService.modificarGrados(id, modCarrerasDto);
+        CarrerasDto actualizada = carrerasService.modificarCarrera(id, modCarrerasDto);
         return ResponseEntity.ok(actualizada);
     }
 
@@ -70,7 +70,7 @@ public class CarrerasController {
     @ApiResponse(responseCode = "204", description = "Carrera eliminada con éxito.")
     @ApiResponse(responseCode = "404", description = "Carrera no encontrada.", content = @Content)
     public ResponseEntity<Void> eliminar(@Parameter(description = "ID de la carrera a eliminar.", example = "1") @PathVariable Long id) {
-        carrerasService.eliminarGrados(id);
+        carrerasService.eliminarCarrera(id);
         return ResponseEntity.noContent().build();
     }
 }
