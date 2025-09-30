@@ -41,7 +41,8 @@ public class AlumnosVistaController {
     public String mostrarPaginaAlumnos(Model model,
                                        @RequestParam(required = false) String carnetFilter,
                                        @RequestParam(required = false) String nombreFilter,
-                                       @RequestParam(required = false) String emailFilter) {
+                                       @RequestParam(required = false) String emailFilter,
+                                       @RequestParam(name = "add", required = false) Boolean add) {
 
         List<AlumnosDto> alumnosFiltrados = alumnosService.buscarPorFiltros(carnetFilter, nombreFilter, emailFilter);
         long totalActivos = alumnosService.contarTotal();
@@ -65,6 +66,9 @@ public class AlumnosVistaController {
         cargarListasDesplegables(model);
         model.addAttribute("paginaActiva", "alumnos");
 
+        if (Boolean.TRUE.equals(add)) {
+            model.addAttribute("openAddModal", true);
+        }
         return "gestion-alumnos";
     }
 
@@ -85,7 +89,7 @@ public class AlumnosVistaController {
             return "redirect:/alumnos";
         }
 
-        return mostrarPaginaAlumnos(model, carnetFilter, nombreFilter, emailFilter);
+        return mostrarPaginaAlumnos(model, carnetFilter, nombreFilter, emailFilter, null);
     }
 
     @PostMapping("/guardar")

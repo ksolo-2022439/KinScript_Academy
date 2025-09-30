@@ -17,9 +17,7 @@
     <main class="main-content">
         <div class="header-bar">
             <h1>Dashboard de Grados</h1>
-            <button type="button" class="add-button" data-bs-toggle="modal" data-bs-target="#gradoModal">
-                ＋ Nuevo Grado
-            </button>
+            <a th:href="@{/grados(add='true')}" class="add-button">＋ Nuevo Grado</a>
         </div>
 
         <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert" th:text="${successMessage}"></div>
@@ -80,7 +78,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <a th:href="@{/tutores}" class="btn btn-secondary">Cancelar</a>
                     <button type="submit" class="btn btn-primary">Guardar Cambios</button>
                 </div>
             </form>
@@ -90,6 +88,12 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script th:if="${editar == true}">
+    document.addEventListener('DOMContentLoaded', function () {
+        var modal = new bootstrap.Modal(document.getElementById('gradoModal'));
+        if (modal) { modal.show(); }
+    });
+</script>
+<script th:if="${openAddModal == true}">
     document.addEventListener('DOMContentLoaded', function () {
         var modal = new bootstrap.Modal(document.getElementById('gradoModal'));
         if (modal) { modal.show(); }

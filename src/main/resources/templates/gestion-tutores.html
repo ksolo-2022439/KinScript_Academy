@@ -38,9 +38,7 @@
     <main class="main-content">
         <div class="header-bar">
             <h1>Dashboard de Tutores</h1>
-            <button type="button" class="add-button" data-bs-toggle="modal" data-bs-target="#tutorModal">
-                ＋ Nuevo Tutor
-            </button>
+            <a th:href="@{/tutores(add='true')}" class="add-button">＋ Nuevo Tutor</a>
         </div>
 
         <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert"
@@ -133,7 +131,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <a th:href="@{/tutores}" class="btn btn-secondary">Cancelar</a>
                     <button type="submit" class="btn btn-primary">Guardar Cambios</button>
                 </div>
             </form>
@@ -148,6 +146,12 @@
         if (modal) {
             modal.show();
         }
+    });
+</script>
+<script th:if="${openAddModal == true}">
+    document.addEventListener('DOMContentLoaded', function () {
+        var modal = new bootstrap.Modal(document.getElementById('tutorModal'));
+        if (modal) { modal.show(); }
     });
 </script>
 </body>

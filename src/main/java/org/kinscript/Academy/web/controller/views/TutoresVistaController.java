@@ -26,7 +26,8 @@ public class TutoresVistaController {
     @GetMapping
     public String mostrarPaginaTutores(Model model,
                                        @RequestParam(required = false) String nombreFilter,
-                                       @RequestParam(required = false) String telefonoFilter) {
+                                       @RequestParam(required = false) String telefonoFilter,
+                                       @RequestParam(name = "add", required = false) Boolean add) {
 
         List<TutoresDto> tutoresFiltrados = tutoresService.buscarPorFiltros(nombreFilter, telefonoFilter);
         long totalActivos = tutoresService.contarTotal();
@@ -43,6 +44,10 @@ public class TutoresVistaController {
         }
 
         model.addAttribute("paginaActiva", "tutores");
+
+        if (Boolean.TRUE.equals(add)) {
+            model.addAttribute("openAddModal", true);
+        }
 
         return "gestion-tutores";
     }
@@ -61,7 +66,7 @@ public class TutoresVistaController {
             redirectAttributes.addFlashAttribute("errorMessage", "Error: No se pudo encontrar el tutor para editar.");
             return "redirect:/tutores";
         }
-        return mostrarPaginaTutores(model, nombreFilter, telefonoFilter);
+        return mostrarPaginaTutores(model, nombreFilter, telefonoFilter, null);
     }
 
     @PostMapping("/guardar")

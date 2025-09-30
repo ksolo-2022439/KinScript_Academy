@@ -24,7 +24,7 @@ public class GradosVistaController {
     private GradosMapper gradosMapper;
 
     @GetMapping
-    public String mostrarPaginaGrados(Model model) {
+    public String mostrarPaginaGrados(Model model, @RequestParam(name = "add", required = false) Boolean add) {
         List<GradosDto> grados = gradosService.obtenerTodo();
         model.addAttribute("grados", grados);
 
@@ -36,6 +36,10 @@ public class GradosVistaController {
         }
 
         model.addAttribute("paginaActiva", "grados");
+
+        if (Boolean.TRUE.equals(add)) {
+            model.addAttribute("openAddModal", true);
+        }
 
         return "gestion-grados";
     }
@@ -53,7 +57,7 @@ public class GradosVistaController {
             redirectAttributes.addFlashAttribute("errorMessage", "Error: No se pudo encontrar el grado para editar.");
             return "redirect:/grados";
         }
-        return mostrarPaginaGrados(model);
+        return mostrarPaginaGrados(model, null);
     }
 
     @PostMapping("/guardar")

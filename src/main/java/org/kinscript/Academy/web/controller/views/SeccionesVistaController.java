@@ -24,7 +24,7 @@ public class SeccionesVistaController {
     private SeccionesMapper seccionesMapper;
 
     @GetMapping
-    public String mostrarPaginaSecciones(Model model) {
+    public String mostrarPaginaSecciones(Model model, @RequestParam(name = "add", required = false) Boolean add) {
         List<SeccionesDto> secciones = seccionesService.obtenerSeccion();
         model.addAttribute("secciones", secciones);
 
@@ -37,6 +37,9 @@ public class SeccionesVistaController {
 
         model.addAttribute("paginaActiva", "secciones");
 
+        if (Boolean.TRUE.equals(add)) {
+            model.addAttribute("openAddModal", true);
+        }
         return "gestion-secciones";
     }
 
@@ -53,7 +56,7 @@ public class SeccionesVistaController {
             redirectAttributes.addFlashAttribute("errorMessage", "Error: No se pudo encontrar la sección para editar.");
             return "redirect:/secciones";
         }
-        return mostrarPaginaSecciones(model);
+        return mostrarPaginaSecciones(model, null);
     }
 
     @PostMapping("/guardar")
