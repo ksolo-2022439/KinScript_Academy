@@ -73,11 +73,14 @@ public class AlumnosEntityRepository implements AlumnosRepository {
     }
 
     @Override
-    public List<AlumnosDto> buscarPorFiltros(String carnet, String nombre, String email) {
-        List<Alumnos> alumnos = crudAlumnosEntity.findByCarnetAlumnoContainingIgnoreCaseAndNombreCompletoContainingIgnoreCaseAndEmailAcademicoContainingIgnoreCase(
-                carnet != null ? carnet : "",
-                nombre != null ? nombre : "",
-                email != null ? email : ""
+    public List<AlumnosDto> buscarPorFiltros(String carnet, String nombre, String email, Long idGrado, Long idSeccion, Long idCarrera) {
+        List<Alumnos> alumnos = crudAlumnosEntity.findByFilters(
+                (carnet != null && !carnet.isEmpty()) ? carnet : null,
+                (nombre != null && !nombre.isEmpty()) ? nombre : null,
+                (email != null && !email.isEmpty()) ? email : null,
+                idGrado,
+                idSeccion,
+                idCarrera
         );
         return alumnosMapper.toDto(alumnos);
     }

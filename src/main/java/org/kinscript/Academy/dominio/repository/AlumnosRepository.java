@@ -16,7 +16,7 @@ public interface AlumnosRepository {
 
     void eliminar(Long idAlumno);
 
-    List<AlumnosDto> buscarPorFiltros(String carnet, String nombre, String email);
+    List<AlumnosDto> buscarPorFiltros(String carnet, String nombre, String email, Long idGrado, Long idSeccion, Long idCarrera);
 
     long contarTotal();
 }

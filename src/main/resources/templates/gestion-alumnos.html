@@ -10,24 +10,24 @@
         .modal-content {
             background-color: var(--primary-bg-color);
             color: var(--text-color);
-            border: 1px solid var(--border-color);
+            border: 1px solid var(--border-color)
         }
 
         .form-control, .form-select {
             background-color: var(--secondary-bg-color);
             color: var(--text-color);
-            border-color: var(--border-color);
+            border-color: var(--border-color)
         }
 
         .form-control:focus, .form-select:focus {
             background-color: var(--secondary-bg-color);
             color: var(--text-color);
             border-color: var(--accent-color);
-            box-shadow: none;
+            box-shadow: none
         }
 
         .btn-close {
-            filter: invert(1) grayscale(100%) brightness(200%);
+            filter: invert(1) grayscale(100%) brightness(200%)
         }
     </style>
 </head>
@@ -58,25 +58,52 @@
         </div>
 
         <div class="data-table-container">
-
             <form th:action="@{/alumnos}" method="get" id="filter-form">
                 <button type="submit" style="display: none;" aria-hidden="true"></button>
                 <table class="data-table">
                     <thead>
                     <tr class="filter-header">
+                        <th><input type="text" name="carnetFilter" placeholder="Buscar por Carnet..."
+                                   th:value="${carnetFilter}" onchange="this.form.submit()"></th>
+                        <th><input type="text" name="nombreFilter" placeholder="Buscar por Nombre..."
+                                   th:value="${nombreFilter}" onchange="this.form.submit()"></th>
+                        <th><input type="text" name="emailFilter" placeholder="Buscar por Email..."
+                                   th:value="${emailFilter}" onchange="this.form.submit()"></th>
                         <th>
-                            <input type="text" name="carnetFilter" placeholder="Buscar por Carnet..."
-                                   th:value="${carnetFilter}" onchange="this.form.submit()">
+                            <div class="d-flex gap-1">
+                                <select name="gradoFilter" class="form-select form-select-sm"
+                                        onchange="this.form.submit()">
+                                    <option value="">Grado...</option>
+                                    <option th:each="g : ${listaGrados}" th:value="${g.idGrado}"
+                                            th:text="${g.nombreGrado}"
+                                            th:selected="${g.idGrado == gradoFilter}"></option>
+                                </select>
+                                <select name="seccionFilter" class="form-select form-select-sm"
+                                        onchange="this.form.submit()">
+                                    <option value="">Sección...</option>
+                                    <option th:each="s : ${listaSecciones}" th:value="${s.idSeccion}"
+                                            th:text="${s.nombreSeccion}"
+                                            th:selected="${s.idSeccion == seccionFilter}"></option>
+                                </select>
+                            </div>
                         </th>
                         <th>
-                            <input type="text" name="nombreFilter" placeholder="Buscar por Nombre..."
-                                   th:value="${nombreFilter}" onchange="this.form.submit()">
+                            <select name="carreraFilter" class="form-select form-select-sm"
+                                    onchange="this.form.submit()">
+                                <option value="">Carrera...</option>
+                                <option th:each="c : ${listaCarreras}" th:value="${c.idCarrera}"
+                                        th:text="${c.nombreCarrera}"
+                                        th:selected="${c.idCarrera == carreraFilter}"></option>
+                            </select>
                         </th>
-                        <th>
-                            <input type="text" name="emailFilter" placeholder="Buscar por Email..."
-                                   th:value="${emailFilter}" onchange="this.form.submit()">
-                        </th>
-                        <th>Grado</th>
+                        <th>Acciones</th>
+                    </tr>
+                    <tr class="header-row">
+                        <th>Carnet</th>
+                        <th>Nombre Completo</th>
+                        <th>Email Académico</th>
+                        <th>Grado y Sección</th>
+                        <th>Carrera</th>
                         <th>Acciones</th>
                     </tr>
                     </thead>
@@ -85,16 +112,18 @@
                         <td th:text="${alumno.carnetAlumno}"></td>
                         <td th:text="${alumno.nombreCompleto + ' ' + alumno.apellidoCompleto}"></td>
                         <td th:text="${alumno.emailAcademico}"></td>
-                        <td th:text="${gradosMap[alumno.idGrado]}"></td>
+                        <td th:text="${gradosMap[alumno.idGrado] + ' ' + seccionesMap[alumno.idSeccion]}"></td>
+                        <td>
+                            <span th:if="${alumno.idCarrera != null}" th:text="${carrerasMap[alumno.idCarrera]}"></span>
+                        </td>
                         <td class="action-buttons">
-                            <a th:href="@{/alumnos/editar/{id}(id=${alumno.idAlumno}, carnetFilter=${carnetFilter}, nombreFilter=${nombreFilter}, emailFilter=${emailFilter})}" class="action-buttons">
+                            <a th:href="@{/alumnos/editar/{id}(id=${alumno.idAlumno}, carnetFilter=${carnetFilter}, nombreFilter=${nombreFilter}, emailFilter=${emailFilter}, gradoFilter=${gradoFilter}, seccionFilter=${seccionFilter}, carreraFilter=${carreraFilter})}"
+                               class="action-buttons">
                                 <button type="button" class="edit" title="Editar">✏️</button>
                             </a>
-
                             <button type="submit" class="delete" title="Eliminar"
-                                    th:formaction="@{/alumnos/eliminar/{id}(id=${alumno.idAlumno})}"
-                                    formmethod="post"
-                                    onclick="return confirm('¿Estás seguro de que quieres eliminar a este alumno?')">🗑️
+                                    th:formaction="@{/alumnos/eliminar/{id}(id=${alumno.idAlumno})}" formmethod="post"
+                                    onclick="return confirm('¿Estás seguro?')">🗑️
                             </button>
                         </td>
                     </tr>
@@ -111,87 +140,68 @@
             <form th:action="@{/alumnos/guardar}" th:object="${alumnoParaFormulario}" method="post">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modalLabel"
-                        th:text="${editar == true ? 'Editar Alumno' : 'Nuevo Alumno'}">Formulario de Alumno</h5>
+                        th:text="${editar == true ? 'Editar Alumno' : 'Nuevo Alumno'}">Formulario</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <input type="hidden" th:field="*{idAlumno}"/>
                     <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="carnet" class="form-label">Carnet</label>
-                            <input type="text" class="form-control" id="carnet" th:field="*{carnetAlumno}" required>
+                        <div class="col-md-6 mb-3"><label for="carnet" class="form-label">Carnet</label><input
+                                type="text" class="form-control" id="carnet" th:field="*{carnetAlumno}" required></div>
+                        <div class="col-md-6 mb-3"><label for="email" class="form-label">Email Académico</label><input
+                                type="email" class="form-control" id="email" th:field="*{emailAcademico}" required>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="email" class="form-label">Email Académico</label>
-                            <input type="email" class="form-control" id="email" th:field="*{emailAcademico}" required>
+                        <div class="col-md-6 mb-3"><label for="nombre" class="form-label">Nombre Completo</label><input
+                                type="text" class="form-control" id="nombre" th:field="*{nombreCompleto}" required>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="nombre" class="form-label">Nombre Completo</label>
-                            <input type="text" class="form-control" id="nombre" th:field="*{nombreCompleto}" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="apellido" class="form-label">Apellido Completo</label>
-                            <input type="text" class="form-control" id="apellido" th:field="*{apellidoCompleto}"
-                                   required>
-                        </div>
-                        <div class="col-md-12 mb-3">
-                            <label for="password" class="form-label">Contraseña</label>
-                            <input type="password" class="form-control" id="password" th:field="*{contrasena}"
-                                   th:required="${alumnoParaFormulario.idAlumno == null}">
+                        <div class="col-md-6 mb-3"><label for="apellido" class="form-label">Apellido
+                            Completo</label><input type="text" class="form-control" id="apellido"
+                                                   th:field="*{apellidoCompleto}" required></div>
+                        <div class="col-md-12 mb-3"><label for="password" class="form-label">Contraseña</label><input
+                                type="password" class="form-control" id="password" th:field="*{contrasena}"
+                                th:required="${alumnoParaFormulario.idAlumno == null}">
                             <div id="passwordHelp" class="form-text" style="color: var(--text-secondary-color);"
-                                 th:if="${alumnoParaFormulario.idAlumno != null}">
-                                Dejar en blanco para no modificar la contraseña actual.
+                                 th:if="${alumnoParaFormulario.idAlumno != null}">Dejar en blanco para no modificar.
                             </div>
                         </div>
-                        <div class="col-12 mb-3">
-                            <label for="direccion" class="form-label">Dirección</label>
-                            <input type="text" class="form-control" id="direccion" th:field="*{direccion}">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="grado" class="form-label">Grado</label>
-                            <select id="grado" class="form-select" th:field="*{idGrado}">
-                                <option value="">Seleccione un grado</option>
-                                <option th:each="g : ${listaGrados}" th:value="${g.idGrado}"
-                                        th:text="${g.nombreGrado}"></option>
-                            </select>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="seccion" class="form-label">Sección</label>
-                            <select id="seccion" class="form-select" th:field="*{idSeccion}">
-                                <option value="">Seleccione una sección</option>
-                                <option th:each="s : ${listaSecciones}" th:value="${s.idSeccion}"
-                                        th:text="${s.nombreSeccion}"></option>
-                            </select>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="jornada" class="form-label">Jornada</label>
-                            <select id="jornada" class="form-select" th:field="*{idJornada}">
-                                <option value="">Seleccione una jornada</option>
-                                <option th:each="j : ${listaJornadas}" th:value="${j.idJornada}"
-                                        th:text="${j.nombreJornada}"></option>
-                            </select>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="carrera" class="form-label">Carrera</label>
-                            <select id="carrera" class="form-select" th:field="*{idCarrera}">
-                                <option value="">Seleccione una carrera</option>
-                                <option th:each="c : ${listaCarreras}" th:value="${c.idCarrera}"
-                                        th:text="${c.nombreCarrera}"></option>
-                            </select>
-                        </div>
-                        <div class="col-md-12 mb-3">
-                            <label for="tutor" class="form-label">Tutor</label>
-                            <select id="tutor" class="form-select" th:field="*{idTutor}">
-                                <option value="">Seleccione un tutor</option>
-                                <option th:each="t : ${listaTutores}" th:value="${t.idTutor}"
-                                        th:text="${t.nombreCompleto}"></option>
-                            </select>
-                        </div>
+                        <div class="col-12 mb-3"><label for="direccion" class="form-label">Dirección</label><input
+                                type="text" class="form-control" id="direccion" th:field="*{direccion}"></div>
+                        <div class="col-md-6 mb-3"><label for="grado" class="form-label">Grado</label><select id="grado"
+                                                                                                              class="form-select"
+                                                                                                              th:field="*{idGrado}">
+                            <option value="">Seleccione...</option>
+                            <option th:each="g : ${listaGrados}" th:value="${g.idGrado}"
+                                    th:text="${g.nombreGrado}"></option>
+                        </select></div>
+                        <div class="col-md-6 mb-3"><label for="seccion" class="form-label">Sección</label><select
+                                id="seccion" class="form-select" th:field="*{idSeccion}">
+                            <option value="">Seleccione...</option>
+                            <option th:each="s : ${listaSecciones}" th:value="${s.idSeccion}"
+                                    th:text="${s.nombreSeccion}"></option>
+                        </select></div>
+                        <div class="col-md-6 mb-3"><label for="jornada" class="form-label">Jornada</label><select
+                                id="jornada" class="form-select" th:field="*{idJornada}">
+                            <option value="">Seleccione...</option>
+                            <option th:each="j : ${listaJornadas}" th:value="${j.idJornada}"
+                                    th:text="${j.nombreJornada}"></option>
+                        </select></div>
+                        <div class="col-md-6 mb-3"><label for="carrera" class="form-label">Carrera</label><select
+                                id="carrera" class="form-select" th:field="*{idCarrera}">
+                            <option value="">Seleccione...</option>
+                            <option th:each="c : ${listaCarreras}" th:value="${c.idCarrera}"
+                                    th:text="${c.nombreCarrera}"></option>
+                        </select></div>
+                        <div class="col-md-12 mb-3"><label for="tutor" class="form-label">Tutor</label><select
+                                id="tutor" class="form-select" th:field="*{idTutor}">
+                            <option value="">Seleccione...</option>
+                            <option th:each="t : ${listaTutores}" th:value="${t.idTutor}"
+                                    th:text="${t.nombreCompleto}"></option>
+                        </select></div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <a th:href="@{/alumnos}" class="btn btn-secondary">Cancelar</a>
-                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
                 </div>
             </form>
         </div>
@@ -199,20 +209,11 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script th:if="${editar == true}">
-    document.addEventListener('DOMContentLoaded', function () {
-        var modalElement = document.getElementById('alumnoModal');
-        if (modalElement) {
-            var modal = new bootstrap.Modal(modalElement);
-            modal.show();
-        }
-    });
-</script>
-<script th:if="${openAddModal == true}">
-    document.addEventListener('DOMContentLoaded', function () {
-        var modal = new bootstrap.Modal(document.getElementById('alumnoModal'));
-        if (modal) { modal.show(); }
-    });
-</script>
+<script th:if="${editar == true}">document.addEventListener('DOMContentLoaded', function () {
+    new bootstrap.Modal(document.getElementById('alumnoModal')).show();
+});</script>
+<script th:if="${openAddModal == true}">document.addEventListener('DOMContentLoaded', function () {
+    new bootstrap.Modal(document.getElementById('alumnoModal')).show();
+});</script>
 </body>
 </html>
