@@ -9,7 +9,7 @@
     <nav class="sidebar-nav">
         <div class="nav-section">
             <div class="nav-section-title">Gestión de KinScript</div>
-            <a href="#" class="nav-item">
+            <a th:href="@{/profesores}" class="nav-item" th:classappend="${paginaActiva == 'profesores' ? 'active' : ''}">
                 <span class="nav-icon">👨‍🏫</span>
                 <span>Profesores</span>
             </a>

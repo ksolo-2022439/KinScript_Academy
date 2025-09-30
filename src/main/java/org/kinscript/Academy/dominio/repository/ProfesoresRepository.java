@@ -11,4 +11,6 @@ public interface ProfesoresRepository {
     ProfesoresDto modificarProfesor(Long idProfesor, ModProfesoresDto  modProfesoresDto);
     void eliminarProfesor(Long idProfesor);
     Optional<ProfesoresDto> findByEmail(String email);
+    List<ProfesoresDto> buscarPorFiltros(String nombre, String apellido, String telefono, String email);
+    long contarTotal();
 }

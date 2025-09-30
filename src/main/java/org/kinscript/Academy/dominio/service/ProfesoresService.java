@@ -40,4 +40,12 @@ public class ProfesoresService {
     public Optional<ProfesoresDto> findByEmail(String email) {
         return this.profesoresRepository.findByEmail(email);
     }
+
+    public List<ProfesoresDto> buscarPorFiltros(String nombre, String apellido, String telefono, String email) {
+        return profesoresRepository.buscarPorFiltros(nombre, apellido, telefono, email);
+    }
+
+    public long contarTotal() {
+        return profesoresRepository.contarTotal();
+    }
 }

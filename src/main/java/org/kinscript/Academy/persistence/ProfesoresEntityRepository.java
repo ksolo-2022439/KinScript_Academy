@@ -75,4 +75,21 @@ public class ProfesoresEntityRepository implements ProfesoresRepository {
         return crudProfesoresEntity.findFirstByEmail(email)
                 .map(profesoresMapper::toDto);
     }
+
+    @Override
+    public List<ProfesoresDto> buscarPorFiltros(String nombre, String apellido, String telefono, String email) {
+        List<Profesores> profesores = crudProfesoresEntity.findByFilters(
+                (nombre != null && !nombre.isEmpty()) ? nombre : null,
+                (apellido != null && !apellido.isEmpty()) ? apellido : null,
+                (telefono != null && !telefono.isEmpty()) ? telefono : null,
+                (email != null && !email.isEmpty()) ? email : null
+        );
+        return profesoresMapper.toDto(profesores);
+    }
+
+    @Override
+    public long contarTotal() {
+        return crudProfesoresEntity.count();
+    }
+
 }
