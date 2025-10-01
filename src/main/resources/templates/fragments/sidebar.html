@@ -52,7 +52,7 @@
                 <span class="nav-icon">💼</span>
                 <span>Carreras</span>
             </a>
-            <a href="#" class="nav-item">
+            <a th:href="@{/gradocurso}" class="nav-item" th:classappend="${paginaActiva == 'gradocurso' ? 'active' : ''}">
                 <span class="nav-icon">🤵</span>
                 <span>Grados por Curso</span>
             </a>

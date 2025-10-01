@@ -29,4 +29,12 @@ public class GradoCursoService {
     public void eliminarAsociacion(Long idGrado, Long idCurso) {
         gradoCursoRepository.eliminar(idGrado, idCurso);
     }
+
+    public List<GradoCursoDto> buscarPorFiltro(Long idGrado) {
+        return gradoCursoRepository.buscarPorFiltro(idGrado);
+    }
+
+    public long contarTotal() {
+        return gradoCursoRepository.contarTotal();
+    }
 }

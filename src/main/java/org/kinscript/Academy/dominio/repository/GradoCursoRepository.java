@@ -11,4 +11,8 @@ public interface GradoCursoRepository {
     GradoCursoDto guardar(GradoCursoDto gradoCursoDto);
 
     void eliminar(Long idGrado, Long idCurso);
+
+    List<GradoCursoDto> buscarPorFiltro(Long idGrado);
+
+    long contarTotal();
 }

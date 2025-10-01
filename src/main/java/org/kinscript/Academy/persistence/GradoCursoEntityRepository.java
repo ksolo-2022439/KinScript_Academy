@@ -51,4 +51,18 @@ public class GradoCursoEntityRepository implements GradoCursoRepository {
         }
         crudGradoCursoEntity.deleteById(id);
     }
+
+    @Override
+    public List<GradoCursoDto> buscarPorFiltro(Long idGrado) {
+        if (idGrado != null) {
+            return gradoCursoMapper.toDto(crudGradoCursoEntity.findByIdGrado(idGrado));
+        } else {
+            return gradoCursoMapper.toDto((List<GradoCurso>) crudGradoCursoEntity.findAll());
+        }
+    }
+
+    @Override
+    public long contarTotal() {
+        return crudGradoCursoEntity.count();
+    }
 }
