@@ -51,4 +51,17 @@ public class ProfesorAsignacionEntityRepository implements ProfesorAsignacionRep
         }
         crudAsignacionEntity.deleteById(id);
     }
+
+    @Override
+    public List<ProfesorAsignacionDto> buscarPorFiltros(Long idProfesor, Long idCurso, Long idGrado, Long idSeccion, Long idJornada) {
+        List<ProfesorAsignacion> asignaciones = crudAsignacionEntity.findByFilters(
+                idProfesor, idCurso, idGrado, idSeccion, idJornada
+        );
+        return asignacionMapper.toDto(asignaciones);
+    }
+
+    @Override
+    public long contarTotal() {
+        return crudAsignacionEntity.count();
+    }
 }

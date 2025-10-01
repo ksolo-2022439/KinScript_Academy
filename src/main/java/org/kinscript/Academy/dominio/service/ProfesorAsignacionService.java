@@ -30,4 +30,12 @@ public class ProfesorAsignacionService {
     public void eliminarAsignacion(ProfesorAsignacionDto asignacionDto) {
         profesorAsignacionRepository.eliminar(asignacionDto);
     }
+
+    public List<ProfesorAsignacionDto> buscarPorFiltros(Long idProfesor, Long idCurso, Long idGrado, Long idSeccion, Long idJornada) {
+        return profesorAsignacionRepository.buscarPorFiltros(idProfesor, idCurso, idGrado, idSeccion, idJornada);
+    }
+
+    public long contarTotal() {
+        return profesorAsignacionRepository.contarTotal();
+    }
 }

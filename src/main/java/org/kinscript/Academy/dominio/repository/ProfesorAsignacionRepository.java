@@ -11,4 +11,8 @@ public interface ProfesorAsignacionRepository {
     ProfesorAsignacionDto guardar(ProfesorAsignacionDto asignacionDto);
 
     void eliminar(ProfesorAsignacionDto asignacionDto);
+
+    List<ProfesorAsignacionDto> buscarPorFiltros(Long idProfesor, Long idCurso, Long idGrado, Long idSeccion, Long idJornada);
+
+    long contarTotal();
 }

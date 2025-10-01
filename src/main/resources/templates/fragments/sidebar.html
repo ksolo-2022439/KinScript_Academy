@@ -56,7 +56,7 @@
                 <span class="nav-icon">🤵</span>
                 <span>Grados por Curso</span>
             </a>
-            <a href="#" class="nav-item">
+            <a th:href="@{/profesorasignacion}" class="nav-item" th:classappend="${paginaActiva == 'profesorasignacion' ? 'active' : ''}">
                 <span class="nav-icon">🔨</span>
                 <span>Asignar Profesores</span>
             </a>
