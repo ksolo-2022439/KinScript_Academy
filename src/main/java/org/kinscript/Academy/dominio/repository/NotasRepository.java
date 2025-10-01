@@ -17,4 +17,8 @@ public interface NotasRepository {
     NotasDto modificar(Long idNota, ModNotasDto modNotasDto);
 
     void eliminar(Long idNota);
+
+    List<NotasDto> buscarPorFiltros(Long idAlumno, Long idCurso);
+
+    long contarTotal();
 }

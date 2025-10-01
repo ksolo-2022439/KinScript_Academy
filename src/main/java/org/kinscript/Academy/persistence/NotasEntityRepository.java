@@ -74,4 +74,15 @@ public class NotasEntityRepository implements NotasRepository {
         }
         crudNotasEntity.deleteById(Math.toIntExact(idNota));
     }
+
+    @Override
+    public List<NotasDto> buscarPorFiltros(Long idAlumno, Long idCurso) {
+        List<Notas> notas = crudNotasEntity.findByFilters(idAlumno, idCurso);
+        return notasMapper.toDto(notas);
+    }
+
+    @Override
+    public long contarTotal() {
+        return crudNotasEntity.count();
+    }
 }

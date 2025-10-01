@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Notas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" th:href="@{/styles/cruds.css(v=1.2)}">
+    <style>
+        .modal-content{background-color:var(--primary-bg-color);color:var(--text-color);border:1px solid var(--border-color)}.form-control,.form-select{background-color:var(--secondary-bg-color);color:var(--text-color);border-color:var(--border-color)}.form-control:focus,.form-select:focus{background-color:var(--secondary-bg-color);color:var(--text-color);border-color:var(--accent-color);box-shadow:none}.btn-close{filter:invert(1) grayscale(100%) brightness(200%)}
+    </style>
+</head>
+<body>
+<div class="layout-container">
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+    <main class="main-content">
+        <div class="header-bar">
+            <h1>Dashboard de Notas</h1>
+            <a th:href="@{/notas(add='true')}" class="add-button">＋ Nueva Nota</a>
+        </div>
+
+        <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert" th:text="${successMessage}"></div>
+        <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert" th:text="${errorMessage}"></div>
+
+        <div class="summary-cards">
+            <div class="card">
+                <h3 class="card-title">Total de Registros</h3>
+                <p class="card-value" th:text="${totalNotas}">0</p>
+            </div>
+            <div class="card">
+                <h3 class="card-title">Registros Activos</h3>
+                <p class="card-value" th:text="${notasActivas}">0</p>
+            </div>
+        </div>
+
+        <div class="data-table-container">
+            <form th:action="@{/notas}" method="get" id="filter-form">
+                <button type="submit" style="display: none;" aria-hidden="true"></button>
+                <table class="data-table">
+                    <thead>
+                    <tr class="filter-header">
+                        <th>
+                            <select name="alumnoFilter" class="form-select form-select-sm" onchange="this.form.submit()">
+                                <option value="">Alumno...</option>
+                                <option th:each="a : ${listaAlumnos}" th:value="${a.idAlumno}" th:text="${a.nombreCompleto() + ' ' + a.apellidoCompleto()}" th:selected="${a.idAlumno == alumnoFilter}"></option>
+                            </select>
+                        </th>
+                        <th>
+                            <select name="cursoFilter" class="form-select form-select-sm" onchange="this.form.submit()">
+                                <option value="">Curso...</option>
+                                <option th:each="c : ${listaCursos}" th:value="${c.idCurso}" th:text="${c.nombreCurso}" th:selected="${c.idCurso == cursoFilter}"></option>
+                            </select>
+                        </th>
+                        <th colspan="4"></th>
+                        <th><input type="number" step="0.01" name="promedioFilter" placeholder="Promedio >= a..." th:value="${promedioFilter}" onchange="this.form.submit()" class="form-control form-control-sm"></th>
+                        <th></th>
+                    </tr>
+                    <tr class="header-row">
+                        <th>Alumno</th>
+                        <th>Curso</th>
+                        <th>Bimestre 1</th>
+                        <th>Bimestre 2</th>
+                        <th>Bimestre 3</th>
+                        <th>Bimestre 4</th>
+                        <th>Promedio</th>
+                        <th>Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="nota : ${notas}">
+                        <td th:text="${alumnosMap[nota.idAlumno]}"></td>
+                        <td th:text="${cursosMap[nota.idCurso]}"></td>
+                        <td th:text="${nota.bimestre1}"></td>
+                        <td th:text="${nota.bimestre2}"></td>
+                        <td th:text="${nota.bimestre3}"></td>
+                        <td th:text="${nota.bimestre4}"></td>
+                        <td th:with="
+                            b1=${nota.bimestre1 != null ? nota.bimestre1 : 0},
+                            b2=${nota.bimestre2 != null ? nota.bimestre2 : 0},
+                            b3=${nota.bimestre3 != null ? nota.bimestre3 : 0},
+                            b4=${nota.bimestre4 != null ? nota.bimestre4 : 0}">
+                            <span th:text="${#numbers.formatDecimal((b1 + b2 + b3 + b4) / 4, 1, 2)}"></span>
+                        </td>
+                        <td class="action-buttons">
+                            <a th:href="@{/notas/editar/{id}(id=${nota.idNota}, alumnoFilter=${alumnoFilter}, cursoFilter=${cursoFilter}, promedioFilter=${promedioFilter})}" class="action-buttons">
+                                <button type="button" class="edit" title="Editar">✏️</button>
+                            </a>
+                            <button type="submit" class="delete" title="Eliminar" th:formaction="@{/notas/eliminar/{id}(id=${nota.idNota})}" formmethod="post" onclick="return confirm('¿Estás seguro?')">🗑️</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </main>
+</div>
+
+<div class="modal fade" id="notaModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form th:action="@{/notas/guardar}" th:object="${notaParaFormulario}" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel" th:text="${editar == true ? 'Editar Nota' : 'Nueva Nota'}">Formulario</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" th:field="*{idNota}"/>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="alumno" class="form-label">Alumno</label>
+                            <select id="alumno" class="form-select" th:field="*{idAlumno}" required>
+                                <option value="">Seleccione...</option>
+                                <option th:each="a : ${listaAlumnos}" th:value="${a.idAlumno}" th:text="${a.nombreCompleto() + ' ' + a.apellidoCompleto()}"></option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="curso" class="form-label">Curso</label>
+                            <select id="curso" class="form-select" th:field="*{idCurso}" required>
+                                <option value="">Seleccione...</option>
+                                <option th:each="c : ${listaCursos}" th:value="${c.idCurso}" th:text="${c.nombreCurso}"></option>
+                            </select>
+                        </div>
+                        <div class="col-md-3 mb-3"><label for="b1" class="form-label">Bimestre 1</label><input type="number" step="0.01" class="form-control" id="b1" th:field="*{bimestre1}"></div>
+                        <div class="col-md-3 mb-3"><label for="b2" class="form-label">Bimestre 2</label><input type="number" step="0.01" class="form-control" id="b2" th:field="*{bimestre2}"></div>
+                        <div class="col-md-3 mb-3"><label for="b3" class="form-label">Bimestre 3</label><input type="number" step="0.01" class="form-control" id="b3" th:field="*{bimestre3}"></div>
+                        <div class="col-md-3 mb-3"><label for="b4" class="form-label">Bimestre 4</label><input type="number" step="0.01" class="form-control" id="b4" th:field="*{bimestre4}"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a th:href="@{/notas}" class="btn btn-secondary">Cancelar</a>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script th:if="${editar == true}">document.addEventListener('DOMContentLoaded', function(){new bootstrap.Modal(document.getElementById('notaModal')).show();});</script>
+<script th:if="${openAddModal == true}">document.addEventListener('DOMContentLoaded', function(){new bootstrap.Modal(document.getElementById('notaModal')).show();});</script>
+</body>
+</html>

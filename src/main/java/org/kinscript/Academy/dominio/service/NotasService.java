@@ -38,4 +38,12 @@ public class NotasService {
     public void eliminarNota(Long idNota) {
         this.notasRepository.eliminar(idNota);
     }
+
+    public List<NotasDto> buscarPorFiltros(Long idAlumno, Long idCurso) {
+        return notasRepository.buscarPorFiltros(idAlumno, idCurso);
+    }
+
+    public long contarTotal() {
+        return notasRepository.contarTotal();
+    }
 }

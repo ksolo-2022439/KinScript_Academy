@@ -17,7 +17,7 @@
                 <span class="nav-icon">👨‍🎓</span>
                 <span>Alumnos</span>
             </a>
-            <a href="#" class="nav-item">
+            <a th:href="@{/cursos}" class="nav-item" th:classappend="${paginaActiva == 'cursos' ? 'active' : ''}">
                 <span class="nav-icon">📚</span>
                 <span>Cursos</span>
             </a>
@@ -25,7 +25,7 @@
                 <span class="nav-icon">👩‍💼</span>
                 <span>Coordinadores</span>
             </a>
-            <a href="#" class="nav-item">
+            <a th:href="@{/notas}" class="nav-item" th:classappend="${paginaActiva == 'notas' ? 'active' : ''}">
                 <span class="nav-icon">📝</span>
                 <span>Notas</span>
             </a>
