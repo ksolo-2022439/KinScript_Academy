@@ -21,6 +21,6 @@ public class AiActividadController {
     //Metodo para sugerir la actividad
     @PostMapping("/sugerir")
     public ResponseEntity<String> generarSugerenciaActividad(@RequestBody SolicitudDto solicitudDto) {
-        return ResponseEntity.ok(this.aiService.generarActivadad(solicitudDto.preferencias()));
+        return ResponseEntity.ok(this.aiService.generarActividad(solicitudDto.preferencias()));
     }
 }

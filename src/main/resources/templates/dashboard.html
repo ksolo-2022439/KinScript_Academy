@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Principal - AcademyHQ</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/styles/cruds.css(v=1.2)}">
+    <link rel="stylesheet" type="text/css" th:href="@{/styles/dashboard.css(v=1.1)}">
+</head>
+<body>
+<div class="layout-container">
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+    <main class="main-content">
+        <div class="header-bar">
+            <h1>Dashboard Principal</h1>
+        </div>
+
+        <div class="dashboard-grid">
+            <a th:href="@{/alumnos}" class="quick-access-card">
+                <div class="card-header"><span class="nav-icon">👨‍🎓</span><span>Alumnos</span></div>
+                <div class="card-body" th:text="${totalAlumnos}">0</div>
+            </a>
+            <a th:href="@{/profesores}" class="quick-access-card">
+                <div class="card-header"><span class="nav-icon">👨‍🏫</span><span>Profesores</span></div>
+                <div class="card-body" th:text="${totalProfesores}">0</div>
+            </a>
+            <a th:href="@{/notas}" class="quick-access-card">
+                <div class="card-header"><span class="nav-icon">📝</span><span>Registros de Notas</span></div>
+                <div class="card-body" th:text="${totalNotas}">0</div>
+            </a>
+            <a th:href="@{/gradocurso}" class="quick-access-card">
+                <div class="card-header"><span class="nav-icon">🤵📚</span><span>Cursos por Grado</span></div>
+                <div class="card-body" th:text="${totalAsignaciones}">0</div>
+            </a>
+            <a th:href="@{/profesorasignacion}" class="quick-access-card">
+                <div class="card-header"><span class="nav-icon">🤵</span><span>Asignar Profesores</span></div>
+                <div class="card-body" th:text="${totalProfAsignaciones}">0</div>
+            </a>
+
+            <div class="ai-panel">
+                <h2>Asistente de Actividades IA</h2>
+                <form id="ai-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="ai-materia">Materia / Curso</label>
+                            <select id="ai-materia" class="form-control" required>
+                                <option value="">Seleccione un curso...</option>
+                                <option th:each="curso : ${listaCursos}" th:value="${curso.nombreCurso}" th:text="${curso.nombreCurso}"></option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="ai-nivel">Nivel Educativo</label>
+                            <select id="ai-nivel" class="form-control" required>
+                                <option value="">Seleccione un nivel...</option>
+                                <option th:each="grado : ${listaGrados}" th:value="${grado.nombreGrado}" th:text="${grado.nombreGrado}"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ai-tema">Tema Específico</label>
+                        <textarea id="ai-tema" class="form-control" placeholder="Ej: La Revolución Francesa, Ecuaciones de segundo grado" required></textarea>
+                    </div>
+                    <button type="submit" id="ai-submit-btn" class="submit-button">Generar Sugerencia</button>
+                </form>
+
+                <div id="ai-response" class="ai-response-box">
+                    <span>La sugerencia de la IA aparecerá aquí...</span>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const aiForm = document.getElementById('ai-form');
+        const submitBtn = document.getElementById('ai-submit-btn');
+        const responseDiv = document.getElementById('ai-response');
+
+        aiForm.addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            const materia = document.getElementById('ai-materia').value;
+            const nivel = document.getElementById('ai-nivel').value;
+            const tema = document.getElementById('ai-tema').value;
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Pensando...';
+            responseDiv.innerHTML = '<span>Generando una idea increíble, por favor espera...</span>';
+            responseDiv.classList.remove('has-content');
+
+            const preferencias = `Materia/Tema: ${materia}\nNivel educativo: ${nivel}\nTema específico: ${tema}`;
+
+            try {
+                const response = await fetch('academy/ai/sugerir', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ preferencias: preferencias })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Error del servidor: ${response.status}`);
+                }
+
+                const aiTextResponse = await response.text();
+                responseDiv.textContent = aiTextResponse;
+                responseDiv.classList.add('has-content');
+
+            } catch (error) {
+                console.error('Error al contactar la IA:', error);
+                responseDiv.innerHTML = '<span>Lo siento, ocurrió un error al generar la sugerencia. Por favor, inténtalo de nuevo.</span>';
+                responseDiv.classList.remove('has-content');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Generar Sugerencia';
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

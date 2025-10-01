@@ -4,11 +4,15 @@
 
 <aside class="sidebar" th:fragment="sidebar">
     <div class="sidebar-header">
-        <a href="#" class="logo">KinScript Academy</a>
+        <a th:href="@{/dashboard}" class="logo">KinScript Academy</a>
     </div>
     <nav class="sidebar-nav">
         <div class="nav-section">
             <div class="nav-section-title">Gestión de KinScript</div>
+            <a th:href="@{/dashboard}" class="nav-item" th:classappend="${paginaActiva == 'dashboard' ? 'active' : ''}">
+                <span class="nav-icon">📊</span>
+                <span>Dashboard</span>
+            </a>
             <a th:href="@{/profesores}" class="nav-item" th:classappend="${paginaActiva == 'profesores' ? 'active' : ''}">
                 <span class="nav-icon">👨‍🏫</span>
                 <span>Profesores</span>
