@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Coordinadores</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" th:href="@{/styles/cruds.css(v=1.2)}">
+    <style>
+        .modal-content{background-color:var(--primary-bg-color);color:var(--text-color);border:1px solid var(--border-color)}.form-control,.form-select{background-color:var(--secondary-bg-color);color:var(--text-color);border-color:var(--border-color)}.form-control:focus,.form-select:focus{background-color:var(--secondary-bg-color);color:var(--text-color);border-color:var(--accent-color);box-shadow:none}.btn-close{filter:invert(1) grayscale(100%) brightness(200%)}
+    </style>
+</head>
+<body>
+<div class="layout-container">
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+    <main class="main-content">
+        <div class="header-bar">
+            <h1>Dashboard de Coordinadores</h1>
+            <a th:href="@{/coordinadores(add='true')}" class="add-button">＋ Nuevo Coordinador</a>
+        </div>
+
+        <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert" th:text="${successMessage}"></div>
+        <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert" th:text="${errorMessage}"></div>
+
+        <div class="summary-cards">
+            <div class="card">
+                <h3 class="card-title">Total de Coordinadores</h3>
+                <p class="card-value" th:text="${totalCoordinadores}">0</p>
+            </div>
+            <div class="card">
+                <h3 class="card-title">Coordinadores Activos</h3>
+                <p class="card-value" th:text="${coordinadoresActivos}">0</p>
+            </div>
+        </div>
+
+        <div class="data-table-container">
+            <form th:action="@{/coordinadores}" method="get" id="filter-form">
+                <button type="submit" style="display: none;" aria-hidden="true"></button>
+                <table class="data-table">
+                    <thead>
+                    <tr class="filter-header">
+                        <th><input type="text" name="nombreFilter" placeholder="Buscar por Nombre..." th:value="${nombreFilter}" onchange="this.form.submit()"></th>
+                        <th><input type="text" name="apellidoFilter" placeholder="Buscar por Apellido..." th:value="${apellidoFilter}" onchange="this.form.submit()"></th>
+                        <th><input type="text" name="emailFilter" placeholder="Buscar por Email..." th:value="${emailFilter}" onchange="this.form.submit()"></th>
+                        <th>
+                            <select name="gradoFilter" class="form-select form-select-sm" onchange="this.form.submit()">
+                                <option value="">Grado...</option>
+                                <option th:each="g : ${listaGrados}" th:value="${g.idGrado}" th:text="${g.nombreGrado}" th:selected="${g.idGrado == gradoFilter}"></option>
+                            </select>
+                        </th>
+                        <th>Acciones</th>
+                    </tr>
+                    <tr class="header-row">
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Email</th>
+                        <th>Grado Asignado</th>
+                        <th>Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="coordinador : ${coordinadores}">
+                        <td th:text="${coordinador.nombreCompleto}"></td>
+                        <td th:text="${coordinador.apellidoCompleto}"></td>
+                        <td th:text="${coordinador.email}"></td>
+                        <td th:text="${gradosMap[coordinador.idGrado]}"></td>
+                        <td class="action-buttons">
+                            <a th:href="@{/coordinadores/editar/{id}(id=${coordinador.idCoordinador}, nombreFilter=${nombreFilter}, apellidoFilter=${apellidoFilter}, emailFilter=${emailFilter}, gradoFilter=${gradoFilter})}" class="action-buttons">
+                                <button type="button" class="edit" title="Editar">✏️</button>
+                            </a>
+                            <button type="submit" class="delete" title="Eliminar" th:formaction="@{/coordinadores/eliminar/{id}(id=${coordinador.idCoordinador})}" formmethod="post" onclick="return confirm('¿Estás seguro?')">🗑️</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </main>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="coordinadorModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form th:action="@{/coordinadores/guardar}" th:object="${coordinadorParaFormulario}" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel" th:text="${editar == true ? 'Editar Coordinador' : 'Nuevo Coordinador'}">Formulario</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" th:field="*{idCoordinador}"/>
+                    <div class="row">
+                        <div class="col-md-6 mb-3"><label for="nombre" class="form-label">Nombre</label><input type="text" class="form-control" id="nombre" th:field="*{nombreCompleto}" required></div>
+                        <div class="col-md-6 mb-3"><label for="apellido" class="form-label">Apellido</label><input type="text" class="form-control" id="apellido" th:field="*{apellidoCompleto}" required></div>
+                        <div class="col-md-12 mb-3"><label for="email" class="form-label">Email</label><input type="email" class="form-control" id="email" th:field="*{email}" required></div>
+                        <div class="col-md-12 mb-3"><label for="grado" class="form-label">Grado Asignado</label><select id="grado" class="form-select" th:field="*{idGrado}"><option value="">Seleccione...</option><option th:each="g : ${listaGrados}" th:value="${g.idGrado}" th:text="${g.nombreGrado}"></option></select></div>
+                        <div class="col-md-12 mb-3"><label for="password" class="form-label">Contraseña</label><input type="password" class="form-control" id="password" th:field="*{contrasena}" th:required="${coordinadorParaFormulario.idCoordinador == null}"><div class="form-text" style="color: var(--text-secondary-color);" th:if="${coordinadorParaFormulario.idCoordinador != null}">Dejar en blanco para no modificar.</div></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a th:href="@{/coordinadores}" class="btn btn-secondary">Cancelar</a>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script th:if="${editar == true}">document.addEventListener('DOMContentLoaded', function(){new bootstrap.Modal(document.getElementById('coordinadorModal')).show();});</script>
+<script th:if="${openAddModal == true}">document.addEventListener('DOMContentLoaded', function(){new bootstrap.Modal(document.getElementById('coordinadorModal')).show();});</script>
+</body>
+</html>

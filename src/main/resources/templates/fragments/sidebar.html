@@ -21,7 +21,7 @@
                 <span class="nav-icon">📚</span>
                 <span>Cursos</span>
             </a>
-            <a href="#" class="nav-item">
+            <a th:href="@{/coordinadores}" class="nav-item" th:classappend="${paginaActiva == 'coordinadores' ? 'active' : ''}">
                 <span class="nav-icon">👩‍💼</span>
                 <span>Coordinadores</span>
             </a>

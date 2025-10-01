@@ -43,4 +43,12 @@ public class CoordinadoresService {
     public Optional<CoordinadoresDto> findByEmail(String email) {
         return this.coordinadoresRepository.findByEmail(email);
     }
+
+    public List<CoordinadoresDto> buscarPorFiltros(String nombre, String apellido, String email, Long idGrado) {
+        return coordinadoresRepository.buscarPorFiltros(nombre, apellido, email, idGrado);
+    }
+
+    public long contarTotal() {
+        return coordinadoresRepository.contarTotal();
+    }
 }

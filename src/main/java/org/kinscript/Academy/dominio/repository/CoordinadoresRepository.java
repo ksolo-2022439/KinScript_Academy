@@ -13,4 +13,6 @@ public interface CoordinadoresRepository {
     Optional<CoordinadoresDto> modificar(Long idCoordinador, ModCoordinadoresDto modCoordinadoresDto);
     void eliminar(Long idCoordinador);
     Optional<CoordinadoresDto> findByEmail(String email);
+    List<CoordinadoresDto> buscarPorFiltros(String nombre, String apellido, String email, Long idGrado);
+    long contarTotal();
 }

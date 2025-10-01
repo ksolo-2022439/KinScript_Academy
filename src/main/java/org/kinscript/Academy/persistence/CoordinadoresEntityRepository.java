@@ -71,4 +71,20 @@ public class CoordinadoresEntityRepository implements CoordinadoresRepository {
         return crudCoordinadoresEntity.findFirstByEmail(email)
                 .map(coordinadoresMapper::toDto);
     }
+
+    @Override
+    public List<CoordinadoresDto> buscarPorFiltros(String nombre, String apellido, String email, Long idGrado) {
+        List<Coordinadores> coordinadores = crudCoordinadoresEntity.findByFilters(
+                (nombre != null && !nombre.isEmpty()) ? nombre : null,
+                (apellido != null && !apellido.isEmpty()) ? apellido : null,
+                (email != null && !email.isEmpty()) ? email : null,
+                idGrado
+        );
+        return coordinadoresMapper.toDto(coordinadores);
+    }
+
+    @Override
+    public long contarTotal() {
+        return crudCoordinadoresEntity.count();
+    }
 }
