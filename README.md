@@ -919,156 +919,1687 @@ jwt.expiration=86400000
 
 ## 🧪 Testing
 
-### Ejecutar Tests
-```bash
-# Ejecutar todos los tests
-./mvnw test
+### 🎯 Estrategia de Testing
 
-# Ejecutar tests con coverage
+El proyecto incluye una estructura de testing completa para garantizar la calidad del código:
+
+```
+src/test/java/org/kinscript/Academy/
+├── 🧪 unit/              # Tests unitarios
+│   ├── service/          # Tests de servicios
+│   └── mapper/           # Tests de mappers
+├── 🔗 integration/       # Tests de integración
+│   ├── controller/       # Tests de controladores
+│   └── repository/       # Tests de repositorios
+└── 🌐 e2e/              # Tests end-to-end (futuro)
+```
+
+### 🚀 Ejecutar Tests
+
+#### Todos los tests
+```bash
+./mvnw test
+```
+
+#### Tests con reporte de cobertura
+```bash
 ./mvnw test jacoco:report
 
-# Ejecutar tests de integración
+# Ver reporte en:
+# target/site/jacoco/index.html
+```
+
+#### Tests de integración
+```bash
 ./mvnw integration-test
 ```
 
-### Tipos de Tests Incluidos
-- **Unit Tests**: Tests unitarios para servicios y utilidades
-- **Integration Tests**: Tests de integración para controladores
-- **Repository Tests**: Tests para la capa de datos
+#### Tests específicos
+```bash
+# Por clase
+./mvnw test -Dtest=AlumnosServiceTest
+
+# Por método
+./mvnw test -Dtest=AlumnosServiceTest#testGuardarAlumno
+```
+
+#### Modo verbose
+```bash
+./mvnw test -X
+```
+
+### 📋 Tipos de Tests Incluidos
+
+#### 🔬 Unit Tests
+Prueban componentes individuales de forma aislada.
+
+```java
+@SpringBootTest
+class AlumnosServiceTest {
+    
+    @Mock
+    private AlumnosRepository repository;
+    
+    @InjectMocks
+    private AlumnosService service;
+    
+    @Test
+    void testGuardarAlumno() {
+        // Arrange
+        AlumnosDto dto = new AlumnosDto();
+        dto.setNombreAlumno("Juan");
+        
+        // Act
+        AlumnosDto result = service.guardar(dto);
+        
+        // Assert
+        assertNotNull(result);
+        assertEquals("Juan", result.getNombreAlumno());
+    }
+}
+```
+
+#### 🔗 Integration Tests
+Prueban la interacción entre componentes.
+
+```java
+@SpringBootTest
+@AutoConfigureMockMvc
+class AlumnosControllerTest {
+    
+    @Autowired
+    private MockMvc mockMvc;
+    
+    @Test
+    void testObtenerTodosLosAlumnos() throws Exception {
+        mockMvc.perform(get("/api/alumnos"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+    }
+}
+```
+
+#### 💾 Repository Tests
+Prueban el acceso a datos.
+
+```java
+@DataJpaTest
+class AlumnosRepositoryTest {
+    
+    @Autowired
+    private AlumnosRepository repository;
+    
+    @Test
+    void testGuardarYBuscarAlumno() {
+        Alumnos alumno = new Alumnos();
+        alumno.setNombreAlumno("Juan");
+        
+        Alumnos saved = repository.save(alumno);
+        Optional<Alumnos> found = repository.findById(saved.getIdAlumno());
+        
+        assertTrue(found.isPresent());
+        assertEquals("Juan", found.get().getNombreAlumno());
+    }
+}
+```
+
+### 📊 Cobertura de Tests
+
+Objetivo de cobertura:
+- **Servicios**: ≥ 80%
+- **Controladores**: ≥ 70%
+- **Repositorios**: ≥ 60%
+- **General**: ≥ 70%
+
+### 🛠️ Herramientas de Testing
+
+- **JUnit 5**: Framework de testing principal
+- **Mockito**: Mocking de dependencias
+- **Spring Boot Test**: Testing de aplicaciones Spring
+- **AssertJ**: Assertions fluidas y expresivas
+- **JaCoCo**: Análisis de cobertura de código
+- **H2 Database**: Base de datos en memoria para tests
+
+### ✅ Buenas Prácticas
+
+1. **📝 Nombres descriptivos**: `testGuardarAlumno_cuandoDatosValidos_debeRetornarAlumnoGuardado()`
+2. **🎯 Tests aislados**: Cada test debe ser independiente
+3. **🔄 AAA Pattern**: Arrange, Act, Assert
+4. **🚫 No tests redundantes**: Evitar duplicación
+5. **⚡ Tests rápidos**: Mantener tiempo de ejecución bajo
+6. **🧹 Cleanup**: Limpiar datos de prueba después de cada test
 
 ## 📊 Monitoreo y Métricas
 
-### Actuator Endpoints
-- `/actuator/health` - Estado de salud de la aplicación
-- `/actuator/metrics` - Métricas de la aplicación
-- `/actuator/info` - Información de la aplicación
+### 📈 Spring Boot Actuator
+
+El proyecto incluye Spring Boot Actuator para monitoreo y métricas.
+
+#### Endpoints Disponibles
+
+| Endpoint | Descripción |
+|----------|-------------|
+| `/actuator/health` | 💚 Estado de salud de la aplicación |
+| `/actuator/info` | ℹ️ Información de la aplicación |
+| `/actuator/metrics` | 📊 Métricas de rendimiento |
+| `/actuator/env` | 🔧 Variables de entorno |
+| `/actuator/loggers` | 📝 Configuración de logs |
+
+#### Habilitar Actuator
+
+En `application.properties`:
+```properties
+# Habilitar endpoints de Actuator
+management.endpoints.web.exposure.include=health,info,metrics
+management.endpoint.health.show-details=always
+
+# Información de la aplicación
+info.app.name=KinScript Academy
+info.app.description=Sistema de Gestión Académica
+info.app.version=1.0.0
+```
+
+#### Acceso a métricas
+```bash
+# Salud de la aplicación
+curl http://localhost:8090/actuator/health
+
+# Métricas disponibles
+curl http://localhost:8090/actuator/metrics
+
+# Métrica específica (ejemplo: uso de memoria)
+curl http://localhost:8090/actuator/metrics/jvm.memory.used
+```
+
+### 📊 Métricas Clave
+
+- **💻 JVM Metrics**: Uso de memoria, threads, garbage collection
+- **🌐 HTTP Metrics**: Peticiones, respuestas, tiempos de respuesta
+- **💾 Database Metrics**: Conexiones activas, queries ejecutadas
+- **⏱️ Performance Metrics**: Tiempo de respuesta por endpoint
+- **❌ Error Metrics**: Tasa de errores por tipo
+
+### 🔍 Herramientas Recomendadas de Monitoreo
+
+#### Prometheus + Grafana
+```properties
+# application.properties
+management.metrics.export.prometheus.enabled=true
+management.endpoint.prometheus.enabled=true
+management.endpoints.web.exposure.include=prometheus
+```
+
+#### Configuración Docker Compose (ejemplo)
+```yaml
+version: '3.8'
+services:
+  academy:
+    image: kinscript/academy:latest
+    ports:
+      - "8090:8090"
+  
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+  
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+```
+
+### 📊 Dashboards Sugeridos
+
+- **Sistema**: CPU, Memoria, Disco
+- **Aplicación**: Request rate, Error rate, Response time
+- **Base de Datos**: Conexiones, Query performance
+- **Usuarios**: Sesiones activas, Operaciones por usuario
 
 ## 🤝 Contribución
 
-### Guías para Contribuir
-1. Fork del repositorio
-2. Crear rama feature (`git checkout -b feature/NuevaCaracteristica`)
-3. Commit de cambios (`git commit -am 'Agregar nueva característica'`)
-4. Push a la rama (`git push origin feature/NuevaCaracteristica`)
-5. Crear Pull Request
+¡Las contribuciones son bienvenidas! 🎉
 
-### Convenciones de Código
-- Seguir las convenciones de Java
-- Usar Lombok para reducir boilerplate
-- Documentar métodos públicos con JavaDoc
-- Escribir tests para nuevas funcionalidades
+### 📝 Guías para Contribuir
 
-## 👨‍💻 Autor
-
-**KinScript Academy Team**
-- GitHub: [@ksolo-2022439](https://github.com/ksolo-2022439)
-- GitHub: [@gc130041](https://github.com/gc130041)
-- GitHub: [@EduardoLG](https://github.com/EduardoLG)
-- GitHub: [@marcss-bnajera](https://github.com/marcss-bnajera)
-- GitHub: [@dnmrll](https://github.com/dnmrll)
-
-## 🚀 Despliegue en Producción
-
-### Docker
-```dockerfile
-# Dockerfile ejemplo
-FROM openjdk:21-jre-slim
-COPY target/Academy-0.0.1-SNAPSHOT.jar app.jar
-EXPOSE 8090
-ENTRYPOINT ["java", "-jar", "/app.jar"]
-```
-
-### Variables de Entorno para Producción
+#### 1️⃣ Fork y Clone
 ```bash
-SPRING_PROFILES_ACTIVE=production
-SPRING_DATASOURCE_URL=jdbc:mysql://db-host:3306/KinScript_Academy
-SPRING_DATASOURCE_USERNAME=${DB_USER}
-SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
-SERVER_PORT=8090
+# Fork el repositorio en GitHub
+# Luego clona tu fork
+git clone https://github.com/TU_USUARIO/KinScript_Academy.git
+cd KinScript_Academy
 ```
 
-## 🔧 Solución de Problemas
-
-### Problemas Comunes
-
-#### Error de Conexión a Base de Datos
+#### 2️⃣ Crear Rama Feature
 ```bash
-# Verificar que MySQL esté ejecutándose
-sudo systemctl status mysql
+# Crear y cambiar a nueva rama
+git checkout -b feature/NuevaCaracteristica
 
-# Verificar conectividad
-mysql -u tu_usuario -p -h localhost
+# O para corrección de bugs
+git checkout -b fix/CorreccionBug
+
+# O para documentación
+git checkout -b docs/ActualizarDocumentacion
 ```
 
-#### Puerto en Uso
+#### 3️⃣ Hacer Cambios
+- ✍️ Escribe código limpio y documentado
+- ✅ Sigue las convenciones del proyecto
+- 🧪 Agrega tests para nuevas funcionalidades
+- 📝 Actualiza documentación si es necesario
+
+#### 4️⃣ Commit de Cambios
 ```bash
-# Encontrar proceso usando el puerto 8090
-lsof -i :8090
+# Añadir archivos
+git add .
 
-# Cambiar puerto en application.properties
-server.port=8091
+# Commit con mensaje descriptivo
+git commit -m "feat: Agregar funcionalidad de exportación de notas"
+
+# Convenciones de commit:
+# feat: Nueva característica
+# fix: Corrección de bug
+# docs: Cambios en documentación
+# style: Formato, punto y coma, etc.
+# refactor: Refactorización de código
+# test: Agregar tests
+# chore: Mantenimiento
 ```
 
-#### Problemas de Compilación con Java 21
+#### 5️⃣ Push y Pull Request
 ```bash
-# Verificar versión de Java
-java -version
+# Push a tu fork
+git push origin feature/NuevaCaracteristica
 
-# Configurar JAVA_HOME
-export JAVA_HOME=/usr/lib/jvm/temurin-21-jdk-amd64
+# Crear Pull Request en GitHub
+# Incluye descripción detallada de los cambios
 ```
 
-### Logs de la Aplicación
-```bash
-# Ver logs en tiempo real
-tail -f logs/academy.log
+### 📋 Convenciones de Código
 
-# Configurar nivel de logs en application.properties
-logging.level.org.kinscript.Academy=DEBUG
+#### Java
+```java
+// ✅ BIEN
+public class AlumnosService {
+    
+    private final AlumnosRepository repository;
+    
+    // Constructor injection
+    public AlumnosService(AlumnosRepository repository) {
+        this.repository = repository;
+    }
+    
+    /**
+     * Guarda un nuevo alumno en el sistema.
+     * 
+     * @param dto Datos del alumno a guardar
+     * @return Alumno guardado con ID asignado
+     * @throws IllegalArgumentException si el DTO es nulo o inválido
+     */
+    public AlumnosDto guardar(AlumnosDto dto) {
+        // Validaciones
+        if (dto == null) {
+            throw new IllegalArgumentException("DTO no puede ser nulo");
+        }
+        
+        // Lógica de negocio
+        Alumnos entity = mapper.toEntity(dto);
+        Alumnos saved = repository.save(entity);
+        return mapper.toDto(saved);
+    }
+}
 ```
 
-## 🔐 Seguridad
+**Reglas:**
+- 📏 Nombres descriptivos en español para entidades/DTOs
+- 🔤 camelCase para variables y métodos
+- 🔡 PascalCase para clases
+- 📝 JavaDoc para métodos públicos
+- 🎯 Single Responsibility Principle
+- 🔧 Usar Lombok para reducir boilerplate
+- 💉 Constructor injection en lugar de @Autowired
 
-### Mejores Prácticas Implementadas
-- Validación de entrada en todos los endpoints
-- Uso de DTOs para evitar exposición de entidades
-- Encriptación de contraseñas (cuando se implemente autenticación)
-- Configuración de CORS apropiada
-- Sanitización de datos SQL con JPA
+#### Thymeleaf
+```html
+<!-- ✅ BIEN -->
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${titulo}">Título por defecto</title>
+</head>
+<body>
+    <!-- Usar fragmentos para código reutilizable -->
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+    
+    <!-- Iteración -->
+    <div th:each="alumno : ${alumnos}">
+        <span th:text="${alumno.nombreAlumno}">Nombre</span>
+    </div>
+</body>
+</html>
+```
 
-### Recomendaciones Adicionales
-- Implementar HTTPS en producción
-- Configurar firewall para la base de datos
-- Usar secretos seguros para API keys
-- Implementar rate limiting
-- Auditoría de accesos
+#### CSS
+```css
+/* ✅ BIEN */
+/* Nombres de clases descriptivos */
+.student-card {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+}
 
-## 📊 Métricas y Monitoreo
+/* Usar variables CSS para colores consistentes */
+:root {
+    --primary-color: #007bff;
+    --secondary-color: #6c757d;
+}
+```
 
-### Métricas Disponibles
-- Número de requests por endpoint
-- Tiempo de respuesta promedio
-- Uso de memoria y CPU
-- Número de conexiones a base de datos
-- Errores por tipo y frecuencia
+### 🧪 Testing
 
-### Herramientas Recomendadas
-- **Micrometer**: Métricas de aplicación
-- **Prometheus**: Recolección de métricas
-- **Grafana**: Visualización de métricas
-- **ELK Stack**: Análisis de logs
+Todas las nuevas funcionalidades deben incluir tests:
+
+```java
+@SpringBootTest
+class AlumnosServiceTest {
+    
+    @Autowired
+    private AlumnosService service;
+    
+    @Test
+    @DisplayName("Debe guardar alumno correctamente con datos válidos")
+    void testGuardarAlumno_conDatosValidos_debeRetornarAlumnoGuardado() {
+        // Arrange
+        AlumnosDto dto = crearAlumnoDtoValido();
+        
+        // Act
+        AlumnosDto result = service.guardar(dto);
+        
+        // Assert
+        assertNotNull(result);
+        assertNotNull(result.getIdAlumno());
+        assertEquals(dto.getNombreAlumno(), result.getNombreAlumno());
+    }
+    
+    @Test
+    @DisplayName("Debe lanzar excepción con DTO nulo")
+    void testGuardarAlumno_conDtoNulo_debeLanzarExcepcion() {
+        // Act & Assert
+        assertThrows(IllegalArgumentException.class, 
+            () -> service.guardar(null));
+    }
+}
+```
+
+### 📚 Documentación
+
+Al agregar nuevos endpoints, documenta con OpenAPI:
+
+```java
+@RestController
+@RequestMapping("/api/alumnos")
+@Tag(name = "Alumnos", description = "Gestión de alumnos")
+public class AlumnosController {
+    
+    @GetMapping("/{id}")
+    @Operation(
+        summary = "Obtener alumno por ID",
+        description = "Busca y retorna un alumno específico por su ID"
+    )
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Alumno encontrado"),
+        @ApiResponse(responseCode = "404", description = "Alumno no encontrado")
+    })
+    public ResponseEntity<AlumnosDto> obtenerPorId(
+        @Parameter(description = "ID del alumno") @PathVariable Long id
+    ) {
+        // ...
+    }
+}
+```
+
+### 🔍 Code Review
+
+Criterios de revisión:
+- ✅ Código sigue las convenciones
+- ✅ Tests incluidos y pasando
+- ✅ Documentación actualizada
+- ✅ Sin warnings de compilación
+- ✅ Sin code smells graves
+- ✅ Performance aceptable
+- ✅ Seguridad verificada
+
+### 🎯 Áreas de Contribución
+
+Buscamos ayuda en:
+
+- 🆕 **Nuevas funcionalidades**
+  - Reportes y estadísticas
+  - Export/Import de datos
+  - Notificaciones por email
+  - Dashboard mejorado
+  
+- 🐛 **Corrección de bugs**
+  - Revisar issues abiertos
+  - Reportar nuevos bugs
+  
+- 📝 **Documentación**
+  - Mejorar README
+  - Tutoriales y guías
+  - Comentarios de código
+  
+- 🧪 **Testing**
+  - Aumentar cobertura
+  - Tests E2E
+  - Tests de performance
+  
+- 🎨 **UI/UX**
+  - Mejorar diseño
+  - Responsive design
+  - Accesibilidad
+
+### 💡 Ideas para Contribuir
+
+- Implementar sistema de roles y permisos
+- Agregar API de reportes en PDF/Excel
+- Crear módulo de asistencia
+- Implementar calendario académico
+- Agregar notificaciones push
+- Mejorar el asistente de IA
+- Crear app móvil (React Native / Flutter)
+- Implementar sistema de backup automático
+- Agregar soporte multiidioma (i18n)
+- Crear módulo de horarios
+
+## 👨‍💻 Autores
+
+### 👥 KinScript Academy Team
+
+| Developer | GitHub | Rol |
+|-----------|--------|-----|
+| **Ksolo** | [@ksolo-2022439](https://github.com/ksolo-2022439) | Lead Developer & Project Manager |
+| **GC** | [@gc130041](https://github.com/gc130041) | Backend Developer |
+| **Eduardo LG** | [@EduardoLG](https://github.com/EduardoLG) | Frontend Developer |
+| **Marcos Banajera** | [@marcss-bnajera](https://github.com/marcss-bnajera) | Full Stack Developer |
+| **Daniel Morales** | [@dnmrll](https://github.com/dnmrll) | Database & DevOps |
+
+### 🙏 Agradecimientos
+
+- 🍃 **Spring Team** - Por el increíble framework
+- 🎨 **Thymeleaf Team** - Por el motor de plantillas
+- 🤖 **LangChain4j Team** - Por la integración con IA
+- 💾 **MySQL Team** - Por el sistema de base de datos
+- 👥 **Comunidad Open Source** - Por todas las bibliotecas utilizadas
 
 ## 📞 Soporte
 
-Para reportar bugs o solicitar nuevas características, por favor crea un [issue](https://github.com/ksolo-2022439/KinScript_Academy/issues) en GitHub.
+### 🐛 Reportar Bugs
 
-### Canales de Comunicación
-- **Issues**: Para bugs y solicitudes de características
-- **Discussions**: Para preguntas generales y discusiones
-- **Wiki**: Documentación adicional y guías avanzadas
+¿Encontraste un bug? ¡Ayúdanos a mejorarlo!
+
+1. 🔍 **Verifica** que no exista un issue similar
+2. 📝 **Crea un issue** con:
+   - Título descriptivo
+   - Descripción detallada del problema
+   - Pasos para reproducir
+   - Comportamiento esperado vs actual
+   - Screenshots si aplica
+   - Versión de Java, MySQL, etc.
+   - Logs de error relevantes
+
+**Template de Issue:**
+```markdown
+### Descripción
+[Descripción breve del bug]
+
+### Pasos para Reproducir
+1. ...
+2. ...
+3. ...
+
+### Comportamiento Esperado
+[Qué debería pasar]
+
+### Comportamiento Actual
+[Qué está pasando]
+
+### Información del Sistema
+- Java: [versión]
+- MySQL: [versión]
+- SO: [sistema operativo]
+
+### Logs
+```
+[logs relevantes]
+```
+```
+
+### 💡 Solicitar Funcionalidades
+
+¿Tienes una idea genial? ¡Compártela!
+
+1. 📋 **Crea un Feature Request** en GitHub Issues
+2. 📝 **Describe** la funcionalidad deseada
+3. 🎯 **Explica** el caso de uso
+4. 💭 **Sugiere** una posible implementación
+
+### 🆘 Obtener Ayuda
+
+#### 📚 Documentación
+- **README.md** - Esta guía completa
+- **Wiki** - Documentación extendida y tutoriales
+- **Swagger UI** - Documentación de API
+- **Código** - Ejemplos en el repositorio
+
+#### 💬 Canales de Comunicación
+
+| Canal | Uso | Link |
+|-------|-----|------|
+| **GitHub Issues** | Bugs y features | [Issues](https://github.com/ksolo-2022439/KinScript_Academy/issues) |
+| **GitHub Discussions** | Preguntas generales | [Discussions](https://github.com/ksolo-2022439/KinScript_Academy/discussions) |
+| **Pull Requests** | Contribuciones | [PRs](https://github.com/ksolo-2022439/KinScript_Academy/pulls) |
+| **Email** | Contacto directo | Ver perfil de GitHub |
+
+#### ❓ Preguntas Frecuentes (FAQ)
+
+**P: ¿Qué versión de Java necesito?**
+R: Java 21 o superior es requerido.
+
+**P: ¿Puedo usar otra base de datos?**
+R: El proyecto está optimizado para MySQL, pero puede adaptarse a PostgreSQL con mínimos cambios.
+
+**P: ¿Es gratuito el uso de la API de OpenAI?**
+R: OpenAI tiene planes de pago. La clave API es opcional solo para funciones de IA.
+
+**P: ¿Cómo puedo contribuir sin saber programar?**
+R: ¡Puedes ayudar con documentación, reportar bugs, sugerir mejoras o traducir la interfaz!
+
+**P: ¿Hay una versión demo disponible?**
+R: Actualmente no hay demo pública, pero puedes clonar y ejecutar localmente fácilmente.
+
+### 🔗 Enlaces Útiles
+
+- 📦 **Repositorio**: https://github.com/ksolo-2022439/KinScript_Academy
+- 📚 **Documentación**: Ver Wiki del proyecto
+- 🐛 **Issues**: Reportar problemas o sugerencias
+- 💬 **Discussions**: Hacer preguntas a la comunidad
+- 🌟 **Releases**: Ver cambios por versión
+
+### 📧 Contacto
+
+Para consultas específicas o colaboraciones:
+- Ver perfiles de GitHub de los autores
+- Crear un Discussion en GitHub
+- Comentar en Issues relevantes
 
 ---
 
-⭐ **¡No olvides dar una estrella al proyecto si te fue útil!** ⭐
+## 📄 Licencia
 
-**KinScript Academy** - Revolucionando la gestión académica con tecnología moderna
+Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.
+
+```
+MIT License
+
+Copyright (c) 2024 KinScript Academy Team
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+[... full MIT license text ...]
+```
+
+---
+
+## 🌟 Reconocimientos
+
+### ⭐ **¡Dale una estrella!**
+
+Si este proyecto te fue útil, ¡considera darle una ⭐ en GitHub!
+
+```bash
+# Comparte el proyecto
+https://github.com/ksolo-2022439/KinScript_Academy
+```
+
+### 🎓 Proyecto Educativo
+
+Este proyecto fue desarrollado como parte de un proyecto académico, demostrando:
+- ✅ Arquitectura de software moderna
+- ✅ Buenas prácticas de desarrollo
+- ✅ Integración de tecnologías actuales
+- ✅ Desarrollo de APIs RESTful
+- ✅ Diseño de interfaces de usuario
+- ✅ Gestión de bases de datos
+- ✅ Implementación de IA en aplicaciones
+
+### 🚀 Tecnologías del Futuro
+
+KinScript Academy demuestra el uso de:
+- **Spring Boot 3** - Framework moderno de Java
+- **Thymeleaf** - Plantillas del lado del servidor
+- **LangChain4j** - Integración con IA
+- **OpenAPI** - Documentación de APIs
+- **MapStruct** - Mapeo eficiente de objetos
+- **MySQL 8** - Base de datos robusta
+
+---
+
+<div align="center">
+
+### 💖 Hecho con pasión por el equipo de KinScript Academy
+
+**⭐ No olvides dar una estrella al proyecto si te fue útil ⭐**
+
+**KinScript Academy** - *Revolucionando la gestión académica con tecnología moderna*
+
+[🏠 Inicio](#-kinscript-academy) • [📚 Documentación](#-tabla-de-contenidos) • [🐛 Reportar Bug](https://github.com/ksolo-2022439/KinScript_Academy/issues) • [💡 Solicitar Feature](https://github.com/ksolo-2022439/KinScript_Academy/issues)
+
+---
+
+© 2024 KinScript Academy Team. Todos los derechos reservados.
+
+</div>
+
+## 🚀 Despliegue en Producción
+
+### 🐳 Opción 1: Docker
+
+#### Dockerfile
+```dockerfile
+# Etapa de compilación
+FROM maven:3.9-eclipse-temurin-21 AS build
+WORKDIR /app
+COPY pom.xml .
+COPY src ./src
+RUN mvn clean package -DskipTests
+
+# Etapa de ejecución
+FROM eclipse-temurin:21-jre-alpine
+WORKDIR /app
+COPY --from=build /app/target/Academy-0.0.1-SNAPSHOT.jar app.jar
+
+# Variables de entorno
+ENV JAVA_OPTS="-Xmx512m -Xms256m"
+ENV SERVER_PORT=8090
+
+# Exponer puerto
+EXPOSE 8090
+
+# Ejecutar aplicación
+ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
+```
+
+#### Construcción y ejecución
+```bash
+# Construir imagen
+docker build -t kinscript/academy:latest .
+
+# Ejecutar contenedor
+docker run -d \
+  --name kinscript-academy \
+  -p 8090:8090 \
+  -e SPRING_DATASOURCE_URL=jdbc:mysql://host.docker.internal:3306/KinScript_Academy \
+  -e SPRING_DATASOURCE_USERNAME=root \
+  -e SPRING_DATASOURCE_PASSWORD=password \
+  -e OPENAI_API_KEY=sk-your-api-key \
+  kinscript/academy:latest
+
+# Ver logs
+docker logs -f kinscript-academy
+
+# Detener contenedor
+docker stop kinscript-academy
+```
+
+### 🐳 Opción 2: Docker Compose
+
+#### docker-compose.yml
+```yaml
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: academy-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: KinScript_Academy
+      MYSQL_USER: academy_user
+      MYSQL_PASSWORD: academy_pass
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./Database:/docker-entrypoint-initdb.d
+    networks:
+      - academy-network
+
+  app:
+    build: .
+    container_name: kinscript-academy
+    depends_on:
+      - mysql
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/KinScript_Academy
+      SPRING_DATASOURCE_USERNAME: academy_user
+      SPRING_DATASOURCE_PASSWORD: academy_pass
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      SPRING_PROFILES_ACTIVE: production
+    ports:
+      - "8090:8090"
+    networks:
+      - academy-network
+    restart: unless-stopped
+
+networks:
+  academy-network:
+    driver: bridge
+
+volumes:
+  mysql_data:
+```
+
+#### Comandos Docker Compose
+```bash
+# Iniciar servicios
+docker-compose up -d
+
+# Ver logs
+docker-compose logs -f app
+
+# Detener servicios
+docker-compose down
+
+# Reconstruir y reiniciar
+docker-compose up -d --build
+```
+
+### ☁️ Opción 3: Despliegue en la Nube
+
+#### AWS Elastic Beanstalk
+```bash
+# Crear archivo JAR
+./mvnw clean package
+
+# Desplegar con EB CLI
+eb init -p java-21 kinscript-academy
+eb create kinscript-academy-env
+eb deploy
+```
+
+#### Heroku
+```bash
+# Crear aplicación
+heroku create kinscript-academy
+
+# Configurar Java
+echo "java.runtime.version=21" > system.properties
+
+# Agregar base de datos
+heroku addons:create jawsdb:kitefin
+
+# Desplegar
+git push heroku main
+
+# Ver logs
+heroku logs --tail
+```
+
+#### Google Cloud Run
+```bash
+# Construir imagen
+gcloud builds submit --tag gcr.io/PROJECT_ID/academy
+
+# Desplegar
+gcloud run deploy academy \
+  --image gcr.io/PROJECT_ID/academy \
+  --platform managed \
+  --region us-central1 \
+  --allow-unauthenticated
+```
+
+### 🔧 Variables de Entorno para Producción
+
+Crear archivo `.env` o configurar en el servicio de hosting:
+
+```bash
+# Base de datos
+SPRING_DATASOURCE_URL=jdbc:mysql://db-host:3306/KinScript_Academy
+SPRING_DATASOURCE_USERNAME=prod_user
+SPRING_DATASOURCE_PASSWORD=secure_password
+
+# Perfil de Spring
+SPRING_PROFILES_ACTIVE=production
+
+# OpenAI
+OPENAI_API_KEY=sk-your-production-key
+
+# Servidor
+SERVER_PORT=8090
+
+# JVM
+JAVA_OPTS=-Xmx1024m -Xms512m -XX:+UseG1GC
+
+# Logging
+LOGGING_LEVEL_ROOT=INFO
+LOGGING_FILE_NAME=/var/log/academy/application.log
+```
+
+### ✅ Checklist de Producción
+
+Antes de desplegar a producción, asegúrate de:
+
+- [ ] ✅ Variables de entorno configuradas correctamente
+- [ ] 🔒 Credenciales de base de datos seguras
+- [ ] 🗄️ Base de datos con respaldos automáticos
+- [ ] 📝 Logging configurado apropiadamente
+- [ ] 🔐 HTTPS habilitado (SSL/TLS)
+- [ ] 🚫 Endpoints de desarrollo deshabilitados
+- [ ] 📊 Monitoreo y alertas configurados
+- [ ] 🔄 Estrategia de respaldo y recuperación
+- [ ] ⚡ Performance testing realizado
+- [ ] 🛡️ Firewall y seguridad de red configurados
+- [ ] 📈 Escalado automático configurado (si aplica)
+- [ ] 📋 Documentación de despliegue actualizada
+
+### 🔄 Actualización sin Downtime
+
+Para actualizaciones sin interrupciones:
+
+```bash
+# Blue-Green Deployment
+1. Desplegar nueva versión en servidor "green"
+2. Verificar que funciona correctamente
+3. Cambiar balanceador de carga a "green"
+4. Mantener "blue" como backup
+5. Después de verificar, actualizar "blue"
+
+# Rolling Update (Kubernetes)
+kubectl set image deployment/academy \
+  academy=kinscript/academy:v2.0 \
+  --record
+
+# Rollback si hay problemas
+kubectl rollout undo deployment/academy
+```
+
+### 📊 Monitoreo Post-Despliegue
+
+Después del despliegue, monitorear:
+
+- 📈 **Métricas de rendimiento**: CPU, memoria, latencia
+- 🔍 **Logs de errores**: Detectar problemas temprano
+- 👥 **Tráfico de usuarios**: Patrones de uso
+- 💾 **Estado de base de datos**: Conexiones, queries lentas
+- 🔐 **Seguridad**: Intentos de acceso no autorizados
+
+## 🔧 Solución de Problemas
+
+### 🐛 Problemas Comunes y Soluciones
+
+#### ❌ Error de Conexión a Base de Datos
+
+**Síntoma:**
+```
+java.sql.SQLNonTransientConnectionException: Could not create connection to database server
+```
+
+**Soluciones:**
+
+1. **Verificar que MySQL esté ejecutándose:**
+```bash
+# Linux/Mac
+sudo systemctl status mysql
+# o
+ps aux | grep mysql
+
+# Windows
+services.msc  # Buscar MySQL en la lista
+```
+
+2. **Verificar conectividad:**
+```bash
+mysql -u tu_usuario -p -h localhost
+```
+
+3. **Verificar configuración:**
+```properties
+# application.properties
+spring.datasource.url=jdbc:mysql://localhost:3306/KinScript_Academy?serverTimezone=UTC
+spring.datasource.username=root
+spring.datasource.password=tu_password
+```
+
+4. **Verificar firewall:**
+```bash
+# Permitir puerto 3306
+sudo ufw allow 3306
+```
+
+#### 🔴 Puerto en Uso
+
+**Síntoma:**
+```
+Web server failed to start. Port 8090 was already in use.
+```
+
+**Soluciones:**
+
+1. **Encontrar proceso usando el puerto:**
+```bash
+# Linux/Mac
+lsof -i :8090
+sudo kill -9 [PID]
+
+# Windows
+netstat -ano | findstr :8090
+taskkill /PID [PID] /F
+```
+
+2. **Cambiar puerto en application.properties:**
+```properties
+server.port=8091
+```
+
+3. **Usar puerto aleatorio disponible:**
+```properties
+server.port=0
+```
+
+#### ☕ Problemas de Compilación con Java 21
+
+**Síntoma:**
+```
+Invalid target release: 21
+```
+
+**Soluciones:**
+
+1. **Verificar versión de Java:**
+```bash
+java -version
+javac -version
+```
+
+2. **Configurar JAVA_HOME:**
+```bash
+# Linux/Mac
+export JAVA_HOME=/usr/lib/jvm/java-21-openjdk
+export PATH=$JAVA_HOME/bin:$PATH
+
+# Windows
+set JAVA_HOME=C:\Program Files\Java\jdk-21
+set PATH=%JAVA_HOME%\bin;%PATH%
+```
+
+3. **Limpiar y recompilar:**
+```bash
+./mvnw clean install -U
+```
+
+#### 🎨 Thymeleaf: Plantilla no Encontrada
+
+**Síntoma:**
+```
+Error resolving template "dashboard", template might not exist
+```
+
+**Soluciones:**
+
+1. **Verificar ubicación de plantillas:**
+```bash
+ls -la src/main/resources/templates/
+```
+
+2. **Verificar configuración de Thymeleaf:**
+```properties
+spring.thymeleaf.prefix=classpath:/templates/
+spring.thymeleaf.suffix=.html
+spring.thymeleaf.cache=false
+spring.thymeleaf.enabled=true
+```
+
+3. **Limpiar y recompilar:**
+```bash
+./mvnw clean compile
+```
+
+#### 🤖 Error con API de OpenAI
+
+**Síntoma:**
+```
+ApiKeyNotSetException: OpenAI API key is not set
+```
+
+**Soluciones:**
+
+1. **Configurar API key:**
+```properties
+langchain4j.open-ai.chat-model.api-key=sk-tu_api_key
+```
+
+2. **Verificar validez del API key:**
+```bash
+curl https://api.openai.com/v1/models \
+  -H "Authorization: Bearer sk-tu_api_key"
+```
+
+3. **Deshabilitar funcionalidad de IA temporalmente:**
+Comentar o remover las dependencias de LangChain4j del `pom.xml`
+
+#### 💾 Error de Mapeo de Entidades
+
+**Síntoma:**
+```
+org.hibernate.MappingException: Unknown entity
+```
+
+**Soluciones:**
+
+1. **Verificar anotación @Entity:**
+```java
+@Entity
+@Table(name = "alumnos")
+public class Alumnos {
+    // ...
+}
+```
+
+2. **Verificar escaneo de paquetes:**
+```java
+@SpringBootApplication
+@EntityScan("org.kinscript.Academy.persistence.entity")
+public class AcademyApplication {
+    // ...
+}
+```
+
+#### 🗺️ Error con MapStruct
+
+**Síntoma:**
+```
+No property named "X" exists in source parameter(s)
+```
+
+**Soluciones:**
+
+1. **Regenerar mappers:**
+```bash
+./mvnw clean compile
+```
+
+2. **Verificar nombres de campos:**
+```java
+@Mapper(componentModel = "spring")
+public interface AlumnosMapper {
+    AlumnosDto toDto(Alumnos entity);
+    Alumnos toEntity(AlumnosDto dto);
+}
+```
+
+3. **Limpiar target y recompilar:**
+```bash
+./mvnw clean install
+```
+
+### 📝 Logs de la Aplicación
+
+#### Ver logs en tiempo real
+```bash
+# Con Maven
+./mvnw spring-boot:run | grep "org.kinscript.Academy"
+
+# Con archivo JAR
+java -jar target/Academy-0.0.1-SNAPSHOT.jar | tee academy.log
+
+# Con Docker
+docker logs -f kinscript-academy
+
+# Filtrar errores
+docker logs kinscript-academy 2>&1 | grep ERROR
+```
+
+#### Configurar nivel de logs
+```properties
+# application.properties
+
+# Log general
+logging.level.root=INFO
+
+# Log de la aplicación (más detallado)
+logging.level.org.kinscript.Academy=DEBUG
+
+# Log de Spring (menos verbose)
+logging.level.org.springframework=WARN
+
+# Log de Hibernate SQL
+logging.level.org.hibernate.SQL=DEBUG
+
+# Archivo de log
+logging.file.name=logs/academy.log
+logging.pattern.file=%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n
+```
+
+### 🔍 Debugging
+
+#### Ejecutar en modo debug
+```bash
+# Maven
+./mvnw spring-boot:run -Dspring-boot.run.jvmArguments="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005"
+
+# JAR
+java -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005 -jar target/Academy-0.0.1-SNAPSHOT.jar
+```
+
+Luego conectar el debugger de tu IDE al puerto 5005.
+
+### 📊 Análisis de Performance
+
+#### Identificar queries lentas
+```properties
+# application.properties
+logging.level.org.hibernate.SQL=DEBUG
+logging.level.org.hibernate.type.descriptor.sql.BasicBinder=TRACE
+spring.jpa.properties.hibernate.generate_statistics=true
+```
+
+#### Profiling de memoria
+```bash
+# Generar heap dump
+jmap -dump:live,format=b,file=heap.bin [PID]
+
+# Analizar con herramientas como:
+# - Eclipse Memory Analyzer (MAT)
+# - VisualVM
+# - JProfiler
+```
+
+### 🆘 Obtener Ayuda
+
+Si sigues experimentando problemas:
+
+1. 📋 **Revisa los logs** completos en `logs/academy.log`
+2. 🔍 **Busca el error** en Stack Overflow o GitHub Issues
+3. 📝 **Crea un issue** en el repositorio con:
+   - Descripción del problema
+   - Logs de error completos
+   - Pasos para reproducir
+   - Versiones de Java, Maven, MySQL
+4. 💬 **Contacta al equipo** a través de los canales de soporte
+
+## 🔐 Seguridad
+
+### 🛡️ Mejores Prácticas Implementadas
+
+#### ✅ Validación de Entrada
+Todos los endpoints utilizan Jakarta Bean Validation:
+
+```java
+@PostMapping
+public ResponseEntity<AlumnosDto> crear(@Valid @RequestBody AlumnosDto dto) {
+    // Spring valida automáticamente el DTO
+}
+```
+
+```java
+public class AlumnosDto {
+    @NotBlank(message = "El nombre es obligatorio")
+    @Size(min = 2, max = 50, message = "El nombre debe tener entre 2 y 50 caracteres")
+    private String nombreAlumno;
+    
+    @Email(message = "Email inválido")
+    private String emailAcademico;
+}
+```
+
+#### 🔒 Uso de DTOs
+
+El sistema usa DTOs para:
+- ✅ Evitar exposición directa de entidades JPA
+- ✅ Controlar qué datos se envían/reciben
+- ✅ Prevenir mass assignment vulnerabilities
+- ✅ Separar lógica de presentación de persistencia
+
+```java
+// ❌ MAL - Exponer entidad directamente
+@GetMapping
+public List<Alumnos> getTodos() { }
+
+// ✅ BIEN - Usar DTO
+@GetMapping
+public List<AlumnosDto> getTodos() { }
+```
+
+#### 🗄️ Prevención de SQL Injection
+
+Spring Data JPA previene SQL injection automáticamente:
+
+```java
+// ✅ Seguro - JPA usa prepared statements
+@Query("SELECT a FROM Alumnos a WHERE a.nombreAlumno = :nombre")
+List<Alumnos> findByNombre(@Param("nombre") String nombre);
+```
+
+#### 🌐 Configuración CORS
+
+Para permitir llamadas desde frontend específico:
+
+```java
+@Configuration
+public class CorsConfig implements WebMvcConfigurer {
+    
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/api/**")
+            .allowedOrigins("https://tudominio.com")
+            .allowedMethods("GET", "POST", "PUT", "DELETE")
+            .allowedHeaders("*")
+            .allowCredentials(true)
+            .maxAge(3600);
+    }
+}
+```
+
+### 🔐 Recomendaciones para Producción
+
+#### 1️⃣ Implementar Spring Security
+
+```xml
+<!-- pom.xml -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-security</artifactId>
+</dependency>
+```
+
+```java
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig {
+    
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/login", "/css/**", "/js/**").permitAll()
+                .requestMatchers("/api/**").authenticated()
+                .anyRequest().authenticated()
+            )
+            .formLogin(form -> form
+                .loginPage("/login")
+                .defaultSuccessUrl("/dashboard")
+            )
+            .logout(logout -> logout
+                .logoutSuccessUrl("/login")
+            );
+        
+        return http.build();
+    }
+}
+```
+
+#### 2️⃣ Encriptar Contraseñas
+
+```java
+@Bean
+public PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+}
+
+// Uso
+String hashedPassword = passwordEncoder.encode("password123");
+boolean matches = passwordEncoder.matches("password123", hashedPassword);
+```
+
+#### 3️⃣ Implementar JWT para API
+
+```java
+// Para APIs stateless
+@Configuration
+public class JwtConfig {
+    
+    public String generateToken(UserDetails userDetails) {
+        return Jwts.builder()
+            .setSubject(userDetails.getUsername())
+            .setIssuedAt(new Date())
+            .setExpiration(new Date(System.currentTimeMillis() + 86400000))
+            .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
+            .compact();
+    }
+}
+```
+
+#### 4️⃣ HTTPS en Producción
+
+```properties
+# application-prod.properties
+server.ssl.key-store=classpath:keystore.p12
+server.ssl.key-store-password=changeit
+server.ssl.key-store-type=PKCS12
+server.ssl.key-alias=tomcat
+```
+
+Generar certificado:
+```bash
+keytool -genkeypair -alias tomcat -keyalg RSA -keysize 2048 \
+  -storetype PKCS12 -keystore keystore.p12 -validity 3650
+```
+
+#### 5️⃣ Proteger Datos Sensibles
+
+```properties
+# NO hacer esto ❌
+spring.datasource.password=mipassword123
+
+# Usar variables de entorno ✅
+spring.datasource.password=${DB_PASSWORD}
+
+# O Spring Cloud Config / Vault para secrets
+```
+
+#### 6️⃣ Rate Limiting
+
+```java
+@Bean
+public RateLimiter rateLimiter() {
+    return RateLimiter.create(100.0); // 100 requests/segundo
+}
+```
+
+#### 7️⃣ Configurar Headers de Seguridad
+
+```java
+http.headers()
+    .contentSecurityPolicy("default-src 'self'")
+    .and()
+    .frameOptions().deny()
+    .and()
+    .xssProtection().block(true)
+    .and()
+    .httpStrictTransportSecurity()
+        .includeSubDomains(true)
+        .maxAgeInSeconds(31536000);
+```
+
+### 🔒 Checklist de Seguridad
+
+Antes de ir a producción:
+
+- [ ] ✅ Spring Security configurado
+- [ ] 🔐 Contraseñas encriptadas con BCrypt
+- [ ] 🌐 HTTPS habilitado
+- [ ] 🔑 JWT o sesiones seguras implementadas
+- [ ] 🛡️ CORS configurado apropiadamente
+- [ ] 🚫 Endpoints de desarrollo/actuator protegidos
+- [ ] 🔒 API keys y secrets en variables de entorno
+- [ ] 📝 Logging de eventos de seguridad
+- [ ] 🔄 Rate limiting implementado
+- [ ] 🎯 Validación de entrada en todos los endpoints
+- [ ] 🗄️ Backups automáticos de base de datos
+- [ ] 🔐 Conexión a BD con credenciales limitadas
+- [ ] 🚪 Firewall configurado
+- [ ] 📊 Monitoreo de intentos de acceso no autorizado
+
+### 🛡️ Auditoría y Compliance
+
+```java
+@Entity
+@EntityListeners(AuditingEntityListener.class)
+public class Alumnos {
+    
+    @CreatedDate
+    private LocalDateTime createdAt;
+    
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
+    
+    @CreatedBy
+    private String createdBy;
+    
+    @LastModifiedBy
+    private String lastModifiedBy;
+}
+```
+
+### 🔍 Escaneo de Vulnerabilidades
+
+```bash
+# Escanear dependencias con OWASP Dependency Check
+./mvnw dependency-check:check
+
+# Actualizar dependencias vulnerables
+./mvnw versions:display-dependency-updates
+```
+
+## 📊 Métricas y Monitoreo
+
+### 📈 Métricas Disponibles
+
+El sistema expone métricas detalladas a través de Spring Boot Actuator:
+
+#### 💻 JVM Metrics
+- **Memoria**: heap, non-heap, buffer pools
+- **Threads**: count, daemon count, peak count
+- **Garbage Collection**: tiempo, frecuencia
+- **CPU**: uso de procesador
+
+#### 🌐 HTTP Metrics
+- **Requests**: total, por endpoint, por método
+- **Responses**: códigos de estado, tiempos de respuesta
+- **Errores**: tasa de error, tipos de error
+- **Latencia**: P50, P95, P99
+
+#### 💾 Database Metrics
+- **Conexiones**: activas, idle, máximo
+- **Queries**: ejecutadas, tiempo promedio
+- **Transacciones**: commits, rollbacks
+- **Pool**: tamaño, timeout
+
+#### 📊 Business Metrics (Personalizadas)
+
+Implementar métricas de negocio:
+
+```java
+@Service
+public class AlumnosService {
+    
+    private final MeterRegistry meterRegistry;
+    private final Counter alumnosCreados;
+    
+    public AlumnosService(MeterRegistry meterRegistry) {
+        this.meterRegistry = meterRegistry;
+        this.alumnosCreados = Counter.builder("alumnos.creados")
+            .description("Total de alumnos creados")
+            .register(meterRegistry);
+    }
+    
+    public AlumnosDto guardar(AlumnosDto dto) {
+        // ... lógica de guardado
+        alumnosCreados.increment();
+        return result;
+    }
+}
+```
+
+### 🔍 Herramientas de Monitoreo Recomendadas
+
+#### Prometheus + Grafana (Recomendado)
+
+**1. Habilitar Prometheus:**
+```properties
+# application.properties
+management.metrics.export.prometheus.enabled=true
+management.endpoint.prometheus.enabled=true
+management.endpoints.web.exposure.include=health,info,metrics,prometheus
+```
+
+**2. Configurar Prometheus (prometheus.yml):**
+```yaml
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'kinscript-academy'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['localhost:8090']
+```
+
+**3. Dashboard de Grafana:**
+- Importar dashboard ID: 4701 (JVM Micrometer)
+- Crear dashboards personalizados para métricas de negocio
+
+#### ELK Stack (Elasticsearch, Logstash, Kibana)
+
+Para análisis de logs centralizado:
+
+```properties
+# application.properties
+logging.file.name=logs/academy.log
+logging.pattern.file=%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n
+```
+
+#### New Relic / Datadog
+
+Para monitoreo en la nube:
+```properties
+# New Relic
+newrelic.config.license_key=${NEW_RELIC_LICENSE_KEY}
+newrelic.config.app_name=KinScript Academy
+
+# Datadog
+management.metrics.export.datadog.api-key=${DATADOG_API_KEY}
+management.metrics.export.datadog.application-key=${DATADOG_APP_KEY}
+```
+
+### 📊 Dashboards Sugeridos
+
+#### 1️⃣ Dashboard de Sistema
+- CPU Usage
+- Memory Usage (Heap/Non-Heap)
+- Disk Space
+- Network I/O
+
+#### 2️⃣ Dashboard de Aplicación
+- Request Rate (requests/segundo)
+- Error Rate (%)
+- Response Time (P50, P95, P99)
+- Active Sessions
+
+#### 3️⃣ Dashboard de Base de Datos
+- Connection Pool Status
+- Query Performance
+- Slow Queries
+- Transaction Rate
+
+#### 4️⃣ Dashboard de Negocio
+- Alumnos registrados hoy
+- Notas registradas por hora
+- Profesores activos
+- Operaciones por módulo
+
+### 🚨 Alertas Recomendadas
+
+Configurar alertas para:
+
+```yaml
+# Alertas sugeridas
+- name: Alta Tasa de Error
+  condition: error_rate > 5%
+  action: Enviar email/SMS
+
+- name: Memoria Alta
+  condition: jvm_memory_used > 80%
+  action: Notificar equipo
+
+- name: Respuesta Lenta
+  condition: http_response_time_p95 > 1000ms
+  action: Escalar automáticamente
+
+- name: Base de Datos Lenta
+  condition: db_query_time_avg > 500ms
+  action: Investigar queries
+
+- name: Conexiones BD Agotadas
+  condition: db_connections_active == db_connections_max
+  action: Aumentar pool o investigar leak
+```
+
+### 📈 Análisis de Tendencias
+
+Métricas importantes para analizar tendencias:
+
+```bash
+# Tráfico por hora del día
+SELECT HOUR(timestamp), COUNT(*) 
+FROM requests 
+GROUP BY HOUR(timestamp);
+
+# Endpoints más utilizados
+SELECT endpoint, COUNT(*) as requests 
+FROM requests 
+GROUP BY endpoint 
+ORDER BY requests DESC;
+
+# Errores más frecuentes
+SELECT error_type, COUNT(*) 
+FROM errors 
+GROUP BY error_type 
+ORDER BY COUNT(*) DESC;
+```
+
+### 🔧 Health Checks Personalizados
+
+```java
+@Component
+public class DatabaseHealthIndicator implements HealthIndicator {
+    
+    @Autowired
+    private DataSource dataSource;
+    
+    @Override
+    public Health health() {
+        try (Connection conn = dataSource.getConnection()) {
+            if (conn.isValid(1000)) {
+                return Health.up()
+                    .withDetail("database", "MySQL")
+                    .withDetail("status", "Conectado")
+                    .build();
+            }
+        } catch (Exception e) {
+            return Health.down()
+                .withDetail("error", e.getMessage())
+                .build();
+        }
+        return Health.down().build();
+    }
+}
+```
+
+Acceso: `GET /actuator/health`
+
+```json
+{
+  "status": "UP",
+  "components": {
+    "database": {
+      "status": "UP",
+      "details": {
+        "database": "MySQL",
+        "status": "Conectado"
+      }
+    },
+    "diskSpace": { "status": "UP" },
+    "ping": { "status": "UP" }
+  }
+}
+```
