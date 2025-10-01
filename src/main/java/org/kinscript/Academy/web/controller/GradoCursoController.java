@@ -3,17 +3,19 @@ package org.kinscript.Academy.web.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.kinscript.Academy.dominio.dto.CursosDto;
 import org.kinscript.Academy.dominio.dto.GradoCursoDto;
+import org.kinscript.Academy.dominio.service.CursosService;
 import org.kinscript.Academy.dominio.service.GradoCursoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/gradocursos")
@@ -21,9 +23,31 @@ import java.util.List;
 public class GradoCursoController {
 
     private final GradoCursoService gradoCursoService;
+    private final CursosService cursosService;
 
-    public GradoCursoController(GradoCursoService gradoCursoService) {
+    public GradoCursoController(GradoCursoService gradoCursoService, CursosService cursosService) {
         this.gradoCursoService = gradoCursoService;
+        this.cursosService = cursosService;
+    }
+
+    @GetMapping("/grado/{idGrado}/cursos")
+    @Operation(summary = "Obtener detalles de cursos por grado", description = "Retorna una lista de los DTOs de Cursos completos asociados a un grado específico.")
+    @ApiResponse(responseCode = "200", description = "Lista de cursos por grado obtenida con éxito.")
+    public ResponseEntity<List<CursosDto>> getCursosPorGrado(@PathVariable Long idGrado) {
+        List<Long> idCursos = gradoCursoService.obtenerCursosPorGrado(idGrado)
+                .stream()
+                .map(GradoCursoDto::idCurso)
+                .collect(Collectors.toList());
+
+        if (idCursos.isEmpty()) {
+            return ResponseEntity.ok(List.of());
+        }
+
+        List<CursosDto> cursos = cursosService.obtenerTodo().stream()
+                .filter(curso -> idCursos.contains(curso.idCurso()))
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(cursos);
     }
 
     @GetMapping

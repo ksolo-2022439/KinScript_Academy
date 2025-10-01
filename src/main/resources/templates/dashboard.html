@@ -6,6 +6,7 @@
     <title>Dashboard Principal - AcademyHQ</title>
     <link rel="stylesheet" type="text/css" th:href="@{/styles/cruds.css(v=1.2)}">
     <link rel="stylesheet" type="text/css" th:href="@{/styles/dashboard.css(v=1.1)}">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
 <div class="layout-container">
@@ -42,17 +43,16 @@
                 <form id="ai-form">
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="ai-materia">Materia / Curso</label>
-                            <select id="ai-materia" class="form-control" required>
-                                <option value="">Seleccione un curso...</option>
-                                <option th:each="curso : ${listaCursos}" th:value="${curso.nombreCurso}" th:text="${curso.nombreCurso}"></option>
+                            <label for="ai-nivel">Nivel Educativo (Grado)</label>
+                            <select id="ai-nivel" class="form-control" required>
+                                <option value="">Seleccione un nivel...</option>
+                                <option th:each="grado : ${listaGrados}" th:value="${grado.idGrado}" th:text="${grado.nombreGrado}"></option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="ai-nivel">Nivel Educativo</label>
-                            <select id="ai-nivel" class="form-control" required>
-                                <option value="">Seleccione un nivel...</option>
-                                <option th:each="grado : ${listaGrados}" th:value="${grado.nombreGrado}" th:text="${grado.nombreGrado}"></option>
+                            <label for="ai-materia">Materia / Curso</label>
+                            <select id="ai-materia" class="form-control" required disabled>
+                                <option value="">Primero seleccione un nivel...</option>
                             </select>
                         </div>
                     </div>
@@ -73,15 +73,74 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        const nivelSelect = document.getElementById('ai-nivel');
+        const materiaSelect = document.getElementById('ai-materia');
+
+        nivelSelect.addEventListener('change', async function() {
+            const idGrado = this.value;
+            materiaSelect.disabled = true;
+            materiaSelect.innerHTML = '<option value="">Cargando cursos...</option>';
+
+            if (!idGrado) {
+                materiaSelect.innerHTML = '<option value="">Primero seleccione un nivel...</option>';
+                return;
+            }
+
+            try {
+                const response = await fetch(`/academy/api/gradocursos/grado/${idGrado}/cursos`);
+                if (!response.ok) throw new Error('Error al cargar cursos');
+
+                const cursos = await response.json();
+
+                materiaSelect.innerHTML = '<option value="">Seleccione un curso...</option>';
+                cursos.forEach(curso => {
+                    const option = document.createElement('option');
+                    option.value = curso.nombreCurso;
+                    option.textContent = curso.nombreCurso;
+                    materiaSelect.appendChild(option);
+                });
+                materiaSelect.disabled = false;
+
+            } catch (error) {
+                console.error(error);
+                materiaSelect.innerHTML = '<option value="">Error al cargar</option>';
+            }
+        });
+
         const aiForm = document.getElementById('ai-form');
         const submitBtn = document.getElementById('ai-submit-btn');
         const responseDiv = document.getElementById('ai-response');
 
+        function parseAiResponseToGrid(text) {
+            const sections = text.split('### ').filter(s => s.trim() !== '');
+            let html = '<div class="ai-response-grid">';
+
+            sections.forEach(section => {
+                const parts = section.split(/:\s*\n/);
+                const title = parts[0] ? parts[0].trim() : 'Sección';
+                let content = parts[1] ? parts[1].trim() : '';
+
+                content = content
+                    .replace(/^- (.*)/gm, '<li>$1</li>')
+                    .replace(/(\d+)\. (.*)/gm, '<li><strong>$1.</strong> $2</li>');
+
+                html += `
+                    <div class="ai-response-section">
+                        <h5>${title}</h5>
+                        ${content.startsWith('<li>') ? `<ul>${content}</ul>` : `<p>${content}</p>`}
+                    </div>
+                `;
+            });
+
+            html += '</div>';
+            return html;
+        }
+
         aiForm.addEventListener('submit', async function (event) {
             event.preventDefault();
 
-            const materia = document.getElementById('ai-materia').value;
-            const nivel = document.getElementById('ai-nivel').value;
+            const nivel = nivelSelect.options[nivelSelect.selectedIndex].text;
+            const materia = materiaSelect.value;
             const tema = document.getElementById('ai-tema').value;
 
             submitBtn.disabled = true;
@@ -92,7 +151,7 @@
             const preferencias = `Materia/Tema: ${materia}\nNivel educativo: ${nivel}\nTema específico: ${tema}`;
 
             try {
-                const response = await fetch('academy/ai/sugerir', {
+                const response = await fetch('/academy/ai/sugerir', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({ preferencias: preferencias })
@@ -103,7 +162,10 @@
                 }
 
                 const aiTextResponse = await response.text();
-                responseDiv.textContent = aiTextResponse;
+
+                const htmlResponse = parseAiResponseToGrid(aiTextResponse);
+
+                responseDiv.innerHTML = htmlResponse;
                 responseDiv.classList.add('has-content');
 
             } catch (error) {
@@ -117,6 +179,5 @@
         });
     });
 </script>
-
 </body>
 </html>

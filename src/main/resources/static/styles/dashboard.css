@@ -113,7 +113,7 @@
 
 .ai-response-box {
     margin-top: 2rem;
-    padding: 1.5rem;
+    padding: 1.5rem 2rem;
     background-color: var(--secondary-bg-color);
     border: 1px solid var(--border-color);
     border-radius: 8px;
@@ -121,6 +121,7 @@
     line-height: 1.6;
     min-height: 150px;
     color: var(--text-secondary-color);
+
     display: flex;
     align-items: center;
     justify-content: center;
@@ -132,4 +133,76 @@
     justify-content: flex-start;
     text-align: left;
     color: var(--text-color);
+}
+
+.ai-response-box.has-content h3 {
+    font-size: 1.5rem;
+    color: var(--accent-color);
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+
+.ai-response-box.has-content h4 {
+    font-size: 1.1rem;
+    color: var(--text-color);
+    font-weight: 600;
+    margin-top: 2rem;
+    margin-bottom: 0.8rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.3rem;
+}
+
+.ai-response-box.has-content hr {
+    border: none;
+    height: 1px;
+    background-color: var(--border-color);
+    opacity: 0.5;
+    margin: 2rem 0;
+}
+
+.ai-response-box.has-content ul, .ai-response-box.has-content ol {
+    padding-left: 25px;
+    margin-bottom: 1rem;
+}
+
+.ai-response-box.has-content li {
+    margin-bottom: 0.6rem;
+    color: var(--text-secondary-color);
+}
+
+.ai-response-box.has-content strong {
+    color: var(--text-color);
+    font-weight: 600;
+}
+
+.ai-response-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.ai-response-section {
+}
+
+.ai-response-section h5 {
+    font-size: 1rem;
+    color: var(--text-color);
+    font-weight: 600;
+    margin-top: 0;
+    margin-bottom: 0.8rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.5rem;
+}
+
+.ai-response-section p,
+.ai-response-section ul,
+.ai-response-section ol {
+    margin: 0;
+    padding: 0;
+    list-style-position: inside;
+}
+
+.ai-response-section li {
+    margin-bottom: 0.5rem;
+    color: var(--text-secondary-color);
 }
