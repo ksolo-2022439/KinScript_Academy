@@ -257,10 +257,6 @@ KinScript_Academy/
 │       │
 │       └── application.properties              # Configuración de la app
 │
-├── 📁 Database/                                # Scripts SQL
-│   ├── KinScript_Academy.sql                  # Esquema de base de datos
-│   └── Datos_KinScript_Academy.sql            # Datos de prueba
-│
 ├── 📄 pom.xml                                  # Configuración Maven
 └── 📄 README.md                                # Este archivo
 ```
