@@ -107,7 +107,7 @@
 #### 🏠 Dashboard Principal
 _El dashboard ofrece una vista general del sistema con acceso rápido a todas las funcionalidades principales._
 
-![Dashboard Principal](screenshots/dashboard.png)
+![Dashboard Principal](Screenshots/dashboard.png)
 
 **Características destacadas:**
 - 📊 Métricas en tiempo real de alumnos, profesores y notas
@@ -118,7 +118,7 @@ _El dashboard ofrece una vista general del sistema con acceso rápido a todas la
 #### 👨‍🎓 Gestión de Alumnos
 _Interfaz completa para administrar el registro estudiantil._
 
-![Gestión de Alumnos](screenshots/gestionalumnos.png)
+![Gestión de Alumnos](Screenshots/gestionalumnos.png)
 
 **Funcionalidades:**
 - ➕ Crear y editar información de estudiantes
@@ -129,17 +129,17 @@ _Interfaz completa para administrar el registro estudiantil._
 #### 👨‍🏫 Gestión de Profesores
 _Panel de administración del personal docente._
 
-![Gestión de Profesores](screenshots/gestionprofesores.png)
+![Gestión de Profesores](Screenshots/gestionprofesores.png)
 
 #### 📝 Sistema de Notas
 _Registro y seguimiento de calificaciones estudiantiles._
 
-![Sistema de Notas](screenshots/gestionnotas.png)
+![Sistema de Notas](Screenshots/gestionnotas.png)
 
 #### 🤖 Asistente IA de Actividades
 _Generador inteligente de actividades educativas personalizado._
 
-![Asistente IA](screenshots/asistenteIA.png)
+![Asistente IA](Screenshots/asistenteIA.png)
 
 **Capacidades del Asistente:**
 - 🎯 Generación de actividades según grado educativo
@@ -150,14 +150,14 @@ _Generador inteligente de actividades educativas personalizado._
 #### 🔐 Login y Autenticación
 _Sistema seguro de inicio de sesión._
 
-![Login](screenshots/login.png)
+![Login](Screenshots/login.png)
 
 ### 📡 API REST y Documentación
 
 #### 📚 Swagger UI - Documentación Interactiva
 _Documentación completa y probador interactivo de la API._
 
-![Swagger UI Overview](screenshots/swagger.png)
+![Swagger UI Overview](Screenshots/swagger.png)
 
 **Características de la API:**
 - 📖 Documentación completa de todos los endpoints
@@ -168,22 +168,22 @@ _Documentación completa y probador interactivo de la API._
 #### 🔍 Endpoints de Alumnos
 _Operaciones CRUD para gestión de estudiantes._
 
-![Swagger Alumnos Endpoints](screenshots/swaggeralumnos.png)
+![Swagger Alumnos Endpoints](Screenshots/swaggeralumnos.png)
 
 #### 📊 Endpoints de Notas
 _API para gestión de calificaciones._
 
-![Swagger Notas Endpoints](screenshots/swaggernotas.png)
+![Swagger Notas Endpoints](Screenshots/swaggernotas.png)
 
 #### 🤖 Endpoints de IA
 _Integración con servicios de inteligencia artificial._
 
-![Swagger IA Endpoints](screenshots/swaggeria.png)
+![Swagger IA Endpoints](Screenshots/swaggeria.png)
 
 #### 📋 Modelos de Datos (Schemas)
 _Definición de estructuras de datos utilizadas en la API._
 
-![Swagger Data Models](screenshots/swaggerschemas.png)
+![Swagger Data Models](Screenshots/swaggerschemas.png)
 
 ---
 
@@ -312,7 +312,7 @@ KinScript_Academy/
 
 ### 📋 Prerrequisitos
 
-- **☕ Java 21** o superior ([Descargar aquí](https://adoptium.net/))
+- **☕ Java 21** o superior ([Descargar aquí]([https://adoptium.net/](https://www.oracle.com/java/technologies/javase/jdk21-archive-downloads.html)))
 - **📦 Maven 3.6+** (incluido con el wrapper `mvnw`)
 - **🗄️ MySQL 8.0+** ([Descargar aquí](https://dev.mysql.com/downloads/))
 - **🔧 Git** para clonar el repositorio
@@ -390,11 +390,11 @@ Una vez iniciada la aplicación, puedes acceder a:
 
 | 🌐 Servicio | 🔗 URL | 📝 Descripción |
 |------------|--------|---------------|
-| **Interfaz Web** | http://localhost:8090/ | Dashboard y gestión |
-| **Login** | http://localhost:8090/login | Página de inicio de sesión |
-| **API REST** | http://localhost:8090/api/ | Endpoints REST |
-| **Swagger UI** | http://localhost:8090/swagger-ui.html | Documentación interactiva |
-| **API Docs** | http://localhost:8090/api-docs | Especificación OpenAPI JSON |
+| **Interfaz Web** | https://localhost/ | Dashboard y gestión |
+| **Login** | https://localhost/login | Página de inicio de sesión |
+| **API REST** | https://localhost/api/ | Endpoints REST |
+| **Swagger UI** | https://localhost/swagger-ui.html | Documentación interactiva |
+| **API Docs** | https://localhost/api-docs | Especificación OpenAPI JSON |
 
 ### 🎉 ¡Listo!
 
