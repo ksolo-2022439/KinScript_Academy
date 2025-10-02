@@ -14,12 +14,12 @@
 
 ### 🌟 Lo Nuevo en Esta Versión
 
-✨ **Migración completa de PrimeFaces a Thymeleaf** - Interfaz web moderna y responsive
-🎨 **Nuevo diseño UI/UX** - Interfaz limpia y profesional con CSS personalizado
-🤖 **Integración con IA** - Asistente inteligente para generación de actividades educativas mediante LangChain4j
-📱 **Diseño responsive** - Adaptado para todos los dispositivos
-⚡ **Rendimiento mejorado** - Carga rápida y navegación fluida
-🔒 **Sistema de autenticación** - Login seguro con recuperación de contraseña
+- ✨ **Migración completa de PrimeFaces a Thymeleaf** - Interfaz web moderna y responsive
+- 🎨 **Nuevo diseño UI/UX** - Interfaz limpia y profesional con CSS personalizado
+- 🤖 **Integración con IA** - Asistente inteligente para generación de actividades educativas mediante LangChain4j
+- 📱 **Diseño responsive** - Adaptado para todos los dispositivos
+- ⚡ **Rendimiento mejorado** - Carga rápida y navegación fluida
+- 🔒 **Sistema de autenticación** - Login seguro con recuperación de contraseña
 
 ## 📋 Tabla de Contenidos
 
@@ -33,8 +33,6 @@
 - [🏗️ Arquitectura del Sistema](#️-arquitectura-del-sistema)
 - [⚙️ Configuración Avanzada](#️-configuración-avanzada)
 - [🧪 Testing](#-testing)
-- [🚀 Despliegue en Producción](#-despliegue-en-producción)
-- [🔧 Solución de Problemas](#-solución-de-problemas)
 - [🤝 Contribución](#-contribución)
 - [📞 Soporte](#-soporte)
 
@@ -109,7 +107,7 @@
 #### 🏠 Dashboard Principal
 _El dashboard ofrece una vista general del sistema con acceso rápido a todas las funcionalidades principales._
 
-![Dashboard Principal](ruta/a/screenshot-dashboard.png)
+![Dashboard Principal](screenshots/dashboard.png)
 
 **Características destacadas:**
 - 📊 Métricas en tiempo real de alumnos, profesores y notas
@@ -120,7 +118,7 @@ _El dashboard ofrece una vista general del sistema con acceso rápido a todas la
 #### 👨‍🎓 Gestión de Alumnos
 _Interfaz completa para administrar el registro estudiantil._
 
-![Gestión de Alumnos](ruta/a/screenshot-alumnos.png)
+![Gestión de Alumnos](screenshots/gestionalumnos.png)
 
 **Funcionalidades:**
 - ➕ Crear y editar información de estudiantes
@@ -131,17 +129,17 @@ _Interfaz completa para administrar el registro estudiantil._
 #### 👨‍🏫 Gestión de Profesores
 _Panel de administración del personal docente._
 
-![Gestión de Profesores](ruta/a/screenshot-profesores.png)
+![Gestión de Profesores](screenshots/gestionprofesores.png)
 
 #### 📝 Sistema de Notas
 _Registro y seguimiento de calificaciones estudiantiles._
 
-![Sistema de Notas](ruta/a/screenshot-notas.png)
+![Sistema de Notas](screenshots/gestionnotas.png)
 
 #### 🤖 Asistente IA de Actividades
 _Generador inteligente de actividades educativas personalizado._
 
-![Asistente IA](ruta/a/screenshot-ai-assistant.png)
+![Asistente IA](screenshots/asistenteIA.png)
 
 **Capacidades del Asistente:**
 - 🎯 Generación de actividades según grado educativo
@@ -152,14 +150,14 @@ _Generador inteligente de actividades educativas personalizado._
 #### 🔐 Login y Autenticación
 _Sistema seguro de inicio de sesión._
 
-![Login](ruta/a/screenshot-login.png)
+![Login](screenshots/login.png)
 
 ### 📡 API REST y Documentación
 
 #### 📚 Swagger UI - Documentación Interactiva
 _Documentación completa y probador interactivo de la API._
 
-![Swagger UI Overview](ruta/a/screenshot-swagger-overview.png)
+![Swagger UI Overview](screenshots/swagger.png)
 
 **Características de la API:**
 - 📖 Documentación completa de todos los endpoints
@@ -170,22 +168,22 @@ _Documentación completa y probador interactivo de la API._
 #### 🔍 Endpoints de Alumnos
 _Operaciones CRUD para gestión de estudiantes._
 
-![Swagger Alumnos Endpoints](ruta/a/screenshot-swagger-alumnos.png)
+![Swagger Alumnos Endpoints](screenshots/swaggeralumnos.png)
 
 #### 📊 Endpoints de Notas
 _API para gestión de calificaciones._
 
-![Swagger Notas Endpoints](ruta/a/screenshot-swagger-notas.png)
+![Swagger Notas Endpoints](screenshots/swaggernotas.png)
 
 #### 🤖 Endpoints de IA
 _Integración con servicios de inteligencia artificial._
 
-![Swagger IA Endpoints](ruta/a/screenshot-swagger-ai.png)
+![Swagger IA Endpoints](screenshots/swaggeria.png)
 
 #### 📋 Modelos de Datos (Schemas)
 _Definición de estructuras de datos utilizadas en la API._
 
-![Swagger Data Models](ruta/a/screenshot-swagger-schemas.png)
+![Swagger Data Models](screenshots/swaggerschemas.png)
 
 ---
 
@@ -197,8 +195,6 @@ KinScript_Academy/
 ├── 📁 src/main/
 │   ├── 📁 java/org/kinscript/Academy/
 │   │   ├── 🚀 AcademyApplication.java          # Clase principal Spring Boot
-│   │   ├── 📁 config/                          # Configuraciones
-│   │   │   └── OpenApiConfig.java              # Config Swagger/OpenAPI
 │   │   ├── 📁 dominio/                         # Capa de lógica de negocio
 │   │   │   ├── 📁 dto/                         # Data Transfer Objects
 │   │   │   │   ├── AlumnosDto.java
@@ -1563,576 +1559,6 @@ KinScript Academy demuestra el uso de:
 
 ---
 
-© 2024 KinScript Academy Team. Todos los derechos reservados.
+© 2025 KinScript Team. Todos los derechos reservados.
 
 </div>
-
-## 🚀 Despliegue en Producción
-
-### 🐳 Opción 1: Docker
-
-#### Dockerfile
-```dockerfile
-# Etapa de compilación
-FROM maven:3.9-eclipse-temurin-21 AS build
-WORKDIR /app
-COPY pom.xml .
-COPY src ./src
-RUN mvn clean package -DskipTests
-
-# Etapa de ejecución
-FROM eclipse-temurin:21-jre-alpine
-WORKDIR /app
-COPY --from=build /app/target/Academy-0.0.1-SNAPSHOT.jar app.jar
-
-# Variables de entorno
-ENV JAVA_OPTS="-Xmx512m -Xms256m"
-ENV SERVER_PORT=8090
-
-# Exponer puerto
-EXPOSE 8090
-
-# Ejecutar aplicación
-ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
-```
-
-#### Construcción y ejecución
-```bash
-# Construir imagen
-docker build -t kinscript/academy:latest .
-
-# Ejecutar contenedor
-docker run -d \
-  --name kinscript-academy \
-  -p 8090:8090 \
-  -e SPRING_DATASOURCE_URL=jdbc:mysql://host.docker.internal:3306/KinScript_Academy \
-  -e SPRING_DATASOURCE_USERNAME=root \
-  -e SPRING_DATASOURCE_PASSWORD=password \
-  -e OPENAI_API_KEY=sk-your-api-key \
-  kinscript/academy:latest
-
-# Ver logs
-docker logs -f kinscript-academy
-
-# Detener contenedor
-docker stop kinscript-academy
-```
-
-### 🐳 Opción 2: Docker Compose
-
-#### docker-compose.yml
-```yaml
-version: '3.8'
-
-services:
-  mysql:
-    image: mysql:8.0
-    container_name: academy-mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: KinScript_Academy
-      MYSQL_USER: academy_user
-      MYSQL_PASSWORD: academy_pass
-    ports:
-      - "3306:3306"
-    volumes:
-      - mysql_data:/var/lib/mysql
-      - ./Database:/docker-entrypoint-initdb.d
-    networks:
-      - academy-network
-
-  app:
-    build: .
-    container_name: kinscript-academy
-    depends_on:
-      - mysql
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/KinScript_Academy
-      SPRING_DATASOURCE_USERNAME: academy_user
-      SPRING_DATASOURCE_PASSWORD: academy_pass
-      OPENAI_API_KEY: ${OPENAI_API_KEY}
-      SPRING_PROFILES_ACTIVE: production
-    ports:
-      - "8090:8090"
-    networks:
-      - academy-network
-    restart: unless-stopped
-
-networks:
-  academy-network:
-    driver: bridge
-
-volumes:
-  mysql_data:
-```
-
-#### Comandos Docker Compose
-```bash
-# Iniciar servicios
-docker-compose up -d
-
-# Ver logs
-docker-compose logs -f app
-
-# Detener servicios
-docker-compose down
-
-# Reconstruir y reiniciar
-docker-compose up -d --build
-```
-
-### ☁️ Opción 3: Despliegue en la Nube
-
-#### AWS Elastic Beanstalk
-```bash
-# Crear archivo JAR
-./mvnw clean package
-
-# Desplegar con EB CLI
-eb init -p java-21 kinscript-academy
-eb create kinscript-academy-env
-eb deploy
-```
-
-#### Heroku
-```bash
-# Crear aplicación
-heroku create kinscript-academy
-
-# Configurar Java
-echo "java.runtime.version=21" > system.properties
-
-# Agregar base de datos
-heroku addons:create jawsdb:kitefin
-
-# Desplegar
-git push heroku main
-
-# Ver logs
-heroku logs --tail
-```
-
-#### Google Cloud Run
-```bash
-# Construir imagen
-gcloud builds submit --tag gcr.io/PROJECT_ID/academy
-
-# Desplegar
-gcloud run deploy academy \
-  --image gcr.io/PROJECT_ID/academy \
-  --platform managed \
-  --region us-central1 \
-  --allow-unauthenticated
-```
-
-### 🔧 Variables de Entorno para Producción
-
-Crear archivo `.env` o configurar en el servicio de hosting:
-
-```bash
-# Base de datos
-SPRING_DATASOURCE_URL=jdbc:mysql://db-host:3306/KinScript_Academy
-SPRING_DATASOURCE_USERNAME=prod_user
-SPRING_DATASOURCE_PASSWORD=secure_password
-
-# Perfil de Spring
-SPRING_PROFILES_ACTIVE=production
-
-# OpenAI
-OPENAI_API_KEY=sk-your-production-key
-
-# Servidor
-SERVER_PORT=8090
-
-# JVM
-JAVA_OPTS=-Xmx1024m -Xms512m -XX:+UseG1GC
-
-# Logging
-LOGGING_LEVEL_ROOT=INFO
-LOGGING_FILE_NAME=/var/log/academy/application.log
-```
-
-### ✅ Checklist de Producción
-
-Antes de desplegar a producción, asegúrate de:
-
-- [ ] ✅ Variables de entorno configuradas correctamente
-- [ ] 🔒 Credenciales de base de datos seguras
-- [ ] 🗄️ Base de datos con respaldos automáticos
-- [ ] 📝 Logging configurado apropiadamente
-- [ ] 🔐 HTTPS habilitado (SSL/TLS)
-- [ ] 🚫 Endpoints de desarrollo deshabilitados
-- [ ] 📊 Monitoreo y alertas configurados
-- [ ] 🔄 Estrategia de respaldo y recuperación
-- [ ] ⚡ Performance testing realizado
-- [ ] 🛡️ Firewall y seguridad de red configurados
-- [ ] 📈 Escalado automático configurado (si aplica)
-- [ ] 📋 Documentación de despliegue actualizada
-
-### 🔄 Actualización sin Downtime
-
-Para actualizaciones sin interrupciones:
-
-```bash
-# Blue-Green Deployment
-1. Desplegar nueva versión en servidor "green"
-2. Verificar que funciona correctamente
-3. Cambiar balanceador de carga a "green"
-4. Mantener "blue" como backup
-5. Después de verificar, actualizar "blue"
-
-# Rolling Update (Kubernetes)
-kubectl set image deployment/academy \
-  academy=kinscript/academy:v2.0 \
-  --record
-
-# Rollback si hay problemas
-kubectl rollout undo deployment/academy
-```
-
-### 📊 Monitoreo Post-Despliegue
-
-Después del despliegue, monitorear:
-
-- 📈 **Métricas de rendimiento**: CPU, memoria, latencia
-- 🔍 **Logs de errores**: Detectar problemas temprano
-- 👥 **Tráfico de usuarios**: Patrones de uso
-- 💾 **Estado de base de datos**: Conexiones, queries lentas
-- 🔐 **Seguridad**: Intentos de acceso no autorizados
-
-## 🔧 Solución de Problemas
-
-### 🐛 Problemas Comunes y Soluciones
-
-#### ❌ Error de Conexión a Base de Datos
-
-**Síntoma:**
-```
-java.sql.SQLNonTransientConnectionException: Could not create connection to database server
-```
-
-**Soluciones:**
-
-1. **Verificar que MySQL esté ejecutándose:**
-```bash
-# Linux/Mac
-sudo systemctl status mysql
-# o
-ps aux | grep mysql
-
-# Windows
-services.msc  # Buscar MySQL en la lista
-```
-
-2. **Verificar conectividad:**
-```bash
-mysql -u tu_usuario -p -h localhost
-```
-
-3. **Verificar configuración:**
-```properties
-# application.properties
-spring.datasource.url=jdbc:mysql://localhost:3306/KinScript_Academy?serverTimezone=UTC
-spring.datasource.username=root
-spring.datasource.password=tu_password
-```
-
-4. **Verificar firewall:**
-```bash
-# Permitir puerto 3306
-sudo ufw allow 3306
-```
-
-#### 🔴 Puerto en Uso
-
-**Síntoma:**
-```
-Web server failed to start. Port 8090 was already in use.
-```
-
-**Soluciones:**
-
-1. **Encontrar proceso usando el puerto:**
-```bash
-# Linux/Mac
-lsof -i :8090
-sudo kill -9 [PID]
-
-# Windows
-netstat -ano | findstr :8090
-taskkill /PID [PID] /F
-```
-
-2. **Cambiar puerto en application.properties:**
-```properties
-server.port=8091
-```
-
-3. **Usar puerto aleatorio disponible:**
-```properties
-server.port=0
-```
-
-#### ☕ Problemas de Compilación con Java 21
-
-**Síntoma:**
-```
-Invalid target release: 21
-```
-
-**Soluciones:**
-
-1. **Verificar versión de Java:**
-```bash
-java -version
-javac -version
-```
-
-2. **Configurar JAVA_HOME:**
-```bash
-# Linux/Mac
-export JAVA_HOME=/usr/lib/jvm/java-21-openjdk
-export PATH=$JAVA_HOME/bin:$PATH
-
-# Windows
-set JAVA_HOME=C:\Program Files\Java\jdk-21
-set PATH=%JAVA_HOME%\bin;%PATH%
-```
-
-3. **Limpiar y recompilar:**
-```bash
-./mvnw clean install -U
-```
-
-#### 🎨 Thymeleaf: Plantilla no Encontrada
-
-**Síntoma:**
-```
-Error resolving template "dashboard", template might not exist
-```
-
-**Soluciones:**
-
-1. **Verificar ubicación de plantillas:**
-```bash
-ls -la src/main/resources/templates/
-```
-
-2. **Verificar configuración de Thymeleaf:**
-```properties
-spring.thymeleaf.prefix=classpath:/templates/
-spring.thymeleaf.suffix=.html
-spring.thymeleaf.cache=false
-spring.thymeleaf.enabled=true
-```
-
-3. **Limpiar y recompilar:**
-```bash
-./mvnw clean compile
-```
-
-#### 🤖 Error con API de OpenAI
-
-**Síntoma:**
-```
-ApiKeyNotSetException: OpenAI API key is not set
-```
-
-**Soluciones:**
-
-1. **Configurar API key:**
-```properties
-langchain4j.open-ai.chat-model.api-key=sk-tu_api_key
-```
-
-2. **Verificar validez del API key:**
-```bash
-curl https://api.openai.com/v1/models \
-  -H "Authorization: Bearer sk-tu_api_key"
-```
-
-3. **Deshabilitar funcionalidad de IA temporalmente:**
-Comentar o remover las dependencias de LangChain4j del `pom.xml`
-
-#### 💾 Error de Mapeo de Entidades
-
-**Síntoma:**
-```
-org.hibernate.MappingException: Unknown entity
-```
-
-**Soluciones:**
-
-1. **Verificar anotación @Entity:**
-```java
-@Entity
-@Table(name = "alumnos")
-public class Alumnos {
-    // ...
-}
-```
-
-2. **Verificar escaneo de paquetes:**
-```java
-@SpringBootApplication
-@EntityScan("org.kinscript.Academy.persistence.entity")
-public class AcademyApplication {
-    // ...
-}
-```
-
-#### 🗺️ Error con MapStruct
-
-**Síntoma:**
-```
-No property named "X" exists in source parameter(s)
-```
-
-**Soluciones:**
-
-1. **Regenerar mappers:**
-```bash
-./mvnw clean compile
-```
-
-2. **Verificar nombres de campos:**
-```java
-@Mapper(componentModel = "spring")
-public interface AlumnosMapper {
-    AlumnosDto toDto(Alumnos entity);
-    Alumnos toEntity(AlumnosDto dto);
-}
-```
-
-3. **Limpiar target y recompilar:**
-```bash
-./mvnw clean install
-```
-
-### 📝 Logs de la Aplicación
-
-#### Ver logs en tiempo real
-```bash
-# Con Maven
-./mvnw spring-boot:run | grep "org.kinscript.Academy"
-
-# Con archivo JAR
-java -jar target/Academy-0.0.1-SNAPSHOT.jar | tee academy.log
-
-# Con Docker
-docker logs -f kinscript-academy
-
-# Filtrar errores
-docker logs kinscript-academy 2>&1 | grep ERROR
-```
-
-#### Configurar nivel de logs
-```properties
-# application.properties
-
-# Log general
-logging.level.root=INFO
-
-# Log de la aplicación (más detallado)
-logging.level.org.kinscript.Academy=DEBUG
-
-# Log de Spring (menos verbose)
-logging.level.org.springframework=WARN
-
-# Log de Hibernate SQL
-logging.level.org.hibernate.SQL=DEBUG
-
-# Archivo de log
-logging.file.name=logs/academy.log
-logging.pattern.file=%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n
-```
-
-### 🔍 Debugging
-
-#### Ejecutar en modo debug
-```bash
-# Maven
-./mvnw spring-boot:run -Dspring-boot.run.jvmArguments="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005"
-
-# JAR
-java -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005 -jar target/Academy-0.0.1-SNAPSHOT.jar
-```
-
-Luego conectar el debugger de tu IDE al puerto 5005.
-
-### 📊 Análisis de Performance
-
-#### Identificar queries lentas
-```properties
-# application.properties
-logging.level.org.hibernate.SQL=DEBUG
-logging.level.org.hibernate.type.descriptor.sql.BasicBinder=TRACE
-spring.jpa.properties.hibernate.generate_statistics=true
-```
-
-#### Profiling de memoria
-```bash
-# Generar heap dump
-jmap -dump:live,format=b,file=heap.bin [PID]
-
-# Analizar con herramientas como:
-# - Eclipse Memory Analyzer (MAT)
-# - VisualVM
-# - JProfiler
-```
-
-### 🆘 Obtener Ayuda
-
-Si sigues experimentando problemas:
-
-1. 📋 **Revisa los logs** completos en `logs/academy.log`
-2. 🔍 **Busca el error** en Stack Overflow o GitHub Issues
-3. 📝 **Crea un issue** en el repositorio con:
-   - Descripción del problema
-   - Logs de error completos
-   - Pasos para reproducir
-   - Versiones de Java, Maven, MySQL
-4. 💬 **Contacta al equipo** a través de los canales de soporte
-
-## 🔐 Seguridad
-
-### 🛡️ Mejores Prácticas Implementadas
-
-#### ✅ Validación de Entrada
-Todos los endpoints utilizan Jakarta Bean Validation:
-
-```java
-@PostMapping
-public ResponseEntity<AlumnosDto> crear(@Valid @RequestBody AlumnosDto dto) {
-    // Spring valida automáticamente el DTO
-}
-```
-
-```java
-public class AlumnosDto {
-    @NotBlank(message = "El nombre es obligatorio")
-    @Size(min = 2, max = 50, message = "El nombre debe tener entre 2 y 50 caracteres")
-    private String nombreAlumno;
-    
-    @Email(message = "Email inválido")
-    private String emailAcademico;
-}
-```
-
-#### 🔒 Uso de DTOs
-
-El sistema usa DTOs para:
-- ✅ Evitar exposición directa de entidades JPA
-- ✅ Controlar qué datos se envían/reciben
-- ✅ Prevenir mass assignment vulnerabilities
-- ✅ Separar lógica de presentación de persistencia
-
-```java
-// ❌ MAL - Exponer entidad directamente
-@GetMapping
-public List<Alumnos> getTodos() { }
-
-// ✅ BIEN - Usar DTO
-@GetMapping
-public List<AlumnosDto> getTodos() { }
-```
